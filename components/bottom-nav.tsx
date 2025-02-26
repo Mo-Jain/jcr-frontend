@@ -15,12 +15,15 @@ export function BottomNav() {
   const {name,imageUrl} = useUserStore();
   const gethortName = () => {
     if(!name) return;
-    const nameArray = name.split(" ");
+    const nameArray = name.trim().split(" ");
     let shortName = "";
-    for(let i = 0; i < nameArray.length; i++){
-      shortName += nameArray[i][0].toLocaleUpperCase();
+    if(nameArray.length > 0){
+      shortName = nameArray[0][0] + nameArray[nameArray.length-1][0];
     }
-    return shortName;
+    else {
+      shortName = nameArray[0][0];
+    }
+    return shortName.toLocaleUpperCase();
   }
   const [shortName,setShortName] = useState(gethortName());
 
@@ -67,8 +70,8 @@ export function BottomNav() {
           <Link href="/profile" className={`flex flex-col items-center ${selectedTab=="profile" ? "text-[#27272A] dark:text-primary" : "text-white"} hover:text-[#27272A] dark:hover:text-primary`}>
             <div className="max-h-6 max-w-6">
               {imageUrl ? 
-                <div className={`h-fit w-fit ${selectedTab=="profile" ? " border-[#27272A] dark:border-primary" : "border-transparent"} border-2 hover:border-[#27272A] rounded-full dark:hover:border-primary`} >
-                  <Image src={imageUrl || "/placeholder.svg"} alt="Profile" width={24} height={24} className="max-h-6 max-w-6 object-cover rounded-full" />
+                <div className={`flex w-full h-full flex-col items-center ${selectedTab=="profile" ? "text-[#27272A] dark:text-primary" : "text-white"} hover:text-[#27272A] dark:hover:text-primary`}>
+                  <Image src={imageUrl || "/placeholder.svg"} alt="Profile" width={24} height={24} className={`max-h-6 max-w-6 object-cover rounded-full border-2 ${selectedTab=="profile" ? " border-[#27272A] dark:border-primary" : "border-transparent"}`} />
                   <span className="text-xs font-bold">Profile</span>
                 </div>
                 :

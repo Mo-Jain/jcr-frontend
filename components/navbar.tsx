@@ -18,12 +18,15 @@ export function NavBar() {
   const {name,imageUrl} = useUserStore();
   const gethortName = () => {
     if(!name) return;
-    const nameArray = name.split(" ");
+    const nameArray = name.trim().split(" ");
     let shortName = "";
-    for(let i = 0; i < nameArray.length; i++){
-      shortName += nameArray[i][0].toLocaleUpperCase();
+    if(nameArray.length > 0){
+      shortName = nameArray[0][0] + nameArray[nameArray.length-1][0];
     }
-    return shortName;
+    else {
+      shortName = nameArray[0][0];
+    }
+    return shortName.toLocaleUpperCase();
   }
   const [shortName,setShortName] = useState(gethortName());
 

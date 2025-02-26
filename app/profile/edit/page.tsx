@@ -89,8 +89,9 @@ export default function ProfilePage() {
   const handleNameUpdate = async() => {
     if(!newName) return;
     try {
+      setNewName(newName.trim());
       await axios.put(`${BASE_URL}/api/v1/me`,{
-        name: newName
+        name: newName.trim()
       },{
         headers: {
           "Content-type": "application/json",
@@ -98,7 +99,7 @@ export default function ProfilePage() {
         }
       });
       setIsEditingName(false);
-      setName(newName);
+      setName(newName.trim());
       toast({
         description: `Name Successfully updated`,
         className: "text-black bg-white border-0 rounded-md shadow-mg shadow-black/5 font-normal",
@@ -211,8 +212,9 @@ export default function ProfilePage() {
   const handleUpdateUsername = async () => {
     // Here you would typically update the username in your backend
     try {
+      setUsername(username.trim());
       await axios.put(`${BASE_URL}/api/v1/me`,{
-        username: username
+        username: username.trim()
       },{
         headers: {
           "Content-type": "application/json",
@@ -239,8 +241,9 @@ export default function ProfilePage() {
   const handleUpdatePassword = async() => {
     // Here you would typically update the password in your backend
     try {
+      setPassword(password.trim());
       await axios.put(`${BASE_URL}/api/v1/me`,{
-        password: password
+        password: password.trim()
       },{
         headers: {
           "Content-type": "application/json",
