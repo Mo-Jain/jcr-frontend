@@ -383,7 +383,7 @@ duration: 2000
                             }
                       <p className="text-red-500 text-sm mt-1">{errors}</p>
                     </div>
-                    <div className="flex justify-center w-[210px] h-[175px] max-sm:min-w-[148px] min-h-[155px] w-fit h-fit border border-border px-[2px]">
+                    <div className="flex justify-center w-[210px] h-[175px] max-sm:min-w-[150px] min-h-[175px] max-sm:min-h-[165px] w-fit h-fit border border-border px-[2px]">
                         <RenderFileList documents={documents} setDocuments={setDocuments} uploadedFiles={uploadedFiles} setUploadedFiles={setUploadedFiles} isEditable={isEditing} />
                         {documents && documents.length === 0 && uploadedFiles.length === 0 &&(
                             <span className="text-center text-sm text-gray-400 dark:text-gray-500">

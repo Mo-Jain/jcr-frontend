@@ -72,10 +72,10 @@ export function BottomNav() {
                   <span className="text-xs font-bold">Profile</span>
                 </div>
                 :
-                <div className={`flex w-full h-full flex-col items-center ${selectedTab=="home" ? "text-[#27272A] dark:text-primary" : "text-white"} hover:text-[#27272A] dark:hover:text-primary`}>
-                  <span className={`h-6 w-6 ${selectedTab=="profile" ? " border-primary text-primary" : "border-gray-700 text-xs p-[2px] font-bold dark:border-white text-gray-700 dark:text-white"} border-2  rounded-full hover:border-primary dark:hover:text-primary dark:hover:border-primary hover:text-primary  flex justify-center items-center `}>
+                <div className={`flex w-full h-full flex-col items-center ${selectedTab=="profile" ? "text-[#27272A] dark:text-primary" : "text-white"} hover:text-[#27272A] dark:hover:text-primary`}>
+                  <span className={`h-6 w-6 text-xs ${selectedTab=="profile" ? " border-primary text-primary" : "border-gray-700 dark:border-white text-gray-700 dark:text-white"} border-[2px] p-2 font-bold rounded-full hover:border-primary dark:hover:text-primary dark:hover:border-primary hover:text-primary  flex justify-center items-center `}>
                   {shortName}</span>
-                  <span className="text-xs font-bold">Profile</span>
+                  <span className={`text-xs font-bold`}>Profile</span>
                 </div>
                   
                 

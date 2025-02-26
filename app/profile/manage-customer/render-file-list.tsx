@@ -34,7 +34,7 @@ const FileItem = ({
       href={url}
       target="_blank"
       className={cn("flex w-fit max-w-[200px] max-h-[40px] my-1 items-center gap-2 bg-gray-200 dark:bg-muted p-1 rounded-md",
-         newFile && `bg-green-300 dark:bg-green-700`
+         newFile && `bg-green-300 dark:bg-green-800`
       )}
 
     >

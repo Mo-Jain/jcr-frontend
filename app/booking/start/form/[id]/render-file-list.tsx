@@ -82,7 +82,7 @@ export const RenderFileList = ({documents,handleDeleteDocument}:{
                 href={url}
                 key={index}
                 target="_blank"
-                className="flex w-fit max-w-[200px] max-h-[40px] my-1 items-center gap-2 bg-green-300 dark:bg-green-700 p-2 rounded-md"
+                className="flex w-fit max-w-[200px] max-h-[40px] my-1 items-center gap-2 bg-green-300 dark:bg-green-800 p-2 rounded-md"
                 >
                     <span className="min-w-4">
                         {getFileIcon(file.type)}

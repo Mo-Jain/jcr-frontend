@@ -403,7 +403,7 @@ const BookingCard =({booking,selectedBookings,setSelectedBookings}:{
             <Link href={`/booking/${booking.id}`} >
             <CardContent className="p-0">
               {/* Rest of the card content remains the same */}
-              <div className="flex justify-between bg-gray-100   dark:bg-muted pr-2 items-center">
+              <div className="flex justify-between  bg-white dark:bg-background pr-2 items-center">
                 {booking.status === "Upcoming" 
                 ? 
                 <div className="px-2 sm:px-4 ">
@@ -500,7 +500,7 @@ const BookingCard =({booking,selectedBookings,setSelectedBookings}:{
                   <p className="text-xs text-blue-400 max-sm:text-[10px]">{booking.carPlateNumber}</p>
                 </div>
               </div>
-              <div className="p-4 max-sm:p-2 bg-green-100 flex dark:bg-secondary items-center text-green-600 dark:text-green-400 gap-2">
+              <div className="p-3 max-sm:p-2 flex bg-muted items-center text-green-600 dark:text-green-400 gap-2">
                 <CarIcon className="w-8 h-3 stroke-green-600 dark:stroke-green-400 fill-green-600 dark:fill-green-400 stroke-[4px]" />
                 <p className="text-sm max-sm:text-xs ">{getTimeUntilBooking(booking.start,booking.status)}</p>
                 
