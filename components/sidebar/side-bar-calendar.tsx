@@ -6,13 +6,19 @@ import React, { Fragment } from "react";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 
 export default function SideBarCalendar() {
-  const { userSelectedDate,setMonth, setDate, selectedMonthIndex, twoDMonthArray } = useDateStore();
+  const {
+    userSelectedDate,
+    setMonth,
+    setDate,
+    selectedMonthIndex,
+    twoDMonthArray,
+  } = useDateStore();
 
   const weeksOfMonth = getWeeks(selectedMonthIndex);
 
-  const handleDateClick = (day:dayjs.Dayjs) => {
+  const handleDateClick = (day: dayjs.Dayjs) => {
     setDate(day);
-  }
+  };
 
   const handlePrevClick = () => {
     setMonth(selectedMonthIndex - 1);
@@ -22,7 +28,6 @@ export default function SideBarCalendar() {
   const handleNextClick = () => {
     setMonth(selectedMonthIndex + 1);
     setDate(userSelectedDate.add(1, "month"));
-    
   };
 
   return (
@@ -33,7 +38,7 @@ export default function SideBarCalendar() {
             "MMMM YYYY",
           )}
         </h4>
-       
+
         <div className="flex items-center gap-3">
           <MdKeyboardArrowLeft
             className="size-5 cursor-pointer font-bold"

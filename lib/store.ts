@@ -22,8 +22,8 @@ export type Car = {
   plateNumber: string;
   imageUrl: string;
   colorOfBooking: string;
-  price:number;
-}
+  price: number;
+};
 
 interface CarStore {
   cars: Car[];
@@ -45,7 +45,7 @@ export type CalendarEventType = {
   status: string;
   startTime: string;
   endTime: string;
-  color:string;
+  color: string;
   allDay: boolean;
   customerName: string;
   customerContact: string;
@@ -64,7 +64,7 @@ type EventStore = {
 
 interface ToggleSideBarType {
   isSideBarOpen: boolean;
-  setSideBarOpen: (flag:boolean) => void;
+  setSideBarOpen: (flag: boolean) => void;
 }
 
 type EventRow = { id: string; rowIndex: number };
@@ -80,10 +80,10 @@ export const useEventRows = create<EventStore1>((set) => ({
 }));
 
 export type WrappedEvent = {
-  id:string;
-  startDate:Dayjs;
-  endDate:Dayjs;
-}
+  id: string;
+  startDate: Dayjs;
+  endDate: Dayjs;
+};
 
 type WrappedEventStore = {
   wrappedEvents: WrappedEvent[];
@@ -106,7 +106,7 @@ export const useUserStore = create<UserStore>()(
         imageUrl: "",
         setImageUrl: (value: string) => {
           set({ imageUrl: value });
-        }
+        },
       }),
       { name: "user_data", skipHydration: true },
     ),
@@ -124,7 +124,6 @@ export const useCarStore = create<CarStore>()(
     ),
   ),
 );
-
 
 export const useViewStore = create<ViewStoreType>()(
   devtools(
@@ -165,7 +164,7 @@ export const useEventStore = create<EventStore>()(
       events: [],
       isEventSummaryOpen: false,
       selectedEvent: null,
-      setEvents: (events) => set({ events: events}),
+      setEvents: (events) => set({ events: events }),
       openEventSummary: (event: CalendarEventType) =>
         set({ isEventSummaryOpen: true, selectedEvent: event }),
       closeEventSummary: () =>
@@ -177,8 +176,8 @@ export const useEventStore = create<EventStore>()(
         events: state.events, // Persist only necessary fields
         selectedEvent: state.selectedEvent,
       }),
-    }
-  )
+    },
+  ),
 );
 
 export const useToggleSideBarStore = create<ToggleSideBarType>()(
@@ -186,13 +185,13 @@ export const useToggleSideBarStore = create<ToggleSideBarType>()(
     persist(
       (set) => ({
         isSideBarOpen: true,
-        setSideBarOpen: (flag:boolean) => {
+        setSideBarOpen: (flag: boolean) => {
           set({ isSideBarOpen: flag });
         },
       }),
-      { name: "sidebar_state" } 
-    )
-  )
+      { name: "sidebar_state" },
+    ),
+  ),
 );
 
 // Cannot update a component (`MappingEvents`) while rendering a different component (`CarsFilters`). To locate the bad setState() call inside `CarsFilters`, follow the stack trace as described in https://react.dev/link/setstate-in-render

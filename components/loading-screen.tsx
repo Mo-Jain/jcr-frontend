@@ -1,6 +1,4 @@
-
 export default function LoadingScreen() {
-
   return (
     <div className=" bg-muted dark:bg-black ">
       <div className="flex space-x-2 justify-center items-center w-screen h-screen">
@@ -11,4 +9,4 @@ export default function LoadingScreen() {
       </div>
     </div>
   );
-} 
+}

@@ -1,26 +1,36 @@
-"use client"
+"use client";
 
-import {useEffect, useState} from "react"
-import { format } from "date-fns"
-import { cn } from "@/lib/utils"
-import { Calendar } from "@/components/ui/calendar"
+import { useEffect, useState } from "react";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-import { Dayjs } from "dayjs"
-import { Input } from "./input"
+} from "@/components/ui/popover";
+import { Input } from "./input";
 
-export function DatePicker({currDate,handleDateChange,dateType,className}:{currDate:Dayjs,handleDateChange:(date:Date,type?:string)=>void,dateType?:string,className?:string}) {
-  const [date, setDate] = useState<Date>(currDate.toDate());
+export function DatePicker({
+  dateType,
+  handleDateChange,
+  className,
+  date,
+  setDate,
+}: {
+  dateType?: string;
+  handleDateChange?: (type: string) => void;
+  className?: string;
+  date: Date;
+  setDate: React.Dispatch<React.SetStateAction<Date>>;
+}) {
   const [dateText, setDateText] = useState<string>(format(date, "MMM d, yyyy"));
   const [isPopoverOpen, setIsPopoverOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    handleDateChange(date,dateType);
+    if (handleDateChange && dateType) handleDateChange(dateType);
     setDateText(format(date, "MMM d, yyyy"));
-  }, [date])
+  }, [date, dateType]);
 
   const handleDateTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newDateText = e.target.value;
@@ -33,25 +43,29 @@ export function DatePicker({currDate,handleDateChange,dateType,className}:{currD
     <div>
       <Popover onOpenChange={(open) => setIsPopoverOpen(open)}>
         <PopoverTrigger asChild>
-          <Input value={dateText} onChange={handleDateTextChange} type="text"
-          className={cn(
-              "p-1 sm:w-[110px] w-[80px] shadow-sm m-0 border-0 focus-visible:ring-0 border-y-4 max-sm:text-xs border-transparent cursor-text bg-muted dark:hover:bg-card rounded-sm hover:bg-gray-300 justify-start text-left font-normal",
-              isPopoverOpen ? " border-b-blue-400" : "" ,
+          <Input
+            value={dateText}
+            onChange={handleDateTextChange}
+            type="text"
+            className={cn(
+              "p-1 sm:w-[110px] w-[80px] shadow-sm m-0 border-0 focus-visible:ring-0 border-y-4 max-sm:text-xs border-transparent cursor-text bg-background dark:hover:bg-card rounded-sm hover:bg-gray-300 justify-start text-left font-normal",
+              isPopoverOpen ? " border-b-blue-400" : "",
               !date && "text-muted-foreground",
-              className
+              className,
             )}
           ></Input>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0 dark:border-gray-600" align="start">
+        <PopoverContent className="w-auto p-0 border-border" align="start">
           <Calendar
             mode="single"
             selected={date}
             onSelect={(date) => setDate(date || new Date())}
             initialFocus
-            style={{ pointerEvents: "auto" }} 
+            style={{ pointerEvents: "auto" }}
+            className="bg-background"
           />
         </PopoverContent>
       </Popover>
     </div>
-  )
+  );
 }

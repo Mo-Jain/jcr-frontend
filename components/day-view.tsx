@@ -1,5 +1,5 @@
-"use client"
-import { CalendarEventType, useCarStore, useDateStore, useEventStore } from "@/lib/store";
+"use client";
+import { CalendarEventType, useDateStore, useEventStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 import dayjs, { Dayjs } from "dayjs";
 import React, { useEffect, useState } from "react";
@@ -7,18 +7,15 @@ import { ScrollArea } from "./ui/scroll-area";
 import { getHours, isCurrentDay } from "@/lib/getTime";
 import { EventRenderer } from "./event-renderer";
 import { ChevronDown, ChevronUp } from "lucide-react";
-
+import DayHeaderEvent from "./day-header-event";
 
 export default function DayView() {
   const [currentTime, setCurrentTime] = useState(dayjs());
-  const {  events } = useEventStore();
+  const { events } = useEventStore();
   const { userSelectedDate, setDate } = useDateStore();
-  const { openEventSummary } = useEventStore();
-  const [filteredEvents,setFilteredEvents] = useState<CalendarEventType[]>([]);
-  const [headerEvents,setHeaderEvents] = useState<CalendarEventType[]>([]);
-  const [noOfEvents, setNoOfEvents] = useState<number>(0);
+  const [filteredEvents, setFilteredEvents] = useState<CalendarEventType[]>([]);
+
   const [isEventHidden, setIsEventHidden] = useState(true);
-  const {cars} = useCarStore();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -28,43 +25,29 @@ export default function DayView() {
   }, []);
 
   useEffect(() => {
-    getFormatedEvents(events,userSelectedDate);
-  }, [events,userSelectedDate]);
+    getFormatedEvents(events, userSelectedDate);
+  }, [events, userSelectedDate]);
 
-  useEffect(() => {
-    getAllDayEvents(events,userSelectedDate);
-  }, [events,isEventHidden,userSelectedDate]);
-
-  const getFormatedEvents = (events:CalendarEventType[], date:Dayjs) => {
+  const getFormatedEvents = (events: CalendarEventType[], date: Dayjs) => {
     const selectedEvents = events.filter((event: CalendarEventType) => {
-        return dayjs(event.startDate).isSame(date,"days")
-            && dayjs(event.endDate).isSame(date,"days")
-      });
+      return (
+        dayjs(event.startDate).isSame(date, "days") &&
+        dayjs(event.endDate).isSame(date, "days")
+      );
+    });
 
     setFilteredEvents(selectedEvents);
-  }
-
-  const getAllDayEvents = (events:CalendarEventType[], date:Dayjs) => {
-      let tempEvents = events.filter((event: CalendarEventType) => {
-          return (dayjs(event.startDate).isBefore(date,"days") && dayjs(event.endDate).isAfter(date,"days"))
-          || (dayjs(event.startDate).isSame(date,"days") && dayjs(event.endDate).isAfter(date,"days"))
-          || (dayjs(event.startDate).isBefore(date,"days") && dayjs(event.endDate).isSame(date,"days"))
-          || (event.allDay);
-        });
-
-      tempEvents = (noOfEvents < 5 || !isEventHidden) ? tempEvents : tempEvents.slice(0,3)
-      setNoOfEvents(tempEvents.length);
-      setHeaderEvents(tempEvents);
-    }
-  
+  };
 
   const isToday =
     userSelectedDate.format("DD-MM-YY") === dayjs().format("DD-MM-YY");
 
   return (
     <>
-      <div className="flex px-4">
-        <div className="flex w-16 flex-col items-center">
+      <div
+        className={`flex py-1 px-4 border-b border-border  ${isEventHidden ? "h-[90px]" : "h-fit"} transition-all duration-300 ease-in-out`}
+      >
+        <div className="flex w-16 flex-col items-center ">
           <div className={cn("text-xs", isToday && "text-blue-600")}>
             {userSelectedDate.format("ddd")}{" "}
           </div>{" "}
@@ -76,35 +59,19 @@ export default function DayView() {
           >
             {userSelectedDate.format("DD")}{" "}
           </div>
-          {isEventHidden ?
-          <ChevronDown className="size-4 cursor-pointer" onClick={()=> setIsEventHidden(false)}/>
-          :
-          <ChevronUp className="size-4 cursor-pointer" onClick={()=> setIsEventHidden(true)}/>
-          }
-          
+          {isEventHidden ? (
+            <ChevronDown
+              className="size-4 cursor-pointer"
+              onClick={() => setIsEventHidden(false)}
+            />
+          ) : (
+            <ChevronUp
+              className="size-4 cursor-pointer"
+              onClick={() => setIsEventHidden(true)}
+            />
+          )}
         </div>
-        <div className="flex flex-col w-full">
-            {
-               headerEvents.map((event) => {
-                const eventDuration = dayjs(event.endDate).diff(dayjs(event.startDate),"days") + 1;
-                const currentDuration  = userSelectedDate.diff(dayjs(event.startDate),"days") + 1;
-                const car = cars.find(car => car.id === event.carId);
-                return(
-                <div
-                  key={event.id}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    openEventSummary(event);
-                  }}
-                  style= {{backgroundColor: car?.colorOfBooking}}
-                  className={` my-[1px] max-sm:h-[12px] w-full flex justify-center items-center cursor-pointer rounded-sm bg-[#039BE5] text-[7px] 
-                      sm:text-xs text-white`}
-                      >
-                  {event.id + " : " + event.carName}  {"("} {currentDuration} / {eventDuration} {")"}
-                </div>
-              )})
-            }          
-          </div>
+        <DayHeaderEvent isEventHidden={isEventHidden} />
       </div>
 
       <ScrollArea className="h-[70vh]">

@@ -1,21 +1,19 @@
-"use client"
-import { useTheme } from "next-themes"
+"use client";
+import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { ToggleButton } from "./toggle-button";
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
-  const [isToggled, setIsToggled] = useState(theme=="light" ? true : false);
+  const [isToggled, setIsToggled] = useState(theme == "light" ? true : false);
 
   useEffect(() => {
-    if(isToggled) {
+    if (isToggled) {
       setTheme("light");
     } else {
       setTheme("dark");
     }
-  }, [isToggled]);
+  }, [isToggled, setTheme]);
 
-  return (
-      <ToggleButton isToggled={isToggled} setIsToggle={setIsToggled} />
-  )
+  return <ToggleButton isToggled={isToggled} setIsToggle={setIsToggled} />;
 }

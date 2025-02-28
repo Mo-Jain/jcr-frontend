@@ -9,11 +9,7 @@ import {
 
 import CarsFilters from "./cars-filter";
 
-
-
 export default function MyCars() {
- 
-  
   return (
     <Accordion type="single" collapsible>
       <AccordionItem value="item-1" className="border-border">
@@ -21,7 +17,7 @@ export default function MyCars() {
           My Cars
         </AccordionTrigger>
         <AccordionContent className="grid gap-2 ">
-          <CarsFilters/>
+          <CarsFilters />
         </AccordionContent>
       </AccordionItem>
     </Accordion>

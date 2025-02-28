@@ -1,19 +1,19 @@
-import "@/app/globals.css"
+import "@/app/globals.css";
 import { BottomNav } from "@/components/bottom-nav";
-import { NavBar } from "@/components/navbar"
+import { NavBar } from "@/components/navbar";
 import { Inter } from "next/font/google";
 import localFont from "next/font/local";
-import { Toaster } from "@/components/ui/toaster"
+import { Toaster } from "@/components/ui/toaster";
 import Providers from "@/components/provider";
 import Initiate from "@/components/initiate";
 
-const inter = Inter({ subsets: ["latin"] })
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: "Jain Car Rentals",
   description: "Track your car bookings with ease",
-  icons:"/favicon.png"
-}
+  icons: "/favicon.png",
+};
 
 const teratur = localFont({
   src: "./fonts/teratur-bold.ttf",
@@ -48,20 +48,21 @@ const alma = localFont({
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en">
-        <body className={`${inter.className} ${teratur.variable} ${alcova.variable} ${xova.variable} ${equinox.variable} ${alma.variable} antialiased`}>
-          <Providers>
-            <Initiate/>
-            <NavBar/>
-            {children}
-            <BottomNav/>
-            <Toaster  />
-          </Providers>
-          </body>
+      <body
+        className={`${inter.className} ${teratur.variable} ${alcova.variable} ${xova.variable} ${equinox.variable} ${alma.variable} antialiased`}
+      >
+        <Providers>
+          <Initiate />
+          <NavBar />
+          {children}
+          <BottomNav />
+          <Toaster />
+        </Providers>
+      </body>
     </html>
-  )
+  );
 }
-

@@ -1,34 +1,31 @@
 "use client";
 
 import React, { useEffect } from "react";
-import {  Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 import { BsCaretDownFill } from "react-icons/bs";
 import { Button } from "../ui/button";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import { useDateStore, useToggleSideBarStore, useViewStore } from "@/lib/store";
 import dayjs from "dayjs";
 
-export default function HeaderLeft(
-  {
-    setOpen,
-    open
-  }:
-  {
-    setOpen: React.Dispatch<React.SetStateAction<boolean>>,
-    open:boolean
-  }
-) {
+export default function HeaderLeft({
+  setOpen,
+  open,
+}: {
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  open: boolean;
+}) {
   const todaysDate = dayjs();
   const { userSelectedDate, setDate, setMonth, selectedMonthIndex } =
     useDateStore();
 
-  const {isSideBarOpen, setSideBarOpen } = useToggleSideBarStore();
+  const { isSideBarOpen, setSideBarOpen } = useToggleSideBarStore();
 
   const { selectedView } = useViewStore();
 
-  useEffect(()=>{
+  useEffect(() => {
     setSideBarOpen(true);
-  },[])
+  }, []);
 
   const handleTodayClick = () => {
     switch (selectedView) {
@@ -57,14 +54,14 @@ export default function HeaderLeft(
       case "week":
         currentMonthIndex = endOfWeek.subtract(1, "week").month();
         setDate(endOfWeek.subtract(1, "week"));
-        if(currentMonthIndex < selectedMonthIndex){
+        if (currentMonthIndex < selectedMonthIndex) {
           setMonth(selectedMonthIndex - 1);
         }
         break;
       case "day":
         currentMonthIndex = userSelectedDate.subtract(1, "day").month();
         setDate(userSelectedDate.subtract(1, "day"));
-        if(currentMonthIndex < selectedMonthIndex){
+        if (currentMonthIndex < selectedMonthIndex) {
           setMonth(selectedMonthIndex - 1);
         }
         break;
@@ -83,14 +80,14 @@ export default function HeaderLeft(
       case "week":
         currentMonthIndex = startOfWeek.add(1, "week").month();
         setDate(startOfWeek.add(1, "week"));
-        if(currentMonthIndex > selectedMonthIndex){
+        if (currentMonthIndex > selectedMonthIndex) {
           setMonth(selectedMonthIndex + 1);
         }
         break;
       case "day":
         currentMonthIndex = userSelectedDate.add(1, "day").month();
         setDate(userSelectedDate.add(1, "day"));
-        if(currentMonthIndex > selectedMonthIndex){
+        if (currentMonthIndex > selectedMonthIndex) {
           setMonth(selectedMonthIndex + 1);
         }
         break;
@@ -110,12 +107,16 @@ export default function HeaderLeft(
         >
           <Menu className="size-6" />
         </Button>
-        
+
         <h1 className="text-xl ">Calendar</h1>
       </div>
 
       {/* Today Button */}
-      <Button variant="outline" className="text-xs select-none bg-transparent border-border sm:text-sm px-4 rounded-lg py-1" onClick={handleTodayClick}>
+      <Button
+        variant="outline"
+        className="text-xs select-none bg-transparent border-border sm:text-sm px-4 rounded-lg py-1"
+        onClick={handleTodayClick}
+      >
         Today
       </Button>
 
@@ -132,21 +133,24 @@ export default function HeaderLeft(
       </div>
 
       {/* Current Month and Year Display */}
-      <h1 className={`text-sm ml-2 sm:ml-0 h-fit w-fit sm:text-xl block flex justify-around items-center`}>
-        <div className="sm:pb-1 flex items-center max-sm:cursor-pointer  mr-[4px]"
-          onClick={() => setOpen((open)=> !open)}>
+      <h1
+        className={`text-sm ml-2 sm:ml-0 h-fit w-fit sm:text-xl block flex justify-around items-center`}
+      >
+        <div
+          className="sm:pb-1 flex items-center max-sm:cursor-pointer  mr-[4px]"
+          onClick={() => setOpen((open) => !open)}
+        >
           {dayjs(new Date(dayjs().year(), selectedMonthIndex)).format(
             "MMMM YYYY",
           )}
-          <BsCaretDownFill  className={`text-xl sm:hidden min-size-3 ml-1 h-3 w-3 py-0 rounded-sm transition-transform duration-300 ${
-              open ? 'rotate-180' : 'rotate-0'
-            }`} 
-        
-          style= {{rotate : `${open ? "180" : ""}`}}
+          <BsCaretDownFill
+            className={`text-xl sm:hidden min-size-3 ml-1 h-3 w-3 py-0 rounded-sm transition-transform duration-300 ${
+              open ? "rotate-180" : "rotate-0"
+            }`}
+            style={{ rotate: `${open ? "180" : ""}` }}
           />
         </div>
       </h1>
-        
     </div>
   );
 }

@@ -7,13 +7,18 @@ const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET as string;
 const REFRESH_TOKEN = process.env.GOOGLE_REFRESH_TOKEN as string;
 
 // Google Drive OAuth2 Setup
-const oauth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, "http://localhost:3000");
+const oauth2Client = new google.auth.OAuth2(
+  CLIENT_ID,
+  CLIENT_SECRET,
+  "http://localhost:3000",
+);
 oauth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
 
 const drive = google.drive({ version: "v3", auth: oauth2Client });
 
 function extractFileId(url: string): string | null {
-  const match = url.match(/id=([a-zA-Z0-9_-]+)/) || url.match(/\/d\/([a-zA-Z0-9_-]+)\//);
+  const match =
+    url.match(/id=([a-zA-Z0-9_-]+)/) || url.match(/\/d\/([a-zA-Z0-9_-]+)\//);
   return match ? match[1] : null;
 }
 
@@ -26,13 +31,11 @@ export async function deleteFile(url: string) {
     await drive.files.delete({ fileId });
     console.log(`🗑️ Deleted File: ${fileId}`);
     return { success: true, message: "File deleted successfully" };
-
   } catch (error) {
-    console.error("🗑️ Delete Error:",error);
+    console.error("🗑️ Delete Error:", error);
     return { success: false, error: (error as Error).message };
   }
 }
-
 
 export async function deleteMultipleFiles(urls: string[]) {
   try {
@@ -64,14 +67,13 @@ export async function deleteMultipleFiles(urls: string[]) {
   }
 }
 
-export async function deleteFolder(id:string) {
-    try {
-        await drive.files.delete({ fileId: id });
-        console.log(`🗑️ Deleted Folder: ${id}`);
-        return { success: true, message: "Folder deleted successfully" };
-
-    } catch (error) {
-        console.error("🗑️ Delete Error:",error);
-        return { success: false, error: (error as Error).message };
-    }
+export async function deleteFolder(id: string) {
+  try {
+    await drive.files.delete({ fileId: id });
+    console.log(`🗑️ Deleted Folder: ${id}`);
+    return { success: true, message: "Folder deleted successfully" };
+  } catch (error) {
+    console.error("🗑️ Delete Error:", error);
+    return { success: false, error: (error as Error).message };
+  }
 }

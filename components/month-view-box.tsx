@@ -4,16 +4,15 @@ import dayjs from "dayjs";
 import React from "react";
 import { EventRenderer } from "./event-renderer";
 
-
 export default function MonthViewBox({
   day,
-  rowIndex
+  rowIndex,
 }: {
   day: dayjs.Dayjs | null;
   rowIndex: number;
 }) {
-  const {  events } = useEventStore();
-  
+  const { events } = useEventStore();
+
   const { setDate } = useDateStore();
 
   if (!day) {
@@ -35,7 +34,7 @@ export default function MonthViewBox({
     <div
       className={cn(
         "group  relative min-h-28 flex flex-col items-center border border-border",
-        "transition-all hover:bg-violet-50 dark:hover:bg-background ",
+        "transition-all ",
       )}
       onClick={handleClick}
     >

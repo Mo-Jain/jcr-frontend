@@ -1,4 +1,3 @@
-
 type IconProps = React.HTMLAttributes<SVGElement>;
 
 export const SvgIcons = {

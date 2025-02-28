@@ -1,55 +1,71 @@
-"use state"
-import { useState } from "react"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
+"use state";
+import { useState } from "react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 
 interface KeysDocumentsAccessoriesData {
-  keys?: string[]
-  accessories?: string[]
-  keysOther?: string
-  accessoriesOther?: string
+  keys?: string[];
+  accessories?: string[];
+  keysOther?: string;
+  accessoriesOther?: string;
 }
 
 interface KeysDocumentsAccessoriesProps {
-  data: KeysDocumentsAccessoriesData
-  updateData: (data: KeysDocumentsAccessoriesData) => void
+  data: KeysDocumentsAccessoriesData;
+  updateData: (data: KeysDocumentsAccessoriesData) => void;
 }
 
-export default function KeysDocumentsAccessories({ data, updateData }: KeysDocumentsAccessoriesProps) {
-  const [keysOther, setKeysOther] = useState(data.keysOther || "")
-  const [accessoriesOther, setAccessoriesOther] = useState(data.accessoriesOther || "")
+export default function KeysDocumentsAccessories({
+  data,
+  updateData,
+}: KeysDocumentsAccessoriesProps) {
+  const [keysOther, setKeysOther] = useState(data.keysOther || "");
+  const [accessoriesOther, setAccessoriesOther] = useState(
+    data.accessoriesOther || "",
+  );
 
-  const handleCheckboxChange = (question: "keys" | "accessories", option: string) => {
-    const updatedOptions = data[question] ? [...data[question]!] : []
-    const index = updatedOptions.indexOf(option)
+  const handleCheckboxChange = (
+    question: "keys" | "accessories",
+    option: string,
+  ) => {
+    const updatedOptions = data[question] ? [...data[question]!] : [];
+    const index = updatedOptions.indexOf(option);
     if (index > -1) {
-      updatedOptions.splice(index, 1)
+      updatedOptions.splice(index, 1);
     } else {
-      updatedOptions.push(option)
+      updatedOptions.push(option);
     }
-    updateData({ ...data, [question]: updatedOptions })
-  }
+    updateData({ ...data, [question]: updatedOptions });
+  };
 
-  const handleOtherChange = (question: "keys" | "accessories", value: string) => {
+  const handleOtherChange = (
+    question: "keys" | "accessories",
+    value: string,
+  ) => {
     if (question === "keys") {
-      setKeysOther(value)
+      setKeysOther(value);
     } else {
-      setAccessoriesOther(value)
+      setAccessoriesOther(value);
     }
-    updateData({ ...data, [`${question}Other`]: value })
-  }
+    updateData({ ...data, [`${question}Other`]: value });
+  };
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-semibold mb-2">Keys, Documents and Accessories</h2>
+      <h2 className="text-2xl font-semibold mb-2">
+        Keys, Documents and Accessories
+      </h2>
       <p className="text-gray-600 mb-4">
-        Ensure that all keys, rental documents, and accessories (such as manuals, spare tire, and tools) are present,
-        intact, and in good condition.
+        Ensure that all keys, rental documents, and accessories (such as
+        manuals, spare tire, and tools) are present, intact, and in good
+        condition.
       </p>
 
       <div className="space-y-4">
-        <Label className="text-lg font-medium">Check return of keys and documents:</Label>
+        <Label className="text-lg font-medium">
+          Check return of keys and documents:
+        </Label>
         {[
           "All keys and required documents are returned, complete, and in good condition",
           "One or more keys or documents are missing or slightly damaged",
@@ -76,7 +92,9 @@ export default function KeysDocumentsAccessories({ data, updateData }: KeysDocum
       </div>
 
       <div className="space-y-4">
-        <Label className="text-lg font-medium">Inspect accessories (e.g., spare tire, GPS, child seat):</Label>
+        <Label className="text-lg font-medium">
+          Inspect accessories (e.g., spare tire, GPS, child seat):
+        </Label>
         {[
           "All accessories (spare tire, GPS, child seat) are present, in good condition, and fully functional",
           "Some accessories are present but show signs of wear or slight damage",
@@ -87,7 +105,9 @@ export default function KeysDocumentsAccessories({ data, updateData }: KeysDocum
             <Checkbox
               id={`accessories-${option}`}
               checked={data.accessories && data.accessories.includes(option)}
-              onCheckedChange={() => handleCheckboxChange("accessories", option)}
+              onCheckedChange={() =>
+                handleCheckboxChange("accessories", option)
+              }
             />
             <Label htmlFor={`accessories-${option}`}>{option}</Label>
           </div>
@@ -102,6 +122,5 @@ export default function KeysDocumentsAccessories({ data, updateData }: KeysDocum
         )}
       </div>
     </div>
-  )
+  );
 }
-
