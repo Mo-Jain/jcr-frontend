@@ -372,7 +372,7 @@ export function CustomerPopup({
                     onChange={(e) => {
                       setAddress(e.target.value);
                     }}
-                    className="w-full bg-muted text-sm"
+                    className="w-full bg-gray-200 dark:bg-muted text-sm"
                   />
                 ) : (
                   <p className="text-sm font-semibold">

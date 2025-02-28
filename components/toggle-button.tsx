@@ -32,7 +32,7 @@ export function ToggleButton({
           circlePositions.map(({ x, y }, index) => (
             <div
               key={index}
-              className="absolute w-[6px] h-[6px] bg-gray-700 dark:bg-white rounded-full transition-transform duration-400"
+              className="absolute w-[6px] h-[6px] bg-zinc-700 dark:bg-white rounded-full transition-transform duration-400"
               style={{
                 transform: `translate(${isToggled ? x : 0}px, ${isToggled ? y : 0}px)`,
                 left: "50%",
@@ -48,12 +48,12 @@ export function ToggleButton({
       {/* Inner div */}
       <div className="w-full h-full z-10 relative">
         <OutCircle
-          className={`absolute top-0 left-0 w-full h-full stroke-0 fill-gray-700 dark:fill-white transition-all duration-500 ${
+          className={`absolute top-0 left-0 w-full h-full stroke-0 fill-zinc-700 dark:fill-white transition-all duration-500 ${
             isToggled ? "scale-[0.44]" : "scale-[0.66]"
           } z-10`}
         />
         <InnerCicle
-          className={`absolute top-0 left-0 w-full h-full stroke-0 fill-gray-700 dark:fill-white transition-all scale-[0.40] duration-500 ${
+          className={`absolute top-0 left-0 w-full h-full stroke-0 fill-zinc-700 dark:fill-white transition-all scale-[0.40] duration-500 ${
             isToggled ? "" : "translate-x-[11%] translate-y-[-9%]"
           } z-10`}
         />

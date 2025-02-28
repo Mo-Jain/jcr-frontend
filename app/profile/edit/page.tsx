@@ -311,7 +311,7 @@ export default function ProfilePage() {
       onClick={handleClickOutside}
     >
       {/* Blue section covering ~30% of the page */}
-      <div className="sm:h-[30vh] h-[20vh] bg-muted dark:bg-black border-b-[1px] dark:border-muted text-muted-foreground relative">
+      <div className="sm:h-[30vh] h-[20vh] bg-blue-200 dark:bg-black border-b-[1px] dark:border-muted text-muted-foreground relative">
         {/* Circle for user image or icon */}
 
         <div className="absolute z-0 left-1/2 bottom-0 transform -translate-x-1/2 translate-y-1/2">

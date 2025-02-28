@@ -1,7 +1,7 @@
 import { ImageIcon, Loader2 } from "lucide-react";
 import { BsFilePdfFill } from "react-icons/bs";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { BASE_URL } from "@/lib/config";
 import { toast } from "@/hooks/use-toast";
@@ -164,34 +164,60 @@ export const RenderNewFileList = ({
     }
     return <ImageIcon className="w-4 h-4" />;
   };
+
+  const renderFileList = (
+    fileType: string,
+    file: File,
+    index: number,
+    name: string,
+  ) => {
+    const url = URL.createObjectURL(file);
+    return (
+      <Link
+        href={url}
+        key={index}
+        target="_blank"
+        className="flex w-fit max-w-[130px] max-h-[30px] sm:max-w-[200px] sm:max-h-[40px] my-1 items-center gap-2 bg-green-300 dark:bg-green-700 p-2 rounded-md"
+      >
+        <span className="min-w-4">{getFileIcon(fileType)}</span>
+        <span className="whitespace-nowrap overflow-hidden text-ellipsis text-xs sm:text-sm">
+          {name}
+        </span>
+        <span
+          className="rotate-45 text-red-500 w-3 cursor-pointer text-[25px]"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            handleRemoveFile(type, index);
+          }}
+        >
+          +
+        </span>
+      </Link>
+    );
+  };
   return (
     <>
-      {uploadedFiles.map((file, index) => {
-        const url = URL.createObjectURL(file);
-        return (
-          <Link
-            href={url}
-            key={index}
-            target="_blank"
-            className="flex w-fit max-w-[130px] max-h-[30px] sm:max-w-[200px] sm:max-h-[40px] my-1 items-center gap-2 bg-green-300 dark:bg-green-700 p-2 rounded-md"
-          >
-            <span className="min-w-4">{getFileIcon(file.type)}</span>
-            <span className="whitespace-nowrap overflow-hidden text-ellipsis text-xs sm:text-sm">
-              {file.name}
-            </span>
-            <span
-              className="rotate-45 text-red-500 w-3 cursor-pointer text-[25px]"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                handleRemoveFile(type, index);
-              }}
-            >
-              +
-            </span>
-          </Link>
-        );
-      })}
+      {type != "selfie" ? (
+        <>
+          {uploadedFiles.map((file, index) => {
+            return renderFileList(file.type, file, index, file.name);
+          })}
+        </>
+      ) : (
+        <>
+          {uploadedFiles.length > 0 && (
+            <>
+              {renderFileList(
+                uploadedFiles[0].type,
+                uploadedFiles[0],
+                0,
+                uploadedFiles[0].name,
+              )}
+            </>
+          )}
+        </>
+      )}
     </>
   );
 };

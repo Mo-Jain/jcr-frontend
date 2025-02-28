@@ -81,7 +81,7 @@ export function NavBar() {
           </div>
         ) : (
           <div className="w-18 space-x-2  flex text-right ">
-            <div className="flex items-center text-gray-700 dark:text-gray-200 max-sm:hidden space-x-2 justify-around">
+            <div className="flex items-center text-zinc-700 dark:text-gray-200 max-sm:hidden space-x-2 justify-around">
               <div
                 className={`px-2 hover:text-blue-700 ${selectedTab == "home" ? "text-blue-700 border-b-blue-700" : ""} border-transparent transition-all border duration-300 border-y-4 p-2 cursor-pointer font-bold`}
                 onClick={() => router.push("/")}
@@ -120,7 +120,7 @@ export function NavBar() {
                 </div>
               ) : (
                 <span
-                  className={`h-8 w-8 ${selectedTab == "profile" ? " border-primary text-primary" : "border-gray-700 dark:border-white text-gray-700 dark:text-white"} border-2  rounded-full hover:border-primary hover:dark:text-primary hover:dark:border-primary hover:text-primary  flex justify-center items-center `}
+                  className={`h-8 w-8 ${selectedTab == "profile" ? " border-primary text-primary" : "border-zinc-700 dark:border-white text-zinc-700 dark:text-white"} border-2  rounded-full hover:border-primary hover:dark:text-primary hover:dark:border-primary hover:text-primary  flex justify-center items-center `}
                 >
                   {shortName}
                 </span>

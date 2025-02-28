@@ -42,11 +42,13 @@ export default function Profile() {
           {name !== "" ? (
             <>
               <div className="flex items-center">
-                <h2 className="text-2xl font-bold ">{name}</h2>
+                <h2 className="text-2xl font-bold text-gray-600 dark:text-white ">
+                  {name}
+                </h2>
               </div>
               <Button
                 variant="outline"
-                className="hover:bg-gray-200 border-border dark:hover:bg-gray-700 bg-transparent"
+                className="hover:bg-gray-200 border-border dark:hover:bg-zinc-700 bg-transparent"
                 onClick={handleLogout}
               >
                 Logout
@@ -55,7 +57,7 @@ export default function Profile() {
           ) : (
             <div className="space-y-2">
               <Button
-                className="w-full bg-blue-600 text-white border-border dark:text-black"
+                className="w-full bg-blue-600 text-white border-border dark:text-gray-600"
                 onClick={() => router.push("/login")}
               >
                 Login
@@ -66,40 +68,40 @@ export default function Profile() {
         <div>
           {name !== "" && (
             <Card className="overflow-hidden bg-muted dark:border-border hover:shadow-md transition-shadow my-2">
-              <CardContent className="p-1 text-black dark:text-gray-400">
+              <CardContent className="p-1 text-gray-600 dark:text-gray-400">
                 <div
-                  className="flex items-center border-border border-b justify-between p-2 cursor-pointer rounded-md dark:hover:bg-gray-700 hover:bg-gray-200 text-black dark:text-white"
+                  className="flex items-center border-border border-b justify-between p-2 cursor-pointer rounded-md dark:hover:bg-zinc-700 hover:bg-gray-200 text-gray-600 dark:text-white"
                   onClick={() => router.push("/profile/manage-garrage")}
                 >
                   <div className="flex items-center">
-                    <CarFrontIcon className="w-8 h-8 fill-black stroke-black dark:fill-white dark:stroke-white stroke-[5px]" />
+                    <CarFrontIcon className="w-8 h-8 fill-gray-600 stroke-gray-600 dark:fill-white dark:stroke-white stroke-[5px]" />
                     <span className="mx-2 max-sm:text-sm ">Manage Garrage</span>
                   </div>
-                  <div className="border-t-2 border-r-2 rotate-45 sm:mr-4 mr-2 w-2 h-2 border-black dark:border-gray-400"></div>
+                  <div className="border-t-2 border-r-2 rotate-45 sm:mr-4 mr-2 w-2 h-2 border-gray-600 dark:border-gray-400"></div>
                 </div>
                 <div
-                  className="flex items-center border-border border-b justify-between p-2 cursor-pointer rounded-md dark:hover:bg-gray-700 hover:bg-gray-200"
+                  className="flex items-center border-border border-b justify-between p-2 cursor-pointer rounded-md dark:hover:bg-zinc-700 hover:bg-gray-200"
                   onClick={() => router.push("/profile/edit")}
                 >
                   <div className="flex items-center">
-                    <UserIcon className="w-7 h-7 stroke-[12px] fill-black stroke-black dark:fill-white dark:stroke-white " />
+                    <UserIcon className="w-7 h-7 stroke-[12px] fill-gray-600 stroke-gray-600 dark:fill-white dark:stroke-white " />
                     <span className="mx-2 max-sm:text-sm dark:text-white">
                       Manage Profile
                     </span>
                   </div>
-                  <div className="border-t-2 border-r-2 rotate-45 sm:mr-4 mr-2 w-2 h-2 border-black dark:border-gray-400"></div>
+                  <div className="border-t-2 border-r-2 rotate-45 sm:mr-4 mr-2 w-2 h-2 border-gray-600 dark:border-gray-400"></div>
                 </div>
                 <div
-                  className="flex items-center justify-between p-2 cursor-pointer rounded-md dark:hover:bg-gray-700 hover:bg-gray-200"
+                  className="flex items-center justify-between p-2 cursor-pointer rounded-md dark:hover:bg-zinc-700 hover:bg-gray-200"
                   onClick={() => router.push("/profile/manage-customer")}
                 >
                   <div className="flex items-center">
-                    <Users className="w-7 h-7 text-black dark:text-white " />
+                    <Users className="w-7 h-7 text-gray-600 dark:text-white " />
                     <span className="mx-2 max-sm:text-sm dark:text-white">
                       Manage Customers
                     </span>
                   </div>
-                  <div className="border-t-2 border-r-2 rotate-45 sm:mr-4 mr-2 w-2 h-2 border-black dark:border-gray-400"></div>
+                  <div className="border-t-2 border-r-2 rotate-45 sm:mr-4 mr-2 w-2 h-2 border-gray-600 dark:border-gray-400"></div>
                 </div>
               </CardContent>
             </Card>

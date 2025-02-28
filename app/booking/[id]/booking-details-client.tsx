@@ -144,6 +144,12 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
     setOdometerReading(booking.odometerReading);
     setNotes(booking.notes);
     setAddress(booking.customerAddress);
+    setErrors({});
+    setUploadedFiles({
+      documents: [],
+      photos: [],
+      selfie: [],
+    });
     return;
   }
 
@@ -161,6 +167,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
         description: `Booking Successfully deleted`,
         className:
           "text-black bg-white border-0 rounded-md shadow-mg shadow-black/5 font-normal",
+        duration: 2000,
       });
 
       router.push("/bookings");
@@ -193,6 +200,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
         description: `Document Successfully deleted`,
         className:
           "text-black bg-white border-0 rounded-md shadow-mg shadow-black/5 font-normal",
+        duration: 2000,
       });
     } catch (error) {
       toast({
@@ -222,6 +230,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
         description: `Car image Successfully deleted`,
         className:
           "text-black bg-white border-0 rounded-md shadow-mg shadow-black/5 font-normal",
+        duration: 2000,
       });
     } catch (error) {
       toast({
@@ -301,19 +310,22 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
       const res = await axios.put(
         `${BASE_URL}/api/v1/booking/${booking.id}`,
         {
-          startDate: startDate,
-          endDate: endDate,
-          startTime: startTime,
-          endTime: endTime,
+          startDate,
+          endDate,
+          startTime,
+          endTime,
           carId: booking.carId,
+          status: bookingStatus,
           customerName: name,
           customerAddress: address,
           customerContact: number,
-          securityDeposit: securityDeposit,
-          dailyRentalPrice: dailyRentalPrice,
-          paymentMethod: paymentMethod,
+          securityDeposit,
+          dailyRentalPrice,
+          paymentMethod,
+          advancePayment,
           totalAmount,
           odometerReading,
+          endOdometerReading,
           notes,
           documents: docFiles.length > 0 ? docFiles : undefined,
           selfieUrl: resSelfie && resSelfie.url,
@@ -330,6 +342,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
       setDocuments(res.data.documents);
       setCarImages(res.data.carImages);
       setSelfieUrl(res.data.selfieUrl);
+      setErrors({});
       setUploadedFiles({
         documents: [],
         photos: [],
@@ -340,6 +353,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
         description: `Booking Successfully updated`,
         className:
           "text-black bg-white border-0 rounded-md shadow-mg shadow-black/5 font-normal",
+        duration: 2000,
       });
     } catch (error) {
       console.log(error);
@@ -699,14 +713,14 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
                   id="name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-[130px] sm:w-[170px]  sm:text-sm text-xs border-0 p-0 px-1 bg-muted dark:hover:bg-card rounded-sm hover:bg-gray-300 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400 "
+                  className="w-[130px] sm:w-[170px]  sm:text-sm text-xs border-0 p-0 px-1 bg-gray-200 dark:bg-muted dark:hover:bg-card rounded-sm hover:bg-gray-300 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400 "
                 />
                 <Input
                   type="text"
                   id="number"
                   value={number}
                   onChange={(e) => setNumber(e.target.value)}
-                  className="w-[130px] sm:w-[170px]  sm:text-sm text-xs border-0 p-0 px-1 my-1 bg-muted dark:hover:bg-card rounded-sm hover:bg-gray-300 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400
+                  className="w-[130px] sm:w-[170px]  sm:text-sm text-xs border-0 p-0 px-1 my-1 bg-gray-200 dark:bg-muted dark:hover:bg-card rounded-sm hover:bg-gray-300 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400
                   [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
                   "
                 />
@@ -726,7 +740,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
                     id="address"
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
-                    className="w-[170px] sm:w-[320px] text-xs sm:text-sm h-fit border-0 p-0 px-1 bg-muted dark:hover:bg-card rounded-sm hover:bg-gray-300 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400 "
+                    className="w-[170px] sm:w-[320px] text-xs sm:text-sm h-fit border-0 p-0 px-1 bg-gray-200 dark:bg-muted dark:hover:bg-card rounded-sm hover:bg-gray-300 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400 "
                   />
                 )}
               </div>
@@ -741,6 +755,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
               <StatusInput
                 status={bookingStatus}
                 setStatus={setBookingStatus}
+                className="bg-gray-200 dark:bg-muted"
               />
             ) : (
               <p className={` `}>{bookingStatus}</p>
@@ -764,7 +779,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
                   id="number"
                   value={dailyRentalPrice}
                   onChange={(e) => setDailyRentalPrice(Number(e.target.value))}
-                  className="w-[130px] sm:w-[170px]  sm:text-sm text-xs  border-0 p-0 px-1 my-1 bg-muted dark:hover:bg-card rounded-sm hover:bg-gray-300 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400
+                  className="w-[130px] sm:w-[170px]  sm:text-sm text-xs  border-0 p-0 px-1 my-1 bg-gray-200 dark:bg-muted dark:hover:bg-card rounded-sm hover:bg-gray-300 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400
                   [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
                   "
                 />
@@ -783,7 +798,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
                     id="name"
                     value={securityDeposit}
                     onChange={(e) => setSecurityDeposit(e.target.value)}
-                    className="w-[130px] sm:w-[170px]  sm:text-sm text-xs  border-0 p-0 px-1 bg-muted dark:hover:bg-card rounded-sm hover:bg-gray-300 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400 "
+                    className="w-[130px] sm:w-[170px]  sm:text-sm text-xs  border-0 p-0 px-1 bg-gray-200 dark:bg-muted dark:hover:bg-card rounded-sm hover:bg-gray-300 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400 "
                   />
                 </>
               )}
@@ -811,7 +826,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
                       id="name"
                       value={paymentMethod}
                       onChange={(e) => setPaymentMethod(e.target.value)}
-                      className="w-[130px] sm:w-[170px]  sm:text-sm text-xs  border-0 p-0 px-1 bg-muted dark:hover:bg-card rounded-sm hover:bg-gray-300 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400 "
+                      className="w-[130px] sm:w-[170px]  sm:text-sm text-xs  border-0 p-0 px-1 bg-gray-200 dark:bg-muted dark:hover:bg-card rounded-sm hover:bg-gray-300 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400 "
                     />
                   </>
                 )}
@@ -840,7 +855,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
                       onChange={(e) =>
                         setAdvancePayment(Number(e.target.value))
                       }
-                      className="w-[130px] sm:w-[170px]  sm:text-sm text-xs  border-0 p-0 my-0 px-1 bg-muted dark:hover:bg-card rounded-sm hover:bg-gray-300 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400
+                      className="w-[130px] sm:w-[170px]  sm:text-sm text-xs  border-0 p-0 my-0 px-1 bg-gray-200 dark:bg-muted dark:hover:bg-card rounded-sm hover:bg-gray-300 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400
                         [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
                         "
                     />
@@ -867,7 +882,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
                       id="name"
                       value={odometerReading}
                       onChange={(e) => setOdometerReading(e.target.value)}
-                      className="w-[130px] sm:w-[170px]  sm:text-sm text-xs  border-0 p-0 px-1 bg-muted dark:hover:bg-card rounded-sm hover:bg-gray-300 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400 "
+                      className="w-[130px] sm:w-[170px]  sm:text-sm text-xs  border-0 p-0 px-1 bg-gray-200 dark:bg-muted dark:hover:bg-card rounded-sm hover:bg-gray-300 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400 "
                     />
                   </>
                 )}
@@ -878,10 +893,9 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
                 <p className="text-xs sm:text-sm text-blue-500">
                   Selfie with car
                 </p>
-                {selfieUrl ? (
-                  <div>{renderFileList("selfie")}</div>
-                ) : (
-                  <div className="h-[40px] w-full" />
+                <div>{renderFileList("selfie")}</div>
+                {(!selfieUrl || uploadedFiles["selfie"].length === 0) && (
+                  <div className="h-[20px] w-full" />
                 )}
                 {isEditable && !selfieUrl && (
                   <>
@@ -972,7 +986,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
                       id="name"
                       value={endOdometerReading}
                       onChange={(e) => setEndOdometerReading(e.target.value)}
-                      className="w-[130px] sm:w-[170px]  sm:text-sm text-xs  border-0 p-0 px-1 bg-muted dark:hover:bg-card rounded-sm hover:bg-gray-300 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400 "
+                      className="w-[130px] sm:w-[170px]  sm:text-sm text-xs  border-0 p-0 px-1 bg-gray-200 dark:bg-muted dark:hover:bg-card rounded-sm hover:bg-gray-300 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400 "
                     />
                   </>
                 )}
@@ -999,7 +1013,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
                       id="name"
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}
-                      className="w-[130px] sm:w-[170px]  sm:text-sm text-xs  border-0 p-0 px-1 bg-muted dark:hover:bg-card rounded-sm hover:bg-gray-300 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400 "
+                      className="w-[130px] sm:w-[170px]  sm:text-sm text-xs  border-0 p-0 px-1 bg-gray-200 dark:bg-muted dark:hover:bg-card rounded-sm hover:bg-gray-300 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400 "
                     />
                   </>
                 )}

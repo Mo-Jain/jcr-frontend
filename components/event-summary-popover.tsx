@@ -183,11 +183,7 @@ export function EventSummaryPopup({
   return (
     <>
       <div className="fixed top-0 left-0 h-screen w-screen z-10 bg-black/50 backdrop-blur-sm"></div>
-      <Dialog
-        open={isOpen && !isActionDialogOpen}
-        onOpenChange={onClose}
-        modal={false}
-      >
+      <Dialog open={isOpen && !isActionDialogOpen} onOpenChange={onClose}>
         <DialogContent className="sm:max-w-[425px] z-20 border-border max-sm:min-h-[70%] flex flex-col p-0 items-center overflow-auto">
           <DialogHeader className="flex flex-row justify-between items-center w-full px-6 py-0">
             <DialogTitle>
@@ -274,7 +270,7 @@ export function EventSummaryPopup({
                       name="bookedBy"
                       value={bookedBy}
                       onChange={(e) => setBookedBy(e.target.value)}
-                      className="bg-muted text-sm"
+                      className="bg-gray-200 dark:bg-card text-sm rounded-sm border-2 focus-visible:ring-0 focus-visible:border-blue-400"
                     />
                   ) : (
                     <p className="text-sm">{bookedBy}</p>

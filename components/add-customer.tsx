@@ -307,7 +307,7 @@ export function AddCustomer({
                     setErrors((prev) => ({ ...prev, address: "" }));
                   }}
                   className={cn(
-                    "w-full bg-muted text-sm focus-visible:ring-0 focus-visible:border-blue-400",
+                    "w-full bg-gray-200 dark:bg-muted text-sm focus-visible:ring-0 focus-visible:border-blue-400",
                     errors.address && "border-red-500 focus:border-red-500",
                   )}
                 />

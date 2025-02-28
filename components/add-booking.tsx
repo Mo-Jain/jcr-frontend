@@ -284,7 +284,7 @@ export function AddBookingDialog({
         className={`${isOpen ? "" : "hidden"} fixed top-0 left-0 h-screen w-screen z-10 bg-opacity-5 backdrop-blur-sm`}
       ></div>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="sm:max-w-[425px] max-sm:p-2 max-sm:py-4 bg-white dark:bg-muted dark:border-gray-700 md:max-w-[600px] h-[82vh] sm:top-[55%] sm:h-auto overflow-y-auto">
+        <DialogContent className="sm:max-w-[425px] max-sm:p-2 max-sm:py-4 bg-white dark:bg-muted dark:border-zinc-700 md:max-w-[600px] h-[82vh] sm:top-[55%] sm:h-auto overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 mt-30 text-blue-700 dark:text-blue-600">
               <Booking className="w-6 h-6 flex-shrink-0 stroke-[6px] stroke-blue-600 fill-blue-600" />

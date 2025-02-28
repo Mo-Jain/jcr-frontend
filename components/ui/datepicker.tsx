@@ -48,7 +48,7 @@ export function DatePicker({
             onChange={handleDateTextChange}
             type="text"
             className={cn(
-              "p-1 sm:w-[110px] w-[80px] shadow-sm m-0 border-0 focus-visible:ring-0 border-y-4 max-sm:text-xs border-transparent cursor-text bg-background dark:hover:bg-card rounded-sm hover:bg-gray-300 justify-start text-left font-normal",
+              "p-1 sm:w-[110px] w-[80px] shadow-sm m-0 border-0 focus-visible:ring-0 border-y-4 max-sm:text-xs border-transparent cursor-text bg-gray-200 dark:bg-card dark:hover:bg-zinc-700 rounded-sm hover:bg-gray-300 justify-start text-left font-normal",
               isPopoverOpen ? " border-b-blue-400" : "",
               !date && "text-muted-foreground",
               className,

@@ -23,6 +23,7 @@ import Booking from "@/public/online-booking.svg";
 import { useCarStore } from "@/lib/store";
 import { toast } from "@/hooks/use-toast";
 import { uploadToDrive } from "@/app/actions/upload";
+import CarIcon from "@/public/car-icon.svg";
 
 interface Car {
   id: number;
@@ -40,6 +41,8 @@ interface Car {
     start: string;
     end: string;
     status: string;
+    startTime: string;
+    endTime: string;
     customerName: string;
     customerContact: string;
   }[];
@@ -258,33 +261,81 @@ export function CarDetailsClient({ carId }: { carId: number }) {
     }
   };
 
+  function getHeader(
+    status: string,
+    startDate: string,
+    startTime: string,
+    endDate: string,
+    endTime: string,
+  ) {
+    let headerText = "";
+    const startDateTime = new Date(startDate);
+    const endDateTime = new Date(endDate);
+
+    const [startHour, startMinute] = startTime.split(":").map(Number);
+    const [endHour, endMinute] = endTime.split(":").map(Number);
+    startDateTime.setHours(startHour, startMinute, 0, 0);
+    endDateTime.setHours(endHour, endMinute, 0, 0);
+    const currDate = new Date();
+    if (status === "Upcoming") {
+      if (startDateTime >= currDate) {
+        headerText = "Guest shall pickup car by";
+      } else {
+        headerText = "Guest was scheduled to pickup car by";
+      }
+    } else if (status === "Ongoing") {
+      if (endDateTime < currDate) {
+        headerText = "Guest was scheduled to return by";
+      } else {
+        headerText = "Guest shall return by";
+      }
+    } else if (status === "Completed") {
+      headerText = "Guest returned at";
+    }
+
+    return headerText;
+  }
+
   function formatDateTime(dateString: string) {
     return new Date(dateString).toLocaleString("en-US", {
       month: "short",
       day: "numeric",
       year: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-      hour12: true,
     });
   }
 
-  function getPickupTime(startTime: string) {
-    const pickup = new Date(startTime);
-    pickup.setMinutes(pickup.getMinutes() - 30);
-    return formatDateTime(pickup.toISOString());
+  function getReturnTime(startDate: string, startTime: string) {
+    const [hours, minutes] = startTime.split(":").map(Number);
+    const currDate = new Date();
+    currDate.setHours(hours);
+    currDate.setMinutes(minutes); // Subtract 30 minutes
+
+    // Format back to HH:MM
+    const newHours = currDate.getHours().toString().padStart(2, "0");
+    const newMinutes = currDate.getMinutes().toString().padStart(2, "0");
+
+    const pickup = new Date(startDate);
+
+    if (newHours === "23" && Number(newMinutes) >= 30) {
+      pickup.setDate(pickup.getDate() - 1); // Add a day
+    }
+
+    const date = pickup.toDateString().replaceAll(" ", ", ");
+    return `${date} ${newHours}:${newMinutes}`;
   }
 
-  function getTimeUntilBooking(startTime: string) {
+  function getTimeUntilBooking(startTime: string, status: string) {
+    if (status === "Completed") return "Trip has ended";
+    if (status === "Ongoing") return "Trip has started";
     const now = new Date();
     const start = new Date(startTime);
     const diffTime = start.getTime() - now.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
     if (diffDays < 0) return "Trip has started";
-    if (diffDays === 0) return "Today";
-    if (diffDays === 1) return "1 day";
-    return `${diffDays} days`;
+    if (diffDays === 0) return "Trip start window opens Today";
+    if (diffDays === 1) return "Trip start window opens in 1 day";
+    return `Trip start window opens in ${diffDays} days`;
   }
 
   async function handleDeleteBooking(bookingId: number) {
@@ -337,7 +388,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
         </div>
       )}
 
-      <div className="flex items-center justify-between pb-2 border-b border-gray-300 dark:border-gray-700">
+      <div className="flex items-center justify-between pb-2 border-b border-gray-300 dark:border-zinc-700">
         <div
           className="mr-2 rounded-md font-bold  cursor-pointer hover:bg-gray-200 dark:hover:bg-muted"
           onClick={() => router.back()}
@@ -430,9 +481,9 @@ export function CarDetailsClient({ carId }: { carId: number }) {
             </>
           )}
         </div>
-        <hr className="my-4 border-gray-200 dark:border-gray-700" />
-        <div className="px-4 ">
-          <section className="px-4 py-4 border-b-4 border-gray-200 dark:border-gray-700">
+        <hr className="my-4 border-gray-200 dark:border-zinc-700" />
+        <div className="sm:px-4 ">
+          <section className="px-4 py-4 border-b-4 border-gray-200 dark:border-zinc-700">
             <h2 className="text-lg font-semibold mb-4 ">Car Details</h2>
             <div className="grid grid-cols-2 gap-4 sm:gap-6">
               <div className="space-y-4">
@@ -450,7 +501,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
                   </p>
                   <div className="flex flex-col item-center gap-1 max-w-[214px] w-full">
                     <div
-                      className={`w-8 h-8 rounded-md border border-gray-300 dark:border-gray-700 ${isEditable ? "cursor-pointer" : ""}`}
+                      className={`w-8 h-8 rounded-md border border-gray-300 dark:border-zinc-700 ${isEditable ? "cursor-pointer" : ""}`}
                       style={{ backgroundColor: color }}
                       onClick={() =>
                         isEditable &&
@@ -472,7 +523,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
             </div>
           </section>
 
-          <section className="px-4 py-4 border-b-4 border-gray-200 dark:border-gray-700">
+          <section className="px-4 py-4 border-b-4 border-gray-200 dark:border-zinc-700">
             <h2 className="text-xl font-semibold mb-4">
               Performance & Pricing
             </h2>
@@ -481,7 +532,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
                 <div>
                   <p className="text-sm text-blue-500 mb-1">24hr Price</p>
                   {!isEditable || !price ? (
-                    <span className="font-medium flex items-center">
+                    <span className="font-medium flex items-center text-sm">
                       <IndianRupee className="w-4 h-4" /> {car.price}
                     </span>
                   ) : (
@@ -490,7 +541,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
                       id="name"
                       value={price}
                       onChange={(e) => setPrice(Number(e.target.value))}
-                      className="w-[170px] border-0 p-0 px-1 bg-gray-200 dark:bg-gray-800 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400 "
+                      className="w-[120px] sm:w-[170px] border-0 p-0 px-1 bg-gray-200 dark:bg-gray-800 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400 "
                     />
                   )}
                 </div>
@@ -499,7 +550,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
                     <p className="text-sm text-blue-500 mb-1">
                       1 month Earnings
                     </p>
-                    <span className="font-medium flex items-center">
+                    <span className="font-medium flex items-center text-sm">
                       <IndianRupee className="w-4 h-4" />{" "}
                       {earnings.oneMonth}{" "}
                     </span>
@@ -515,7 +566,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
                       id="name"
                       value={mileage}
                       onChange={(e) => setMileage(Number(e.target.value))}
-                      className="w-[170px] border-0 p-0 px-1 bg-gray-200 dark:bg-gray-800 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400 "
+                      className="w-[120px] sm:w-[170px] border-0 p-0 px-1 bg-gray-200 dark:bg-gray-800 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400 "
                     />
                   )}
                 </div>
@@ -526,7 +577,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
                     <p className="text-sm text-blue-500 mb-1">
                       This Month Earnings
                     </p>
-                    <span className="font-medium flex items-center">
+                    <span className="font-medium flex items-center text-sm">
                       <IndianRupee className="w-4 h-4" />
                       {earnings.thisMonth}
                     </span>
@@ -537,7 +588,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
                     <p className="text-sm text-blue-500 mb-1">
                       6 Month Earnings
                     </p>
-                    <span className="font-medium flex items-center">
+                    <span className="font-medium flex items-center text-sm">
                       <IndianRupee className="w-4 h-4" />
                       {earnings.sixMonths}
                     </span>
@@ -546,7 +597,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
                 {car && car.totalEarnings != 0 && car.totalEarnings && (
                   <div>
                     <p className="text-sm text-blue-500 mb-1">Total Earnings</p>
-                    <span className="font-medium flex items-center">
+                    <span className="font-medium flex items-center text-sm">
                       <IndianRupee className="w-4 h-4" />
                       {car.totalEarnings}
                     </span>
@@ -564,17 +615,23 @@ export function CarDetailsClient({ carId }: { carId: number }) {
                   return (
                     <Card
                       key={booking.id}
-                      className="overflow-hidden hover:shadow-md dark:border-gray-700 transition-shadow my-2"
+                      className="overflow-hidden hover:shadow-md dark:border-zinc-700 transition-shadow my-2"
                     >
                       <CardContent className="p-0">
                         {/* Rest of the card content remains the same */}
                         <div className="flex justify-between items-center p-2 bg-muted">
                           <div className="">
                             <p className="text-sm max-sm:text-xs text-blue-500">
-                              Guest shall pickup car by
+                              {getHeader(
+                                booking.status,
+                                booking.start,
+                                booking.startTime,
+                                booking.end,
+                                booking.endTime,
+                              )}
                             </p>
                             <p className="font-semibold text-[#5B4B49] max-sm:text-sm dark:text-gray-400">
-                              {getPickupTime(booking.start)}
+                              {getReturnTime(booking.end, booking.endTime)}{" "}
                             </p>
                           </div>
                           <div className="flex items-center gap-2 justify-center">
@@ -596,7 +653,8 @@ export function CarDetailsClient({ carId }: { carId: number }) {
                                   From
                                 </p>
                                 <p className="font-semibold text-[#5B4B49] text-xs sm:text-sm dark:text-gray-400">
-                                  {formatDateTime(booking.start)}
+                                  {formatDateTime(booking.start)}{" "}
+                                  {booking.startTime}
                                 </p>
                               </div>
                               <ArrowRight className="mt-4 w-12 stroke-0 fill-blue-400 flex-shrink-0" />
@@ -605,7 +663,8 @@ export function CarDetailsClient({ carId }: { carId: number }) {
                                   To
                                 </p>
                                 <p className="font-semibold text-[#5B4B49] text-xs sm:text-sm dark:text-gray-400">
-                                  {formatDateTime(booking.end)}
+                                  {formatDateTime(booking.end)}{" "}
+                                  {booking.endTime}
                                 </p>
                               </div>
                             </div>
@@ -639,11 +698,10 @@ export function CarDetailsClient({ carId }: { carId: number }) {
                             <Trash2 className="h-6 w-6 hover:text-red-500" />
                           </div>
                         </div>
-                        <div className="p-4 max-sm:p-2 bg-gray-100 flex bg-muted items-center text-red-600 dark:text-red-400 gap-2">
-                          <PlaneTakeoff className="h-4 w-4" />
+                        <div className="p-3 max-sm:p-2 flex bg-gray-200 dark:bg-muted items-center text-green-600 dark:text-green-400 gap-2">
+                          <CarIcon className="w-8 h-3 stroke-green-600 dark:stroke-green-400 fill-green-600 dark:fill-green-400 stroke-[4px]" />
                           <p className="text-sm max-sm:text-xs ">
-                            Trip start window opens in{" "}
-                            {getTimeUntilBooking(booking.start)}
+                            {getTimeUntilBooking(booking.start, booking.status)}
                           </p>
                         </div>
                       </CardContent>

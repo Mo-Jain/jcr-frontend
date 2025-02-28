@@ -211,7 +211,7 @@ export function AddCarDialog({ isOpen, setIsOpen }: AddCarDialogProps) {
                   setErrors((prev) => ({ ...prev, carBrand: "" }));
                 }}
                 placeholder="ADD CAR BRAND"
-                className="my-4 rounded-none placeholder:text-[30px] text-[30px] max-sm:placeholder:text-[24px]  md:text-[30px] file:text-[30px] placeholder:text-gray-700 dark:placeholder:text-gray-400  border-0 border-b focus-visible:border-b-2 border-b-gray-400 focus-visible:border-b-blue-600  focus-visible:ring-0 focus-visible:ring-offset-0 w-full"
+                className="my-4 rounded-none placeholder:text-[30px] text-[30px] max-sm:placeholder:text-[24px]  md:text-[30px] file:text-[30px] placeholder:text-zinc-700 dark:placeholder:text-gray-400  border-0 border-b focus-visible:border-b-2 border-b-gray-400 focus-visible:border-b-blue-600  focus-visible:ring-0 focus-visible:ring-offset-0 w-full"
               />
               {errors.carBrand && (
                 <p className="text-red-500 text-sm mt-1">{errors.carBrand}</p>
@@ -219,8 +219,8 @@ export function AddCarDialog({ isOpen, setIsOpen }: AddCarDialogProps) {
             </div>
 
             <div className="gap-4 w-10/11">
-              <div className="flex justify-between gap-6 items-center">
-                <CarFrontIcon className="w-16 h-4 stroke-[6px] dark:stroke-white dark:fill-white  stroke-black fill-black" />
+              <div className="flex justify-between gap-4 sm:gap-6 items-center">
+                <CarFrontIcon className="w-10 h-4 stroke-[6px] dark:stroke-white dark:fill-white  stroke-black fill-black" />
                 <div>
                   <Input
                     type="text"
@@ -231,7 +231,7 @@ export function AddCarDialog({ isOpen, setIsOpen }: AddCarDialogProps) {
                       setCarModel(e.target.value);
                       setErrors((prev) => ({ ...prev, carModel: "" }));
                     }}
-                    className="my-4 w-full rounded-none placeholder:text-[14px] max-sm:placeholder:text-[12px] max-sm:text-[12px] text-[14px] md:text-[14px] placeholder:text-gray-700 dark:placeholder:text-gray-400  border-0 border-b focus-visible:border-b-2 border-b-gray-400 focus-visible:border-b-blue-600  focus-visible:ring-0 focus-visible:ring-offset-0"
+                    className="my-4 w-full rounded-none placeholder:text-[14px] max-sm:placeholder:text-[12px] max-sm:text-[12px] text-[14px] md:text-[14px] placeholder:text-zinc-700 dark:placeholder:text-gray-400  border-0 border-b focus-visible:border-b-2 border-b-gray-400 focus-visible:border-b-blue-600  focus-visible:ring-0 focus-visible:ring-offset-0"
                   />
                   {errors.carModel && (
                     <p className="text-red-500 text-sm mt-1">
@@ -297,7 +297,7 @@ export function AddCarDialog({ isOpen, setIsOpen }: AddCarDialogProps) {
                       document.getElementById("carImage")?.click();
                       setIsOpen(true);
                     }}
-                    className="flex items-center justify-center  bg-gray-300 max-sm:text-sm hover:bg-gray-400 dark:bg-muted dark:hover:bg-gray-900 w-fit cursor-pointer text-secondary-foreground px-2 py-1 rounded-sm hover:bg-gray-200 transition-colors"
+                    className="flex items-center justify-center whitespace-nowrap  bg-gray-300 max-sm:text-sm hover:bg-gray-400 dark:bg-muted dark:hover:bg-gray-900 w-fit cursor-pointer text-secondary-foreground px-2 py-1 rounded-sm hover:bg-gray-200 transition-colors"
                   >
                     <Upload className="mr-2 h-4 w-4" />
                     <span>Choose file</span>
@@ -331,7 +331,7 @@ export function AddCarDialog({ isOpen, setIsOpen }: AddCarDialogProps) {
                     type="number"
                     id="price"
                     placeholder="0"
-                    className="w-1/3 border-black max-sm:text-xs dark:border-gray-700 placeholder:text-gray-700 dark:placeholder:text-gray-400  focus:border-blue-400 focus-visible:ring-blue-400 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="w-1/3 border-black max-sm:text-xs dark:border-zinc-700 placeholder:text-zinc-700 dark:placeholder:text-gray-400  focus:border-blue-400 focus-visible:ring-blue-400 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                     value={price || 0}
                     onChange={(e) => {
                       setPrice(parseInt(e.target.value));
@@ -356,7 +356,7 @@ export function AddCarDialog({ isOpen, setIsOpen }: AddCarDialogProps) {
                       setMileage(parseInt(e.target.value));
                       setErrors((prev) => ({ ...prev, mileage: "" }));
                     }}
-                    className="w-1/3 max-sm:text-xs placeholder:text-gray-700 dark:placeholder:text-gray-400  border-black dark:border-gray-700 focus:border-blue-400 focus-visible:ring-blue-400 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none "
+                    className="w-1/3 max-sm:text-xs placeholder:text-zinc-700 dark:placeholder:text-gray-400  border-black dark:border-zinc-700 focus:border-blue-400 focus-visible:ring-blue-400 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none "
                   />
                   {errors.mileage && (
                     <p className="text-red-500 text-sm mt-1">
@@ -365,7 +365,7 @@ export function AddCarDialog({ isOpen, setIsOpen }: AddCarDialogProps) {
                   )}
                 </div>
               </div>
-              <div className="w-[140px] h-[100px] border border-black dark:border-gray-700 relative">
+              <div className="w-[140px] h-[100px] border border-black dark:border-zinc-700 relative">
                 {selectedImage && (
                   <>
                     <Image
@@ -378,7 +378,7 @@ export function AddCarDialog({ isOpen, setIsOpen }: AddCarDialogProps) {
                     <button
                       type="button"
                       onClick={handleRemoveImage}
-                      className="absolute -top-2 -right-2 bg-white rounded-full p-1 shadow-md dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700"
+                      className="absolute -top-2 -right-2 bg-white rounded-full p-1 shadow-md dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-zinc-700"
                     >
                       <X className="h-4 w-4" />
                     </button>

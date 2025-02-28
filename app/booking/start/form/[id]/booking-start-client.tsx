@@ -502,7 +502,7 @@ export default function BookingStartClient({
                   >
                     <SelectValue placeholder="Select a car" />
                   </SelectTrigger>
-                  <SelectContent className="dark:border-gray-700">
+                  <SelectContent className="dark:border-zinc-700">
                     {cars &&
                       cars.length > 0 &&
                       cars.map((car) => (
