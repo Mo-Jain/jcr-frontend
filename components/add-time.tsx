@@ -39,7 +39,7 @@ export default function AddTime({
         onOpenChange={(open) => setIsOpen(open)}
       >
         <SelectTrigger
-          isArrow={false}
+{/*           isArrow={false} */}
           className={cn(
             "p-1 sm:w-[60px] shadow-sm sm:text-sm text-xs m-0 h-[38px] p-[6px] border-0 focus-visible:ring-0 border-transparent border-y-4 cursor-text bg-gray-200 dark:bg-card dark:hover:bg-zinc-700 rounded-sm hover:bg-gray-300 justify-start text-left font-normal",
             isOpen && "border-b-4 border-b-blue-400",
