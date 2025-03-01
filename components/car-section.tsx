@@ -24,11 +24,11 @@ export function CarSection() {
   }
 
   return (
-    <>
+    <div className="mx-1 sm:mx-2">
       <AddCarDialog isOpen={isOpen} setIsOpen={setIsOpen} />
       {name ? (
-        <div>
-          <section className="py-6 bg-background sm:px-4 px-2">
+        <div >
+          <section className="py-6 bg-white bg-opacity-40 dark:bg-opacity-20 rounded-t-md backdrop-blur-lg sm:px-4 px-2">
             <div className="flex justify-between items-center border-b border-border pb-5 mb-3 px-4">
               <h1
                 style={{ fontFamily: "var(--font-equinox), sans-serif" }}
@@ -81,7 +81,7 @@ export function CarSection() {
               </div>
             )}
           </section>
-          <section className="py-6 bg-background px-2 sm:px-4">
+          <section className="py-6 my-1 bg-white bg-opacity-40 dark:bg-opacity-20 backdrop-blur-lg px-2 sm:px-4">
             <h1
               style={{ fontFamily: "var(--font-equinox), sans-serif" }}
               className="sm:text-3xl border-b border-border pb-5 mb-3 text-xl font-black font-myfont"
@@ -97,7 +97,7 @@ export function CarSection() {
           </section>
         </div>
       ) : (
-        <section className="sm:py-12 py-6 bg-muted">
+        <section className="bg-white bg-opacity-40 dark:bg-opacity-20 rounded-t-md backdrop-blur-lg sm:py-12 py-6 bg-muted">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold text-center mb-12">
               Key Features
@@ -128,6 +128,6 @@ export function CarSection() {
           </div>
         </section>
       )}
-    </>
+    </div>
   );
 }

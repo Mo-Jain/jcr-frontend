@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import MoonStar from "@/public/moon-stars.svg";
 import SunImage from "./sun-image";
+
 const ThemeBg = () => {
   const [mounted, setMounted] = useState(false);
 
@@ -13,15 +14,11 @@ const ThemeBg = () => {
   if (!mounted) return null;
 
   return (
-    <div>
-      <div
-        className={`-mt-5 -ml-12 max-sm:-ml-24 dark:mt-48 left-5 z-20 transition-all duration-500  pointer-events-none`}
-      >
+    <div className="absolute inset-0 -z-50 pointer-events-none">
+      <div className="-mt-5 -ml-12 max-sm:-ml-24 dark:mt-48 left-5 transition-all duration-500">
         <SunImage />
       </div>
-      <div
-        className={` absolute overflow-hidden top-[-60%] dark:top-5 left-5 z-0 transition-all duration-500  pointer-events-none`}
-      >
+      <div className="absolute top-[-60%] dark:top-5 left-5 transition-all duration-500">
         <MoonStar className="w-40 h-40 max-sm:w-28 max-sm:h-28 dark:fill-white" />
       </div>
     </div>

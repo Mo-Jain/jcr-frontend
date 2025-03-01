@@ -1,5 +1,4 @@
 "use client";
-import Link from "next/link";
 import StarryBackground from "./starry-background";
 import ThemeBg from "./theme-bg";
 import { useUserStore } from "@/lib/store";
@@ -10,12 +9,10 @@ export const TopSection = () => {
   const router = useRouter();
   return (
     <div>
-      <section className="bg-blue-200 max-h-[300px] my-0 dark:bg-[#181818] relative overflow-hidden py-12 sm:py-20">
+      <section className="bg-transparent max-h-[300px] my-0 relative overflow-hidden py-12 sm:py-20">
         {/* Background Components */}
-        <div className="absolute inset-0 dark:opacity-50 -z-1">
           <StarryBackground />
           <ThemeBg />
-        </div>
         <div className="container mx-auto px-4 h-fit">
           <div className="max-w-3xl mx-auto text-center relative z-10">
             <h1
@@ -32,7 +29,7 @@ export const TopSection = () => {
               <div className="flex justify-center items-center bg-transparent">
                 <div
                   onClick={() => router.push("/bookings")}
-                  className="bg-blue-600 max-w-[220px] bg-opacity-20 backdrop-blur-sm cursor-pointer shadow-xl max-sm:text-sm text-white px-3 sm:px-6 py-3 rounded-sm font-semibold hover:bg-primary/90 transition duration-300"
+                  className="bg-white/20 hover:bg-white/40 dark:hover:bg-white/30 max-w-[220px] bg-opacity-20 backdrop-blur-md cursor-pointer shadow-xl max-sm:text-sm text-foreground px-3 sm:px-6 py-3 rounded-sm font-semibold transition duration-300"
                 >
                   <span className="text-foreground">
                     Start Booking Now
@@ -40,13 +37,13 @@ export const TopSection = () => {
                 </div>
               </div>
             ) : (
-              <div>
-                <Link
-                  href="/login"
-                  className="bg-primary shadow-xl max-sm:text-sm text-white px-3 sm:px-6 py-3 rounded-sm font-semibold hover:bg-primary/90 transition duration-300"
+              <div className="flex justify-center items-center bg-transparent">
+                <div
+                  onClick={() => router.push("/login")}
+                  className="bg-white/20 hover:bg-white/40 dark:hover:bg-white/30 max-w-[220px] bg-opacity-20 backdrop-blur-md cursor-pointer shadow-xl max-sm:text-sm text-foreground px-3 sm:px-6 py-3 rounded-sm font-semibold transition duration-300"
                 >
                   Get Started
-                </Link>
+                </div>
               </div>
             )}
           </div>

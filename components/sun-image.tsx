@@ -10,7 +10,7 @@ const SunImage = () => {
       >
         <Image src={Sunlight} alt="sun" className="w-fit h-80" />
       </div>
-      <div className={`absolute  top-[36%] left-[40%] `}>
+      <div className={`absolute  top-[35%] left-[39%] `}>
         <div className="w-20 h-20 cursor-pointer transition-all duration-300 ease-in-out bg-yellow-500 opacity-90 backdrop-blur-lg rounded-full" />
       </div>
     </div>

@@ -59,7 +59,7 @@ export function ToggleButton({
         />
         <div
           className={`absolute top-0 left-0 w-full h-full rounded-full stroke-0 bg-white dark:bg-[#202020] transition-scale duration-500 ${
-            isToggled ? "scale-[0.44]" : "scale-[0.66]"
+            isToggled ? "scale-[0.43]" : "scale-[0.66]"
           }`}
         />
       </div>
