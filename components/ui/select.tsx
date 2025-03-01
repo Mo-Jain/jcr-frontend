@@ -6,6 +6,14 @@ import { Check, ChevronDown, ChevronUp } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
+interface CustomSelectTriggerProps extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> {
+  isArrow?: boolean;
+}
+
+interface CustomSelectItemProps extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item> {
+  isCheck?: boolean;
+}
+
 const Select = SelectPrimitive.Root;
 
 const SelectGroup = SelectPrimitive.Group;
@@ -14,7 +22,7 @@ const SelectValue = SelectPrimitive.Value;
 
 const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
+  CustomSelectTriggerProps
 >(({ className, children, isArrow = true, ...props }, ref) => (
   <SelectPrimitive.Trigger
     ref={ref}
@@ -115,7 +123,7 @@ SelectLabel.displayName = SelectPrimitive.Label.displayName;
 
 const SelectItem = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Item>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item>
+  CustomSelectItemProps
 >(({ className, children, isCheck = true, ...props }, ref) => (
   <SelectPrimitive.Item
     ref={ref}
