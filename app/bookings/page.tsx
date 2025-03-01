@@ -101,6 +101,7 @@ export default function Bookings() {
   const [selectedBookings, setSelectedBookings] = useState<string[]>([]);
   const [isSelectionMode, setIsSelectionMode] = useState<boolean>(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const [isDeleting,setIsDeleting] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -129,6 +130,7 @@ export default function Bookings() {
   }, [selectedBookings]);
 
   const handleDelete = async () => {
+    setIsDeleting(true);
     try {
       if (selectedBookings.length === 0) return;
       await axios.put(
@@ -159,6 +161,7 @@ export default function Bookings() {
         duration: 2000,
       });
     }
+    setIsDeleting(false);
   };
 
   const handleSelectAll = () => {
@@ -331,8 +334,22 @@ export default function Bookings() {
               onClick={handleDelete}
               className="flex items-center gap-2"
             >
-              <Trash2 className="w-4 h-4" />
-              <span>Delete</span>
+              {isDeleting ? (
+                <>
+                  <span>Deleting</span>
+                  <div className="flex items-end py-1 h-full">
+                    <span className="sr-only">Loading...</span>
+                    <div className="h-1 w-1 bg-foreground mx-[2px] border-border rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                    <div className="h-1 w-1 bg-foreground mx-[2px] border-border rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                    <div className="h-1 w-1 bg-foreground mx-[2px] border-border rounded-full animate-bounce"></div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <Trash2 className="w-4 h-4" />
+                  <span>Delete</span>
+                </>
+              )}
             </Button>
           </div>
         </div>

@@ -370,7 +370,7 @@ export default function ProfilePage() {
               </h1>
               <Pencil
                 onClick={() => setIsEditingName(true)}
-                className="w-4 h-4 mt-2 cursor-pointer text-white"
+                className="w-4 h-4 mt-2 cursor-pointer text-foreground"
               />
             </div>
           ) : (

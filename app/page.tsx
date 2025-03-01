@@ -14,7 +14,7 @@ export default function Home() {
 
       <footer className="bg-background container mx-auto px-4 text-muted-foreground py-8">
         <div className=" text-center">
-          <p>&copy; 2025 Jain Car Rental. All rights reserved.</p>
+          <p>&copy; 2025 Jain Car Rentals. All rights reserved.</p>
         </div>
         <Link
           href="/terms-and-conditions"
