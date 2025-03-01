@@ -48,7 +48,7 @@ export function NavBar() {
   return (
     <div className="relative">
       <Redirect />
-      <nav className="fixed w-full  border-border top-0 left-0 z-[99999] py-1 flex items-center rounded-none cursor-normal bg-blue-400 dark:bg-[#181818]  justify-between px-4">
+      <nav className="fixed w-full  border-border top-0 left-0 z-[99999] py-1 flex items-center rounded-none cursor-normal bg-blue-400 dark:bg-[#181818] bg-opacity-60 dark:bg-opacity-60 backdrop-blur-lg justify-between px-4">
         <div className="flex max-sm:flex-row-reverse w-full transition-all duration-300">
           {name && (
             <div className="max-sm:w-25 flex sm:hidden items-center">
