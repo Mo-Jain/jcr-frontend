@@ -13,7 +13,7 @@ export default function Home() {
           <CarSection />
         </div>
       </main>
-      <div className="mx-1 sm:mx-2">
+      <div className="mx-2">
         <footer className="bg-white bg-opacity-40 dark:bg-opacity-20 backdrop-blur-lg container mx-auto px-4 text-muted-foreground py-8">
           <div className=" text-center">
             <p>&copy; 2025 Jain Car Rentals. All rights reserved.</p>

@@ -9,11 +9,11 @@ export const TopSection = () => {
   const router = useRouter();
   return (
     <div>
-      <section className="bg-transparent max-h-[300px] my-0 relative overflow-hidden py-12 sm:py-20">
+      <section className="dark:bg-black/20 bg-opacity-20 max-h-[300px] my-0 relative overflow-hidden py-12 sm:py-20">
         {/* Background Components */}
           <StarryBackground />
           <ThemeBg />
-        <div className="container mx-auto px-4 h-fit">
+        <div className="container mx-auto px-4 h-fit ">
           <div className="max-w-3xl mx-auto text-center relative z-10">
             <h1
               className="sm:text-4xl text-2xl font-bold [text-shadow:_0_8px_8px_rgb(103_103_110_/_0.8)] text-gray-900 dark:text-gray-200 mb-4"

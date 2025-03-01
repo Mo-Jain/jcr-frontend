@@ -42,10 +42,10 @@ const StarryBackground: React.FC = () => {
             }}
           />
         ))}
-        <Image src={Stars} alt="stars"  className="absolute inset-0 object-cover opacity-0 dark:opacity-100 transition-all duration-1000 ease-in-out z-20 w-full h-full" />
+        <Image src={Stars} alt="stars"  className="absolute inset-0 object-cover opacity-0 dark:opacity-100 transition-opacity duration-1000 ease-in-out z-20 w-full h-full" />
       </div>
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <Image src={Sky} alt="sky"  className="absolute inset-0 h-screen w-screen opacity-50 dark:opacity-0 transition-all duration-1000 ease-in-out  w-full h-full" />
+        <Image src={Sky} alt="sky"  className="absolute inset-0 h-screen w-screen opacity-50 dark:opacity-0 transition-opacity duration-1000 ease-in-out  w-full h-full" />
       </div>
     </div>
   );

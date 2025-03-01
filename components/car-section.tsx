@@ -24,7 +24,7 @@ export function CarSection() {
   }
 
   return (
-    <div className="mx-1 sm:mx-2">
+    <div className="mx-2">
       <AddCarDialog isOpen={isOpen} setIsOpen={setIsOpen} />
       {name ? (
         <div >
