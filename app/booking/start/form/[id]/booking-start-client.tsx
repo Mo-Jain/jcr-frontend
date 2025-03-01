@@ -542,19 +542,19 @@ export default function BookingStartClient({
                   <SelectContent className="bg-muted border-border">
                     <SelectItem
                       className="hover:dark:bg-card cursor-pointer"
-                      value="cash"
+                      value="Cash"
                     >
                       Cash
                     </SelectItem>
                     <SelectItem
                       className="hover:dark:bg-card cursor-pointer"
-                      value="card"
+                      value="Card"
                     >
                       Card
                     </SelectItem>
                     <SelectItem
                       className="hover:dark:bg-card cursor-pointer"
-                      value="upi"
+                      value="UPI"
                     >
                       UPI
                     </SelectItem>

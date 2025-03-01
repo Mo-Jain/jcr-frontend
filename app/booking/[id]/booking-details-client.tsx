@@ -132,7 +132,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
     return;
   }
 
-  function handleCancel() {
+  function handleReset() {
     //add code to stop or start the booking
     setIsEditable(!isEditable);
     setStartDate(new Date(booking.start));
@@ -585,7 +585,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
             <DropdownMenuContent align="end" className="border-border">
               <DropdownMenuItem
                 className="cursor-pointer"
-                onClick={handleCancel}
+                onClick={handleReset}
               >
                 <Edit className="mr-2 h-4 w-4" />
                 <span>Edit</span>
@@ -728,7 +728,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
             )}
           </div>
           <div>
-            {address && (
+            {booking.customerAddress && (
               <div>
                 <p className="text-sm text-blue-500">Address</p>
                 {!isEditable ? (
@@ -786,7 +786,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
               </>
             )}
           </div>
-          {securityDeposit && (
+          {booking.securityDeposit && (
             <div>
               <p className="text-sm text-blue-500">Security Deposit</p>
               {!isEditable ? (
@@ -812,7 +812,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
               <p className="text-sm text-blue-500">Payment Amount</p>
               <span className="text-sm">{totalAmount}</span>
             </div>
-            {paymentMethod && (
+            {booking.paymentMethod && (
               <div>
                 <p className="text-sm text-blue-500">Payment Method</p>
                 {!isEditable ? (
@@ -839,7 +839,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
               {(totalAmount ? totalAmount : 0) -
                 (advancePayment ? advancePayment : 0)}
             </span>
-            {advancePayment && (
+            {booking.advancePayment && (
               <div>
                 <p className="text-sm text-blue-500">Payment Done</p>
                 {!isEditable ? (
@@ -870,7 +870,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
         <h3 className="text-lg font-semibold mb-4 ">Some more details</h3>
         <div className="grid grid-cols-2 gap-4 sm:gap-6">
           <div className="space-y-4">
-            {odometerReading && (
+            {booking.odometerReading && (
               <div>
                 <p className="text-sm text-blue-500">Odometer Reading</p>
                 {!isEditable ? (
@@ -888,7 +888,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
                 )}
               </div>
             )}
-            {bookingStatus !== "Upcoming" && (
+            {booking.status !== "Upcoming" && (
               <div>
                 <p className="text-xs sm:text-sm text-blue-500">
                   Selfie with car
@@ -992,7 +992,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
                 )}
               </div>
             )}
-            {odometerReading &&
+            {booking.odometerReading &&
               Number(endOdometerReading) > Number(odometerReading) && (
                 <div>
                   <p className="text-sm text-blue-500">Kilometer travelled</p>
@@ -1001,7 +1001,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
                   </span>
                 </div>
               )}
-            {notes && (
+            {booking.notes && (
               <div>
                 <p className="text-sm text-blue-500">Notes if any</p>
                 {!isEditable ? (
@@ -1019,7 +1019,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
                 )}
               </div>
             )}
-            {bookingStatus !== "Upcoming" && (
+            {booking.status !== "Upcoming" && (
               <div>
                 <div className="flex sm:gap-1 items-center">
                   <p className="text-xs sm:text-sm text-blue-500">
@@ -1105,7 +1105,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
             {!isLoading ? (
               <>
                 <Button
-                  className="px-4 py-4 max-sm:w-full bg-primary hover:bg-opacity-50 shadow-lg"
+                  className="px-4 py-4 max-sm:w-full min-w-[100px] bg-primary hover:bg-opacity-50 shadow-lg"
                   onClick={() => {
                     setAction("Update");
                     setIsDialogOpen(true);
@@ -1114,10 +1114,10 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
                   <span className="">Update</span>
                 </Button>
                 <Button
-                  className="px-4 py-4 max-sm:w-full bg-primary hover:bg-opacity-50 shadow-lg"
-                  onClick={handleCancel}
+                  className="px-4 py-4 max-sm:w-full min-w-[100px] bg-primary hover:bg-opacity-50 shadow-lg"
+                  onClick={handleReset}
                 >
-                  <span className="">Cancel</span>
+                  <span className="">Reset</span>
                 </Button>
               </>
             ) : (

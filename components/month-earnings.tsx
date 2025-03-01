@@ -40,7 +40,7 @@ const MonthEarnings = () => {
   }, []);
 
   return (
-    <div className="w-full  relative p-1 rounded-xl shadow-sm bg-white dark:bg-muted z-0 flex flex-col xs:bg-blue-500">
+    <div className="w-full  relative p-1 rounded-md shadow-sm bg-white dark:bg-muted z-0 flex flex-col xs:bg-blue-500">
       <div className="px-4 py-3 border-b border-gray-300 dark:border-border">
         <h3 className="font-semibold text-md">This Month Earnings</h3>
       </div>

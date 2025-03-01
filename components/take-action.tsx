@@ -66,7 +66,7 @@ const TakeAction = () => {
   }, []);
 
   return (
-    <div className="w-full z-0 relative p-1 rounded-xl shadow-sm bg-white dark:bg-muted z-0 flex flex-col">
+    <div className="w-full z-0 relative p-1 rounded-md shadow-sm bg-white dark:bg-muted z-0 flex flex-col">
       <div className="px-4 py-3 border-b border-gray-300 dark:border-border">
         <h3 className="font-semibold text-md">Take Action</h3>
       </div>
@@ -145,7 +145,7 @@ const Booking = ({
       <div
         key={booking.id}
         onClick={() => router.push(`/booking/${booking.id}`)}
-        className="flex cursor-pointer items-center shadow-sm justify-between w-full bg-gray-100 dark:bg-background rounded-lg p-1 gap-1 sm:p-2 "
+        className="flex cursor-pointer items-center shadow-sm justify-between w-full bg-gray-100 dark:bg-background rounded-sm p-1 gap-1 sm:p-2 "
       >
         <div className="flex flex-col items-center">
           <div

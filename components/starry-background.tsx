@@ -4,6 +4,8 @@ import type React from "react";
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { useMediaQuery } from "react-responsive";
+import Image from "next/image";
+import Stars from "@/public/stars-black.jpg";
 
 const StarryBackground: React.FC = () => {
   const { theme, systemTheme } = useTheme();
@@ -39,6 +41,7 @@ const StarryBackground: React.FC = () => {
           }}
         />
       ))}
+      <Image src={Stars} alt="stars"  className="object-cover opacity-0 dark:opacity-100 transition-all duration-1000 ease-in-out z-20 w-full h-full" />
     </div>
   );
 };

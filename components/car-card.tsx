@@ -22,7 +22,7 @@ export function CarCard({ name, imageUrl, plateNumber }: CarCardProps) {
               className="rounded-lg w-full "
             />
           </div>
-          <div className="p-0 sm:p-4 w-full flex justify-center items-center">
+          <div className="p-0 sm:p-1 w-full flex justify-center items-center">
             <div className="flex justify-center items-center gap-2">
               <div className="flex flex-col gap-1 w-fit justify-center items-center">
                 <h3 className="text-lg max-sm:text-xs w-fit overflow-hidden text-center font-semibold whitespace-wrap">
