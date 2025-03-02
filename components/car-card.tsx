@@ -13,7 +13,7 @@ export function CarCard({ name, imageUrl, plateNumber }: CarCardProps) {
     <div className="w-full z-0 relative z-0">
       <div className="p-2 z-0 border border-border shadow-sm  bg-white dark:bg-muted rounded-md cursor-pointer">
         <div className="flex flex-col justify-between gap-1 sm:px-1">
-          <div className="relative flex-shrink-0 w-full h-24 sm:h-48">
+          <div className="relative flex-shrink-0 w-full h-24 sm:h-48 min-h-24 sm:min-h-48 max-h-24 sm:max-h-48">
             <Image
               src={imageUrl || "/placeholder.svg"}
               alt={name}
@@ -25,8 +25,8 @@ export function CarCard({ name, imageUrl, plateNumber }: CarCardProps) {
           <div className="p-0 sm:p-1 w-full flex justify-center items-center">
             <div className="flex justify-center items-center gap-2">
               <div className="flex flex-col gap-1 w-fit justify-center items-center">
-                <h3 className="text-lg max-sm:text-xs w-fit overflow-hidden text-center font-semibold whitespace-wrap">
-                  {name.toLocaleUpperCase()}
+                <h3 className="text-lg flex items-center max-sm:text-xs max-sm:min-h-[36px] w-fit overflow-hidden text-center font-semibold whitespace-wrap">
+                  <span>{name.toLocaleUpperCase()}</span>
                 </h3>
                 <div className="max-sm:max-w-[107px] max-sm:max-h-[20px]">
                   <div className="flex justify-center sm:-mt-3 items-center gap-1 p-1 sm:p-1 border-[3.5px] w-fit scale-[0.40] sm:scale-[0.60]  border-gray-400 rounded-sm max-sm:scaled-container ">

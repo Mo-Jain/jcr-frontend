@@ -68,7 +68,7 @@ export default function LoginPage() {
       <Card className="w-full max-w-md border-border bg-muted">
         <CardHeader className="space-y-1">
           <div className="flex justify-between items-center">
-            <CardTitle className="text-2xl font-bold">Login</CardTitle>
+            <CardTitle className="text-2xl select-none font-bold">Login</CardTitle>
           </div>
           <CardDescription>
           </CardDescription>

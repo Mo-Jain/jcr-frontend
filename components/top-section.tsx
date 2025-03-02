@@ -28,11 +28,9 @@ export const TopSection = () => {
               <div className="flex justify-center items-center bg-transparent">
                 <div
                   onClick={() => router.push("/bookings")}
-                  className="bg-white/20 hover:bg-white/40 dark:hover:bg-white/30 max-w-[220px] bg-opacity-20 backdrop-blur-md cursor-pointer shadow-xl max-sm:text-sm text-foreground px-3 sm:px-6 py-3 rounded-sm font-semibold transition duration-300"
+                  className="bg-white/20 select-none text-foreground hover:bg-white/40 dark:hover:bg-white/30 max-w-[220px] bg-opacity-20 backdrop-blur-md cursor-pointer shadow-xl max-sm:text-sm text-foreground px-3 sm:px-6 py-3 rounded-sm font-semibold transition duration-300"
                 >
-                  <span className="text-foreground">
                     Start Booking Now
-                  </span>
                 </div>
               </div>
             ) : (

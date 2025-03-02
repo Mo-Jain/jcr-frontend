@@ -18,7 +18,7 @@ const SplashScreen = () => {
 
   return (
     <div className="relative">
-      <div className="fixed top-0 left-0 z-[999999] w-full h-full flex items-center justify-center bg-black/80 backdrop-blur-sm">
+      <div className="fixed top-0 left-0 z-[999999] w-full h-full flex items-center justify-center bg-black/60 backdrop-blur-xl">
         <Logo1 id="water" className="h-[120px] w-[140px] stroke-[1px]" />
         <Logo1 className="h-[120px] w-[140px] z-10 ml-[-140px] stroke-[1px] stroke-white" />
       </div>

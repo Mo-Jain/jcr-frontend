@@ -71,12 +71,12 @@ export function NavBar() {
         </div>
         {!name ? (
           <div className="py-2">
-            <p
-              className="w-full font-bold text-zinc-700 dark:text-gray-200 cursor-pointer hover:text-blue-700 hover:dark:text-blue-700"
+            <div
+              className="w-full font-bold select-none text-zinc-700 dark:text-gray-200 cursor-pointer hover:text-blue-700 hover:dark:text-blue-700"
               onClick={() => router.push("/login")}
             >
               Login
-            </p>
+            </div>
           </div>
         ) : (
           <div className="w-18 space-x-2  flex text-right ">
@@ -128,7 +128,7 @@ export function NavBar() {
           </div>
         )}
       </nav>
-      <div className="w-full h-[59px]"></div>
+      <div className="w-full h-[59px] max-sm:h-[56px]"></div>
     </div>
   );
 }
