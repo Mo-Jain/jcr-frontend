@@ -12,7 +12,7 @@ import BackArrow from "@/public/back-arrow.svg";
 const Home = () => {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <Card className="w-full max-w-md">
+      <Card className="w-full max-w-md border-border">
         <CardHeader className="space-y-1">
           <div className="flex justify-between items-center">
             <CardTitle className="text-2xl font-bold">

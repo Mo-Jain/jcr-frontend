@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import Logo1 from "@/public/logo1.svg";
 import LogoText from "@/public/logo_text.svg";
 import { usePathname, useRouter } from "next/navigation";
@@ -72,12 +71,12 @@ export function NavBar() {
         </div>
         {!name ? (
           <div className="py-2">
-            <Button
-              className="w-full bg-blue-600 text-white dark:text-black"
+            <p
+              className="w-full font-bold text-zinc-700 dark:text-gray-200 cursor-pointer hover:text-blue-700 hover:dark:text-blue-700"
               onClick={() => router.push("/login")}
             >
               Login
-            </Button>
+            </p>
           </div>
         ) : (
           <div className="w-18 space-x-2  flex text-right ">
@@ -129,7 +128,7 @@ export function NavBar() {
           </div>
         )}
       </nav>
-      <div className="w-full h-[59px] sm:h-[65px]"></div>
+      <div className="w-full h-[59px]"></div>
     </div>
   );
 }

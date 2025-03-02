@@ -1,6 +1,4 @@
 "use client";
-import StarryBackground from "./starry-background";
-import ThemeBg from "./theme-bg";
 import { useUserStore } from "@/lib/store";
 import { useRouter } from "next/navigation";
 
@@ -9,10 +7,9 @@ export const TopSection = () => {
   const router = useRouter();
   return (
     <div>
-      <section className="dark:bg-black/20 bg-opacity-20 max-h-[300px] my-0 relative overflow-hidden py-12 sm:py-20">
+      <section className="dark:bg-black/50 max-h-[300px] my-0 relative overflow-hidden py-12 sm:py-20">
         {/* Background Components */}
-          <StarryBackground />
-          <ThemeBg />
+          
         <div className="container mx-auto px-4 h-fit ">
           <div className="max-w-3xl mx-auto text-center relative z-10">
             <h1
@@ -21,7 +18,9 @@ export const TopSection = () => {
             >
               SEAMLESS CAR BOOKINGS
             </h1>
-            <p className="sm:text-xl text-sm mb-8">
+            <p 
+            style={{ fontFamily: "var(--font-alma), sans-serif" }}
+            className="sm:text-lg text-sm mb-6 text-gray-500 dark:text-gray-400">
               Manage your car rentals with ease using our intuitive booking
               scheduler.
             </p>

@@ -7,22 +7,20 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ThemeToggle } from "@/components/theme-toggle";
 import CarIcon from "@/public/car-icon.svg";
 import BackArrow from "@/public/back-arrow.svg";
 
 export default function CarNotFound() {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-0">
-      <Card className="w-full max-w-md">
+      <Card className="w-full max-w-md border-border">
         <CardHeader className="space-y-1">
           <div className="flex justify-between items-center">
             <CardTitle className="text-2xl font-bold">Car Not Found</CardTitle>
-            <ThemeToggle />
           </div>
         </CardHeader>
         <CardContent className="flex flex-col items-center space-y-4">
-          <CarIcon className="w-60 dark:stroke-blue-200  dark:fill-blue-200 stroke-primary fill-primary" />
+          <CarIcon className="w-56 h-24 dark:stroke-blue-200  dark:fill-blue-200 stroke-primary fill-primary" />
           <p className="text-center text-muted-foreground">
             We&apos;re sorry, but the car you&apos;re looking for doesn&apos;t
             exist or has been removed.

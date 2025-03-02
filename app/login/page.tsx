@@ -64,14 +64,13 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+    <div className="min-h-screen bg-white/30 dark:bg-black/30 backdrop-blur-lg flex items-center justify-center p-4">
       <Card className="w-full max-w-md border-border bg-muted">
         <CardHeader className="space-y-1">
           <div className="flex justify-between items-center">
             <CardTitle className="text-2xl font-bold">Login</CardTitle>
           </div>
           <CardDescription>
-            Enter your username and password to access your account
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>

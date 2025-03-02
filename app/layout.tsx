@@ -6,6 +6,8 @@ import localFont from "next/font/local";
 import { Toaster } from "@/components/ui/toaster";
 import Providers from "@/components/provider";
 import Initiate from "@/components/initiate";
+import StarryBackground from "@/components/starry-background";
+import ThemeBg from "@/components/theme-bg";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -56,6 +58,8 @@ export default function RootLayout({
         className={`${inter.className} ${teratur.variable} ${alcova.variable} ${xova.variable} ${equinox.variable} ${alma.variable} antialiased`}
       >
         <Providers>
+          <StarryBackground />
+          <ThemeBg />
           <Initiate />
           <NavBar />
           {children}

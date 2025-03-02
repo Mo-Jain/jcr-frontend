@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Edit, IndianRupee, LogOut, PlaneTakeoff, Trash2 } from "lucide-react";
+import { Edit, IndianRupee, LogOut,  Trash2 } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
@@ -79,7 +79,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
       setMileage(car.mileage || 0);
       setImageUrl(car.imageUrl || "");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [car]);
 
   useEffect(() => {

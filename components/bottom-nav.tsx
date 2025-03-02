@@ -5,7 +5,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useUserStore } from "@/lib/store";
-import HomeIcon from "@/public/home.svg";
+import HomeIcon from "@/public/home1.svg";
 import BookingIcon from "@/public/online-booking.svg";
 import CalendarIcon from "@/public/calendar.svg";
 
@@ -58,7 +58,7 @@ export function BottomNav() {
   return (
     <div className="relative">
       <div className="w-full h-[56px] sm:hidden"></div>
-      <nav className="fixed z-[99999] bottom-0 left-0 right-0 border dark:border-border bg-white dark:bg-[#181818] sm:hidden">
+      <nav className="fixed z-[99999] bottom-0 left-0 right-0 border dark:border-border bg-white bg-opacity-60 dark:bg-black dark:bg-opacity-50 backdrop-blur-lg  sm:hidden">
         {name ? (
           <div className="flex justify-around py-2">
             {NAV_ITEMS.map(({ id, href, icon: Icon }) => (
@@ -72,7 +72,7 @@ export function BottomNav() {
                 ) : (
                   Icon && (
                     <Icon
-                      className={`h-8 w-12 ${getIconClasses(selectedTab === id)}`}
+                      className={`h-8 w-8 ${getIconClasses(selectedTab === id)}`}
                     />
                   )
                 )}
@@ -101,7 +101,7 @@ function ProfileIcon({ selected, imageUrl, shortName }: ProfileIconProps) {
           alt="Profile"
           width={24}
           height={24}
-          className={`h-8 w-8 object-cover rounded-full border-2 ${selected ? "border-[#27272A] dark:border-primary" : "border-transparent"}`}
+          className={`h-8 w-8 object-cover rounded-full border-2 ${selected ? "border-primary" : "border-transparent"}`}
         />
       ) : (
         <span

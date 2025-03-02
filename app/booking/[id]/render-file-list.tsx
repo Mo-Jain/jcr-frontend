@@ -1,7 +1,7 @@
 import { ImageIcon, Loader2 } from "lucide-react";
 import { BsFilePdfFill } from "react-icons/bs";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import axios from "axios";
 import { BASE_URL } from "@/lib/config";
 import { toast } from "@/hooks/use-toast";
