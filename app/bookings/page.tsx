@@ -88,6 +88,7 @@ export interface Booking {
   startTime: string;
   endTime: string;
   status: string;
+  isAdmin: boolean;
 }
 
 export default function Bookings() {
@@ -149,10 +150,13 @@ export default function Bookings() {
       for (const id of selectedBookings) {
         setBookings((prev) => prev.filter((booking) => booking.id != id));
       }
+      setSelectedBookings([]);
+      setIsSelectionMode(false);
       toast({
         description: "Bookings successfully deleted",
         duration: 2000,
       });
+      
     } catch (error) {
       console.log(error);
       toast({
@@ -165,12 +169,17 @@ export default function Bookings() {
   };
 
   const handleSelectAll = () => {
-    if (filteredBookings.length === selectedBookings.length) {
+    const adminBookings = filteredBookings.filter(booking => booking.isAdmin);
+    if (adminBookings.length === selectedBookings.length) {
       setSelectedBookings([]);
     } else {
-      setSelectedBookings(filteredBookings.map((booking) => booking.id));
+      setSelectedBookings(adminBookings.map((booking) => booking.id));
     }
   };
+
+  useEffect(() =>{
+    console.log("selectedBookings",selectedBookings)
+  },[selectedBookings])
 
   const handleAddBooking = () => {
     if (cars.length === 0) {
@@ -195,6 +204,7 @@ export default function Bookings() {
 
     setFilteredBookings(newfilteredBookings);
   }, [bookings, selectedCar, selectedStatus]);
+
 
   return (
     <div className="min-h-screen bg-background">
@@ -321,7 +331,7 @@ export default function Bookings() {
           >
             <div className="flex items-center gap-3">
               <Checkbox
-                checked={filteredBookings.length === selectedBookings.length}
+                checked={filteredBookings.filter(booking => booking.isAdmin).length === selectedBookings.length}
                 onClick={handleSelectAll}
                 className={`h-5 w-5 max-sm:w-4 max-sm:h-4 transition-all  duration-300 sm:rounded-md accent-blue-300`}
               />
@@ -440,18 +450,18 @@ const BookingCard = ({
     const currDate = new Date();
     if (status === "Upcoming") {
       if (startDateTime >= currDate) {
-        headerText = "Guest shall pickup car by";
+        headerText = "Scheduled pickup on";
       } else {
-        headerText = "Guest was scheduled to pickup car by";
+        headerText = "Scheduled pickup was on";
       }
     } else if (status === "Ongoing") {
       if (endDateTime < currDate) {
-        headerText = "Guest was scheduled to return by";
+        headerText = "Scheduled return was on";
       } else {
-        headerText = "Guest shall return by";
+        headerText = "Scheduled return by";
       }
     } else if (status === "Completed") {
-      headerText = "Guest returned at";
+      headerText = "Booking ended at";
     }
 
     return headerText;
@@ -462,11 +472,11 @@ const BookingCard = ({
       style={{ marginTop: 0 }}
       className="flex gap-2 overflow-hidden mt-0 items-center w-full"
     >
-      <Checkbox
+     {booking.isAdmin && <Checkbox
         checked={selectedBookings.includes(booking.id)}
         onClick={() => handleCheckboxChange(booking.id)}
         className={`h-5 w-5 max-sm:w-4 max-sm:h-4 ${selectedBookings.length > 0 ? "ml-0" : "-ml-6"} transition-all duration-300 p-0 sm:rounded-md accent-blue-300`}
-      />
+      />}
       <Card className="w-full overflow-hidden bg-white dark:bg-background hover:shadow-md border-border transition-shadow my-2">
         <Link href={`/booking/${booking.id}`}>
           <CardContent className="p-0">
@@ -502,6 +512,7 @@ const BookingCard = ({
                   </div>
                 </div>
                 <div className="">
+                  {booking.isAdmin &&
                   <DropdownMenu
                     modal={false}
                     open={isDropDownOpen}
@@ -537,6 +548,7 @@ const BookingCard = ({
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
+                  }
                 </div>
               </div>
             </div>

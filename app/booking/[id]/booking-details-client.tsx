@@ -29,6 +29,7 @@ import BookingStop from "@/components/booking-stop";
 
 interface BookingDetailsClientProps {
   booking: Booking;
+  isAdmin: boolean;
 }
 
 function formatDateTime(date: Date) {
@@ -43,7 +44,7 @@ interface FormErrors {
   [key: string]: string;
 }
 
-export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
+export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientProps) {
   const router = useRouter();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isEditable, setIsEditable] = useState(false);
@@ -441,7 +442,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
       setErrors((prev) => ({ ...prev, [type]: "" }));
     }
   };
-
+  
   function getHeader(
     status: string,
     startDate: string,
@@ -455,24 +456,23 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
 
     const [startHour, startMinute] = startTime.split(":").map(Number);
     const [endHour, endMinute] = endTime.split(":").map(Number);
-
     startDateTime.setHours(startHour, startMinute, 0, 0);
     endDateTime.setHours(endHour, endMinute, 0, 0);
     const currDate = new Date();
     if (status === "Upcoming") {
       if (startDateTime >= currDate) {
-        headerText = "Guest shall pickup car by";
+        headerText = "Scheduled pickup on";
       } else {
-        headerText = "Guest was scheduled to pickup car by";
+        headerText = "Scheduled pickup was on";
       }
     } else if (status === "Ongoing") {
       if (endDateTime < currDate) {
-        headerText = "Guest was scheduled to return by";
+        headerText = "Scheduled return was on";
       } else {
-        headerText = "Guest shall return by";
+        headerText = "Scheduled return by";
       }
     } else if (status === "Completed") {
-      headerText = "Guest returned at";
+      headerText = "Booking ended at";
     }
 
     return headerText;
@@ -571,6 +571,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
           <p className="text-sm text-blue-500">Booking ID: {booking.id}</p>
         </div>
         <div className="mr-4">
+          {isAdmin &&
           <DropdownMenu
             open={isDropDownOpen}
             onOpenChange={setIsDropdownOpen}
@@ -603,6 +604,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+          }
         </div>{" "}
         {/* Spacer for alignment */}
       </div>
@@ -653,7 +655,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
         <div className="flex items-center justify-center gap-8 max-sm:gap-2 mb-4">
           <div>
             <p className="text-sm text-blue-500">From</p>
-            {!isEditable ? (
+            {!isEditable || !isAdmin ? (
               <p className="font-semibold max-sm:text-sm">
                 {formatDateTime(startDate)} {booking.startTime}
               </p>
@@ -676,7 +678,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
           <ArrowRight className="mt-4 w-12 stroke-0 fill-blue-400 flex-shrink-0" />
           <div>
             <p className="text-sm text-blue-500">To</p>
-            {!isEditable ? (
+            {!isEditable || !isAdmin ? (
               <p className="font-semibold max-sm:text-sm">
                 {formatDateTime(endDate)} {booking.endTime}
               </p>
@@ -701,7 +703,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
         <div className="grid grid-cols-2 items-center sm:gap-6">
           <div>
             <p className="text-sm text-blue-500 mb-1">Booked by</p>
-            {!isEditable ? (
+            {!isEditable || !isAdmin ? (
               <>
                 <p className="font-semibold">{name}</p>
                 <p className="text-sm">{number}</p>
@@ -731,7 +733,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
             {booking.customerAddress && (
               <div>
                 <p className="text-sm text-blue-500">Address</p>
-                {!isEditable ? (
+                {!isEditable || !isAdmin ? (
                   <span className="text-sm whitespace-wrap max-w-[120px]">
                     {address}
                   </span>
@@ -751,7 +753,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
         <div>
           <p className="text-sm text-blue-500 mb-1">Booking Status</p>
           <div>
-            {isEditable ? (
+            {isEditable && isAdmin ? (
               <StatusInput
                 status={bookingStatus}
                 setStatus={setBookingStatus}
@@ -770,7 +772,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
         <div className="grid grid-cols-2 gap-4 sm:gap-6">
           <div>
             <p className="text-sm text-blue-500 mb-1">24 Hr Price</p>
-            {!isEditable ? (
+            {!isEditable || !isAdmin ? (
               <p className="text-sm">{dailyRentalPrice}</p>
             ) : (
               <>
@@ -789,7 +791,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
           {booking.securityDeposit && (
             <div>
               <p className="text-sm text-blue-500">Security Deposit</p>
-              {!isEditable ? (
+              {!isEditable || !isAdmin ? (
                 <span className="text-sm">{securityDeposit}</span>
               ) : (
                 <>
@@ -815,7 +817,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
             {booking.paymentMethod && (
               <div>
                 <p className="text-sm text-blue-500">Payment Method</p>
-                {!isEditable ? (
+                {!isEditable || !isAdmin ? (
                   <>
                     <span className="text-sm">{paymentMethod}</span>
                   </>
@@ -842,7 +844,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
             {booking.advancePayment && (
               <div>
                 <p className="text-sm text-blue-500">Payment Done</p>
-                {!isEditable ? (
+                {!isEditable || !isAdmin ? (
                   <>
                     <span className="text-sm">{advancePayment}</span>
                   </>
@@ -873,7 +875,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
             {booking.odometerReading && (
               <div>
                 <p className="text-sm text-blue-500">Odometer Reading</p>
-                {!isEditable ? (
+                {!isEditable || !isAdmin ? (
                   <span className="text-sm">{odometerReading}</span>
                 ) : (
                   <>
@@ -897,7 +899,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
                 {(!selfieUrl || uploadedFiles["selfie"].length === 0) && (
                   <div className="h-[20px] w-full" />
                 )}
-                {isEditable && !selfieUrl && (
+                {isEditable && isAdmin && !selfieUrl && (
                   <>
                     <Button
                       variant="outline"
@@ -927,7 +929,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
                 <p className="text-xs sm:text-sm text-blue-500">
                   Aadhar Card and Driving License
                 </p>
-                {isEditable && documents && (
+                {isEditable && isAdmin && documents && (
                   <Button
                     className="cursor-pointer p-2 bg-gray-200 dark:bg-muted dark:text-white text-black hover:bg-gray-300 dark:hover:bg-secondary hover:bg-opacity-30"
                     onClick={() => {
@@ -946,7 +948,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
                   </div>
                 </div>
               )}
-              {isEditable && (!documents || documents.length < 5) && (
+              {isEditable && isAdmin && (!documents || documents.length < 5) && (
                 <>
                   <Button
                     variant="outline"
@@ -977,7 +979,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
             {booking.endodometerReading && (
               <div>
                 <p className="text-sm text-blue-500">End Odometer Reading</p>
-                {!isEditable ? (
+                {!isEditable || !isAdmin ? (
                   <span className="text-sm">{endOdometerReading}</span>
                 ) : (
                   <>
@@ -1004,7 +1006,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
             {booking.notes && (
               <div>
                 <p className="text-sm text-blue-500">Notes if any</p>
-                {!isEditable ? (
+                {!isEditable || !isAdmin ? (
                   <span className="text-sm">{notes}</span>
                 ) : (
                   <>
@@ -1025,7 +1027,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
                   <p className="text-xs sm:text-sm text-blue-500">
                     Photos Before pick-up
                   </p>
-                  {isEditable && carImages && (
+                  {isEditable && isAdmin && carImages && (
                     <Button
                       className="cursor-pointer p-2 bg-gray-200 dark:bg-muted dark:text-white text-black hover:bg-gray-300 dark:hover:bg-secondary hover:bg-opacity-30"
                       onClick={() => {
@@ -1044,7 +1046,7 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
                     </div>
                   </div>
                 )}
-                {isEditable && (!carImages || carImages.length < 5) && (
+                {isEditable && isAdmin && (!carImages || carImages.length < 5) && (
                   <>
                     <Button
                       variant="outline"
@@ -1072,8 +1074,9 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
           </div>
         </div>
       </div>
-
-      {!isEditable && (
+      {isAdmin &&
+      <>
+      {!isEditable && isAdmin && (
         <div className=" flex justify-center space-x-2 mt-2">
           {bookingStatus === "Upcoming" && (
             <Button
@@ -1099,7 +1102,9 @@ export function BookingDetailsClient({ booking }: BookingDetailsClientProps) {
           )}
         </div>
       )}
-      {isEditable && (
+      </>
+      }
+      {isEditable && isAdmin && (
         <div className=" flex justify-center space-x-2 mt-2">
           <>
             {!isLoading ? (

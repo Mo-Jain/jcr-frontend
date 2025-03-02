@@ -230,6 +230,7 @@ export function AddBookingDialog({
         carPlateNumber: car?.plateNumber || "",
         carColor: car?.colorOfBooking || "",
         status: "Upcoming",
+        isAdmin:true
       };
 
       setIsOpen(false);

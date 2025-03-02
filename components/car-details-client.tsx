@@ -71,6 +71,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isAdmin,setIsAdmin] = useState(false);
 
   useEffect(() => {
     if (car) {
@@ -92,6 +93,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
           },
         });
         setCar(resCar.data.car);
+        setIsAdmin(resCar.data.isAdmin);
         const resEarnings = await axios.get(
           `${BASE_URL}/api/v1/car/earnings/${carId}`,
           {
@@ -279,18 +281,18 @@ export function CarDetailsClient({ carId }: { carId: number }) {
     const currDate = new Date();
     if (status === "Upcoming") {
       if (startDateTime >= currDate) {
-        headerText = "Guest shall pickup car by";
+        headerText = "Scheduled pickup on";
       } else {
-        headerText = "Guest was scheduled to pickup car by";
+        headerText = "Scheduled pickup was on";
       }
     } else if (status === "Ongoing") {
       if (endDateTime < currDate) {
-        headerText = "Guest was scheduled to return by";
+        headerText = "Scheduled return was on";
       } else {
-        headerText = "Guest shall return by";
+        headerText = "Scheduled return by";
       }
     } else if (status === "Completed") {
-      headerText = "Guest returned at";
+      headerText = "Booking ended at";
     }
 
     return headerText;
@@ -438,48 +440,52 @@ export function CarDetailsClient({ carId }: { carId: number }) {
           )}
         </div>
         <div className="flex justify-center w-full">
-          {!isEditable ? (
-            <Button
-              onClick={() => setIsEditable(true)}
-              className="bg-primary text-primary-foreground p-2 rounded-md hover:bg-primary/90 transition-colors"
-            >
-              <Edit size={20} />
-              <span>Edit Car Details</span>
-            </Button>
-          ) : (
-            <>
+          {isAdmin &&
+          <>
+            {!isEditable ? (
               <Button
-                disabled={isLoading}
-                onClick={() => {
-                  setAction("Update car");
-                  setIsDialogOpen(true);
-                }}
-                className={`mx-3 flex items-center bg-primary text-primary-foreground p-2 rounded-md hover:bg-primary/90 transition-colors ${isLoading && "cursor-not-allowed opacity-50"}`}
+                onClick={() => setIsEditable(true)}
+                className="bg-primary text-primary-foreground p-2 rounded-md hover:bg-primary/90 transition-colors"
               >
-                {isLoading ? (
-                  <>
-                    <span className="text-white">Please wait</span>
-                    <div className="flex items-end py-1 h-full">
-                      <span className="sr-only">Loading...</span>
-                      <div className="h-1 w-1 bg-white mx-[2px] border-border rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-                      <div className="h-1 w-1 bg-white mx-[2px] border-border rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-                      <div className="h-1 w-1 bg-white mx-[2px] border-border rounded-full animate-bounce"></div>
-                    </div>
-                  </>
-                ) : (
-                  <span>Update</span>
-                )}
+                <Edit size={20} />
+                <span>Edit Car Details</span>
               </Button>
-              {!isLoading && (
+            ) : (
+              <>
                 <Button
-                  onClick={() => handleCancel()}
-                  className="mx-3 bg-secondary text-secondary-foreground p-2 rounded-md hover:bg-secondary/90 transition-colors"
+                  disabled={isLoading}
+                  onClick={() => {
+                    setAction("Update car");
+                    setIsDialogOpen(true);
+                  }}
+                  className={`mx-3 flex items-center bg-primary text-primary-foreground p-2 rounded-md hover:bg-primary/90 transition-colors ${isLoading && "cursor-not-allowed opacity-50"}`}
                 >
-                  <span>Cancel</span>
+                  {isLoading ? (
+                    <>
+                      <span className="text-white">Please wait</span>
+                      <div className="flex items-end py-1 h-full">
+                        <span className="sr-only">Loading...</span>
+                        <div className="h-1 w-1 bg-white mx-[2px] border-border rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                        <div className="h-1 w-1 bg-white mx-[2px] border-border rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                        <div className="h-1 w-1 bg-white mx-[2px] border-border rounded-full animate-bounce"></div>
+                      </div>
+                    </>
+                  ) : (
+                    <span>Update</span>
+                  )}
                 </Button>
-              )}
-            </>
-          )}
+                {!isLoading && (
+                  <Button
+                    onClick={() => handleCancel()}
+                    className="mx-3 bg-secondary text-secondary-foreground p-2 rounded-md hover:bg-secondary/90 transition-colors"
+                  >
+                    <span>Cancel</span>
+                  </Button>
+                )}
+              </>
+            )}
+          </>
+          }
         </div>
         <hr className="my-4 border-gray-200 dark:border-zinc-700" />
         <div className="sm:px-4 ">
@@ -495,9 +501,10 @@ export function CarDetailsClient({ carId }: { carId: number }) {
               <div className="space-y-3">
                 <div>
                   <p className="text-sm text-blue-500">
-                    {!isEditable
-                      ? "Color of Bookings"
-                      : "Select the Color of Booking"}
+                    {isEditable && isAdmin
+                      ? "Select the Color of Booking"
+                      : "Color of Bookings"
+                      }
                   </p>
                   <div className="flex flex-col item-center gap-1 max-w-[214px] w-full">
                     <div
@@ -531,7 +538,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
               <div className="space-y-3">
                 <div>
                   <p className="text-sm text-blue-500 mb-1">24hr Price</p>
-                  {!isEditable || !price ? (
+                  {!isEditable || !price || !isAdmin  ? (
                     <span className="font-medium flex items-center text-sm">
                       <IndianRupee className="w-4 h-4" /> {car.price}
                     </span>
@@ -558,7 +565,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
                 )}
                 <div>
                   <p className="text-sm text-blue-500 mb-1">Mileage</p>
-                  {!isEditable || !mileage ? (
+                  {!isEditable || !mileage || !isAdmin ? (
                     <span className="font-medium">{car.mileage} km/ltr</span>
                   ) : (
                     <Input

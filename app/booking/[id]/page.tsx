@@ -55,6 +55,7 @@ export default function BookingDetails() {
   // const bookingId = await Number(params.id); // Resolve params.id synchronously after awaiting params
   const Booking = useParams();
   const [booking, setBooking] = useState<Booking>();
+  const [isAdmin,setIsAdmin] = useState(false);
   const router = useRouter();
   useEffect(() => {
     if (!Booking) return;
@@ -69,6 +70,7 @@ export default function BookingDetails() {
           },
         );
         setBooking(res.data.booking);
+        setIsAdmin(res.data.isAdmin);
       } catch (error) {
         console.log(error);
         router.push("/booking-not-found");
@@ -95,7 +97,7 @@ export default function BookingDetails() {
             </div>
           }
         >
-          <BookingDetailsClient booking={booking} />
+          <BookingDetailsClient booking={booking} isAdmin={isAdmin} />
         </Suspense>
       </main>
     </div>
