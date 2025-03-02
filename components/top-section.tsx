@@ -20,7 +20,7 @@ export const TopSection = () => {
             </h1>
             <p 
             style={{ fontFamily: "var(--font-alma), sans-serif" }}
-            className="sm:text-lg text-sm mb-6 text-gray-500 dark:text-gray-400">
+            className="sm:text-lg text-xs mb-6 text-gray-500 dark:text-gray-400">
               Manage your car rentals with ease using our intuitive booking
               scheduler.
             </p>
