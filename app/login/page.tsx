@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/card";
 import axios from "axios";
 import { BASE_URL } from "@/lib/config";
-import { useUserStore } from "@/lib/store";
+import { useCarStore, useUserStore } from "@/lib/store";
 import { useRouter } from "next/navigation";
 import { toast } from "@/hooks/use-toast";
 
@@ -25,6 +25,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const { setName } = useUserStore();
   const router = useRouter();
+  const {setCars} = useCarStore();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -42,9 +43,15 @@ export default function LoginPage() {
           },
         },
       );
+      localStorage.setItem("token", res.data.token);
+      const res1 = await axios.get(`${BASE_URL}/api/v1/car/all`, {
+        headers: {
+          authorization: `Bearer ` + localStorage.getItem("token"),
+        },
+      });
+      setCars(res1.data.cars);
       router.push("/");
       router.refresh();
-      localStorage.setItem("token", res.data.token);
       setName(res.data.name);
       toast({
         description: "Login Successful",
