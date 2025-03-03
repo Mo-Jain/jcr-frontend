@@ -24,8 +24,8 @@ export function CarCard({ name, imageUrl, plateNumber }: CarCardProps) {
           </div>
           <div className="p-0 sm:p-1 w-full flex justify-center items-center">
             <div className="flex justify-center items-center gap-2">
-              <div className="flex flex-col gap-1 w-fit justify-center items-center">
-                <h3 className="text-lg flex items-center max-sm:text-xs px-1 min-h-[36px] sm:min-h-[60px] w-fit overflow-hidden text-center font-semibold whitespace-wrap">
+              <div className="flex flex-col gap-1 w-fit justify-center min-h-[56px] sm:min-h-[100px] items-center">
+                <h3 className="text-lg flex items-center max-sm:text-xs px-1  w-fit overflow-hidden text-center font-semibold whitespace-wrap">
                   <span>{name.toLocaleUpperCase()}</span>
                 </h3>
                 <div className="max-sm:max-w-[107px] max-sm:max-h-[20px]">
