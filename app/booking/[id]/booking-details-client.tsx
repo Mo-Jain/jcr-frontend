@@ -26,6 +26,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { RenderFileList, RenderNewFileList } from "./render-file-list";
 import { uploadToDrive } from "@/app/actions/upload";
 import BookingStop from "@/components/booking-stop";
+import { useEventStore } from "@/lib/store";
 
 interface BookingDetailsClientProps {
   booking: Booking;
@@ -91,6 +92,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
   );
   const [progress, setProgress] = useState(0);
   const [loadingMessage, setLoadingMessage] = useState("Please wait");
+  const {events,setEvents} = useEventStore();
 
   const initialReading = useMemo(() => {
     if (booking.endodometerReading) return booking.endodometerReading;
@@ -171,6 +173,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
         duration: 2000,
       });
 
+      setEvents(events.filter((event) => event.id != booking.id));
       router.push("/bookings");
     } catch (error) {
       console.error(error);

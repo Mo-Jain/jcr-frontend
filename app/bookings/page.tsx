@@ -18,7 +18,7 @@ import CarIcon from "@/public/car-icon.svg";
 import axios from "axios";
 import { BASE_URL } from "@/lib/config";
 import { cn } from "@/lib/utils";
-import { useCarStore } from "@/lib/store";
+import { useCarStore, useEventStore } from "@/lib/store";
 import Booking from "@/public/online-booking.svg";
 import { toast } from "@/hooks/use-toast";
 import ExcelUploader from "@/components/excel-upload";
@@ -93,6 +93,7 @@ export interface Booking {
 
 export default function Bookings() {
   const { cars } = useCarStore();
+  const {events,setEvents} = useEventStore();
   const [selectedCar, setSelectedCar] = useState<string>("All");
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [selectedStatus, setSelectedStatus] = useState<BookingStatus>("All");
@@ -149,6 +150,7 @@ export default function Bookings() {
       setFilteredBookings([]);
       for (const id of selectedBookings) {
         setBookings((prev) => prev.filter((booking) => booking.id != id));
+        setEvents(events.filter((event) => event.id != id));
       }
       setSelectedBookings([]);
       setIsSelectionMode(false);
