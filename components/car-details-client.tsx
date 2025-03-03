@@ -424,13 +424,15 @@ export function CarDetailsClient({ carId }: { carId: number }) {
         <div className="flex flex-col sm:flex-row gap-2 sm:border-b border-border h-full">
           <div className=" flex flex-col justify-center sm:py-4 items-center w-full min-h-full">
             <div className="relative w-full max-sm:px-2  my-2 h-fit">
-              <Image
-                src={imageUrl || "/placeholder.svg"}
-                alt={`${car.brand} ${car.model}`}
-                width={2000}
-                height={1000}
-                className=" rounded-md mx-auto w-full h-fit min-h-[200px] object-cover"
-              />
+              <div className="h-[240px] sm:h-[275px] ">
+                <Image
+                  src={imageUrl || "/placeholder.svg"}
+                  alt={`${car.brand} ${car.model}`}
+                  width={2000}
+                  height={1000}
+                  className=" rounded-md mx-auto max-w-full max-h-full max-sm:min-h-[230px] object-cover"
+                />
+              </div>
               {isEditable && (
                 <button
                   onClick={() => document.getElementById("carImage")?.click()}

@@ -2,11 +2,11 @@
 import Sunlight from "@/public/sunlight.png";
 import Image from "next/image";
 
-const SunImage = () => {
+const  SunImage = () => {
   return (
     <div className="relative max-w-96 h-80">
       <div
-        className={`absolute top-0 left-0 scale-[0.8] dark:scale-[0.3] transition-all duration-1000 ease-in-out`}
+        className={`absolute top-0 left-0 scale-[0.8] dark:scale-[0.3] transition-scale duration-1000 ease-in-out`}
       >
         <Image src={Sunlight} alt="sun" className="w-fit h-80" />
       </div>

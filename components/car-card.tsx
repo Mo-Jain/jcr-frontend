@@ -13,13 +13,13 @@ export function CarCard({ name, imageUrl, plateNumber }: CarCardProps) {
     <div className="w-full z-0 relative z-0">
       <div className="p-2 z-0 border border-border shadow-sm  bg-white dark:bg-muted rounded-md cursor-pointer">
         <div className="flex flex-col justify-between gap-1 sm:px-1">
-          <div className="relative flex-shrink-0 w-full h-24 sm:h-48 min-h-24 sm:min-h-48 max-h-24 sm:max-h-48">
+          <div className="relative flex-shrink-0 h-24 sm:h-48">
             <Image
               src={imageUrl || "/placeholder.svg"}
               alt={name}
               fill
               style={{ objectFit: "cover" }}
-              className="rounded-lg w-full "
+              className="rounded-lg h-fit max-w-full max-h-full object-cover"
             />
           </div>
           <div className="p-0 sm:p-1 w-full flex justify-center items-center">
