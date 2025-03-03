@@ -62,7 +62,9 @@ export default function RootLayout({
           <ThemeBg />
           <Initiate />
           <NavBar />
-          {children}
+          <div className="">
+            {children}
+          </div>
           <BottomNav />
           <Toaster />
         </Providers>

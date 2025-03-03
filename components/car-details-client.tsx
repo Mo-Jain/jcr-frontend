@@ -393,7 +393,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
         </div>
       )}
 
-      <div className="flex items-center justify-between pb-2 border-b border-gray-300 dark:border-zinc-700">
+      <div className="flex items-center justify-between border-b border-gray-300 dark:border-zinc-700">
         <div
           className="mr-2 rounded-md font-bold  cursor-pointer hover:bg-gray-200 dark:hover:bg-muted"
           onClick={() => router.back()}
@@ -404,6 +404,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
             </div>
           </div>
         </div>
+        <h2 className="text-lg font-semibold">{car?.brand} {car?.model}</h2>
         <div className="text-center w-5 h-5"></div>
         {isAdmin && (
         <div
@@ -420,204 +421,210 @@ export function CarDetailsClient({ carId }: { carId: number }) {
       </div>
 
       <div>
-        <div className="relative w-full max-w-[700px] max-sm:mb-32 my-2 h-[160px] sm:h-[300px] mx-auto">
-          <Image
-            src={imageUrl || "/placeholder.svg"}
-            alt={`${car.brand} ${car.model}`}
-            width={2000}
-            height={1000}
-            className=" rounded-md mx-auto h-64 object-cover"
-          />
-          {isEditable && (
-            <button
-              onClick={() => document.getElementById("carImage")?.click()}
-              className="absolute top-2 right-2 bg-primary text-primary-foreground p-2 rounded-full hover:bg-primary/90 transition-colors"
-            >
-              <Edit size={20} />
-              <Input
-                id="carImage"
-                type="file"
-                accept="image/*"
-                onChange={handleFileUpload}
-                className="hidden"
+        <div className="flex flex-col sm:flex-row gap-2 sm:border-b border-border h-full">
+          <div className=" flex flex-col justify-center sm:py-4 items-center w-full min-h-full">
+            <div className="relative w-full max-sm:px-2  my-2 h-fit">
+              <Image
+                src={imageUrl || "/placeholder.svg"}
+                alt={`${car.brand} ${car.model}`}
+                width={2000}
+                height={1000}
+                className=" rounded-md mx-auto w-full h-fit min-h-[200px] object-cover"
               />
-            </button>
-          )}
-        </div>
-        <div className="flex justify-center w-full">
-          {isAdmin &&
-          <>
-            {!isEditable ? (
-              <Button
-                onClick={() => setIsEditable(true)}
-                className="bg-primary text-primary-foreground p-2 rounded-md hover:bg-primary/90 transition-colors"
-              >
-                <Edit size={20} />
-                <span>Edit Car Details</span>
-              </Button>
-            ) : (
-              <>
-                <Button
-                  disabled={isLoading}
-                  onClick={() => {
-                    setAction("Update car");
-                    setIsDialogOpen(true);
-                  }}
-                  className={`mx-3 flex items-center bg-primary text-primary-foreground p-2 rounded-md hover:bg-primary/90 transition-colors ${isLoading && "cursor-not-allowed opacity-50"}`}
+              {isEditable && (
+                <button
+                  onClick={() => document.getElementById("carImage")?.click()}
+                  className="absolute top-2 right-2 bg-primary text-primary-foreground p-2 rounded-full hover:bg-primary/90 transition-colors"
                 >
-                  {isLoading ? (
-                    <>
-                      <span className="text-white">Please wait</span>
-                      <div className="flex items-end py-1 h-full">
-                        <span className="sr-only">Loading...</span>
-                        <div className="h-1 w-1 bg-white mx-[2px] border-border rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-                        <div className="h-1 w-1 bg-white mx-[2px] border-border rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-                        <div className="h-1 w-1 bg-white mx-[2px] border-border rounded-full animate-bounce"></div>
-                      </div>
-                    </>
-                  ) : (
-                    <span>Update</span>
-                  )}
-                </Button>
-                {!isLoading && (
+                  <Edit size={20} />
+                  <Input
+                    id="carImage"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileUpload}
+                    className="hidden"
+                  />
+                </button>
+              )}
+            </div>
+            <div className="flex justify-center w-full">
+              {isAdmin &&
+              <>
+                {!isEditable ? (
                   <Button
-                    onClick={() => handleCancel()}
-                    className="mx-3 bg-secondary text-secondary-foreground p-2 rounded-md hover:bg-secondary/90 transition-colors"
+                    onClick={() => setIsEditable(true)}
+                    className="bg-primary text-primary-foreground p-2 rounded-md hover:bg-primary/90 transition-colors"
                   >
-                    <span>Cancel</span>
+                    <Edit size={20} />
+                    <span>Edit Car Details</span>
                   </Button>
+                ) : (
+                  <>
+                    <Button
+                      disabled={isLoading}
+                      onClick={() => {
+                        setAction("Update car");
+                        setIsDialogOpen(true);
+                      }}
+                      className={`mx-3 flex items-center bg-primary text-primary-foreground p-2 rounded-md hover:bg-primary/90 transition-colors ${isLoading && "cursor-not-allowed opacity-50"}`}
+                    >
+                      {isLoading ? (
+                        <>
+                          <span className="text-white">Please wait</span>
+                          <div className="flex items-end py-1 h-full">
+                            <span className="sr-only">Loading...</span>
+                            <div className="h-1 w-1 bg-white mx-[2px] border-border rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                            <div className="h-1 w-1 bg-white mx-[2px] border-border rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                            <div className="h-1 w-1 bg-white mx-[2px] border-border rounded-full animate-bounce"></div>
+                          </div>
+                        </>
+                      ) : (
+                        <span>Update</span>
+                      )}
+                    </Button>
+                    {!isLoading && (
+                      <Button
+                        onClick={() => handleCancel()}
+                        className="mx-3 bg-secondary text-secondary-foreground p-2 rounded-md hover:bg-secondary/90 transition-colors"
+                      >
+                        <span>Cancel</span>
+                      </Button>
+                    )}
+                  </>
                 )}
               </>
-            )}
-          </>
-          }
+              }
+            </div>
+          </div>
+          <div className="w-full h-full">
+            <div className="">
+              <section className="px-2 py-2 pb-0 max-sm:border-t border-gray-200 dark:border-zinc-700">
+                <h2 className="text-lg font-semibold mb-4 ">Car Details</h2>
+                <div className="grid grid-cols-2 gap-4 ">
+                  <div className="space-y-4">
+                    <p className="text-sm text-blue-500 mb-1">Brand</p>
+                    <span className="font-medium">{car.brand}</span>
+                    <p className="text-sm text-blue-500 mb-1">Model</p>
+                    <span className="font-medium">{car.model}</span>
+                  </div>
+                  <div className="space-y-3">
+                    <div>
+                      <p className="text-sm text-blue-500">
+                        {isEditable && isAdmin
+                          ? "Select the Color of Booking"
+                          : "Color of Bookings"
+                          }
+                      </p>
+                      <div className="flex flex-col item-center gap-1 max-w-[214px] w-full">
+                        <div
+                          className={`w-8 h-8 rounded-md border border-gray-300 dark:border-zinc-700 ${isEditable ? "cursor-pointer" : ""}`}
+                          style={{ backgroundColor: color }}
+                          onClick={() =>
+                            isEditable &&
+                            document.getElementById("colorPicker")?.click()
+                          }
+                        />
+                        <Input
+                          type="color"
+                          id="colorPicker"
+                          value={color}
+                          onChange={(e) => setColor(e.target.value)}
+                          className="hidden my-0"
+                        />
+                      </div>
+                    </div>
+                    <p className="text-sm text-blue-500 mb-1">Plate Number</p>
+                    <span className="font-medium">{car.plateNumber}</span>
+                  </div>
+                </div>
+              </section>
+            </div>
+            <hr className="my-4 border-gray-200 dark:border-zinc-700" />
+            <section className="px-2 py-2 max-sm:border-b-4 border-gray-200 dark:border-zinc-700">
+                <h2 className="text-xl font-semibold mb-4">
+                  Performance & Pricing
+                </h2>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-3">
+                    <div>
+                      <p className="text-sm text-blue-500 mb-1">24hr Price</p>
+                      {!isEditable || !price || !isAdmin  ? (
+                        <span className="font-medium flex items-center text-sm">
+                          <IndianRupee className="w-4 h-4" /> {car.price}
+                        </span>
+                      ) : (
+                        <Input
+                          type="number"
+                          id="name"
+                          value={price}
+                          onChange={(e) => setPrice(Number(e.target.value))}
+                          className="w-[120px] sm:w-[170px] border-0 p-0 px-1 bg-gray-200 dark:bg-gray-800 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400 "
+                        />
+                      )}
+                    </div>
+                    {earnings && earnings.oneMonth != 0 && (
+                      <div>
+                        <p className="text-sm text-blue-500 mb-1">
+                          1 month Earnings
+                        </p>
+                        <span className="font-medium flex items-center text-sm">
+                          <IndianRupee className="w-4 h-4" />{" "}
+                          {earnings.oneMonth}{" "}
+                        </span>
+                      </div>
+                    )}
+                    <div>
+                      <p className="text-sm text-blue-500 mb-1">Mileage</p>
+                      {!isEditable || !mileage || !isAdmin ? (
+                        <span className="font-medium">{car.mileage} km/ltr</span>
+                      ) : (
+                        <Input
+                          type="number"
+                          id="name"
+                          value={mileage}
+                          onChange={(e) => setMileage(Number(e.target.value))}
+                          className="w-[120px] sm:w-[170px] border-0 p-0 px-1 bg-gray-200 dark:bg-gray-800 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400 "
+                        />
+                      )}
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    {earnings && earnings.thisMonth != 0 && earnings.thisMonth && (
+                      <div>
+                        <p className="text-sm text-blue-500 mb-1">
+                          This Month Earnings
+                        </p>
+                        <span className="font-medium flex items-center text-sm">
+                          <IndianRupee className="w-4 h-4" />
+                          {earnings.thisMonth}
+                        </span>
+                      </div>
+                    )}
+                    {earnings && earnings.sixMonths != 0 && earnings.sixMonths && (
+                      <div>
+                        <p className="text-sm text-blue-500 mb-1">
+                          6 Month Earnings
+                        </p>
+                        <span className="font-medium flex items-center text-sm">
+                          <IndianRupee className="w-4 h-4" />
+                          {earnings.sixMonths}
+                        </span>
+                      </div>
+                    )}
+                    {car && car.totalEarnings != 0 && car.totalEarnings && (
+                      <div>
+                        <p className="text-sm text-blue-500 mb-1">Total Earnings</p>
+                        <span className="font-medium flex items-center text-sm">
+                          <IndianRupee className="w-4 h-4" />
+                          {car.totalEarnings}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+            </section>
+          </div>
         </div>
-        <hr className="my-4 border-gray-200 dark:border-zinc-700" />
-        <div className="sm:px-4 ">
-          <section className="px-4 py-4 border-b-4 border-gray-200 dark:border-zinc-700">
-            <h2 className="text-lg font-semibold mb-4 ">Car Details</h2>
-            <div className="grid grid-cols-2 gap-4 sm:gap-6">
-              <div className="space-y-4">
-                <p className="text-sm text-blue-500 mb-1">Brand</p>
-                <span className="font-medium">{car.brand}</span>
-                <p className="text-sm text-blue-500 mb-1">Model</p>
-                <span className="font-medium">{car.model}</span>
-              </div>
-              <div className="space-y-3">
-                <div>
-                  <p className="text-sm text-blue-500">
-                    {isEditable && isAdmin
-                      ? "Select the Color of Booking"
-                      : "Color of Bookings"
-                      }
-                  </p>
-                  <div className="flex flex-col item-center gap-1 max-w-[214px] w-full">
-                    <div
-                      className={`w-8 h-8 rounded-md border border-gray-300 dark:border-zinc-700 ${isEditable ? "cursor-pointer" : ""}`}
-                      style={{ backgroundColor: color }}
-                      onClick={() =>
-                        isEditable &&
-                        document.getElementById("colorPicker")?.click()
-                      }
-                    />
-                    <Input
-                      type="color"
-                      id="colorPicker"
-                      value={color}
-                      onChange={(e) => setColor(e.target.value)}
-                      className="hidden my-0"
-                    />
-                  </div>
-                </div>
-                <p className="text-sm text-blue-500 mb-1">Plate Number</p>
-                <span className="font-medium">{car.plateNumber}</span>
-              </div>
-            </div>
-          </section>
-
-          <section className="px-4 py-4 border-b-4 border-gray-200 dark:border-zinc-700">
-            <h2 className="text-xl font-semibold mb-4">
-              Performance & Pricing
-            </h2>
-            <div className="grid grid-cols-2 gap-4 sm:gap-6">
-              <div className="space-y-3">
-                <div>
-                  <p className="text-sm text-blue-500 mb-1">24hr Price</p>
-                  {!isEditable || !price || !isAdmin  ? (
-                    <span className="font-medium flex items-center text-sm">
-                      <IndianRupee className="w-4 h-4" /> {car.price}
-                    </span>
-                  ) : (
-                    <Input
-                      type="number"
-                      id="name"
-                      value={price}
-                      onChange={(e) => setPrice(Number(e.target.value))}
-                      className="w-[120px] sm:w-[170px] border-0 p-0 px-1 bg-gray-200 dark:bg-gray-800 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400 "
-                    />
-                  )}
-                </div>
-                {earnings && earnings.oneMonth != 0 && (
-                  <div>
-                    <p className="text-sm text-blue-500 mb-1">
-                      1 month Earnings
-                    </p>
-                    <span className="font-medium flex items-center text-sm">
-                      <IndianRupee className="w-4 h-4" />{" "}
-                      {earnings.oneMonth}{" "}
-                    </span>
-                  </div>
-                )}
-                <div>
-                  <p className="text-sm text-blue-500 mb-1">Mileage</p>
-                  {!isEditable || !mileage || !isAdmin ? (
-                    <span className="font-medium">{car.mileage} km/ltr</span>
-                  ) : (
-                    <Input
-                      type="number"
-                      id="name"
-                      value={mileage}
-                      onChange={(e) => setMileage(Number(e.target.value))}
-                      className="w-[120px] sm:w-[170px] border-0 p-0 px-1 bg-gray-200 dark:bg-gray-800 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400 "
-                    />
-                  )}
-                </div>
-              </div>
-              <div className="space-y-3">
-                {earnings && earnings.thisMonth != 0 && earnings.thisMonth && (
-                  <div>
-                    <p className="text-sm text-blue-500 mb-1">
-                      This Month Earnings
-                    </p>
-                    <span className="font-medium flex items-center text-sm">
-                      <IndianRupee className="w-4 h-4" />
-                      {earnings.thisMonth}
-                    </span>
-                  </div>
-                )}
-                {earnings && earnings.sixMonths != 0 && earnings.sixMonths && (
-                  <div>
-                    <p className="text-sm text-blue-500 mb-1">
-                      6 Month Earnings
-                    </p>
-                    <span className="font-medium flex items-center text-sm">
-                      <IndianRupee className="w-4 h-4" />
-                      {earnings.sixMonths}
-                    </span>
-                  </div>
-                )}
-                {car && car.totalEarnings != 0 && car.totalEarnings && (
-                  <div>
-                    <p className="text-sm text-blue-500 mb-1">Total Earnings</p>
-                    <span className="font-medium flex items-center text-sm">
-                      <IndianRupee className="w-4 h-4" />
-                      {car.totalEarnings}
-                    </span>
-                  </div>
-                )}
-              </div>
-            </div>
-          </section>
           <section className="px-4 py-4 ">
             <h2 className="text-xl font-semibold mb-4">Current Bookings</h2>
             {car.bookings.length > 0 ? (
@@ -631,7 +638,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
                     >
                       <CardContent className="p-0">
                         {/* Rest of the card content remains the same */}
-                        <div className="flex justify-between items-center p-2 bg-muted">
+                        <div className="flex justify-between items-center p-1 sm:p-2 bg-muted">
                           <div className="">
                             <p className="text-sm max-sm:text-xs text-blue-500">
                               {getHeader(
@@ -646,8 +653,8 @@ export function CarDetailsClient({ carId }: { carId: number }) {
                               {getReturnTime(booking.end, booking.endTime)}{" "}
                             </p>
                           </div>
-                          <div className="flex items-center gap-2 justify-center">
-                            <span className="text-blue-500">Go to Booking</span>
+                          <div className="flex items-center ml-2 gap-[2px] sm:gap-2 justify-center">
+                            <span className="text-blue-500 max-sm:text-xs">Go to Booking</span>
                             <LogOut
                               onClick={() =>
                                 router.push("/booking/" + booking.id)
@@ -737,7 +744,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
             )}
           </section>
         </div>
-      </div>
+     
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="sm:max-w-[425px] bg-muted border-border ">
           <DialogHeader>

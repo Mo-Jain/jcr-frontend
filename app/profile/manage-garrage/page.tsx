@@ -19,7 +19,7 @@ const Page = () => {
   }
 
   return (
-    <div className="py-6 px-2 sm:px-4 h-screen bg-background ">
+    <div className="py-6 px-2 sm:px-4 h-full min-h-[88vh] sm:min-h-[90vh] bg-background ">
       <div className="w-full flex gap-6 h-fit items-start">
         <Button
           onClick={() => router.push("/profile")}
@@ -39,7 +39,7 @@ const Page = () => {
       {cars.length > 0 ? (
         <div
           key={cars.length}
-          className="grid grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-6"
+          className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3"
         >
           {cars.map((car) => (
             <Link
@@ -47,30 +47,34 @@ const Page = () => {
               key={car.id}
               className="transform transition-all duration-300 hover:scale-105"
             >
-              <Card className="w-full border-0">
-                <CardContent className="p-2 border-0 bg-muted  rounded-md cursor-pointer">
-                  <div className="flex flex-col justify-between gap-1 sm:px-1">
-                    <div className="relative flex-shrink-0 w-full h-24 sm:h-48">
-                      <Image
-                        src={car.imageUrl || "/placeholder.svg"}
-                        alt={car.brand + " " + car.model}
-                        fill
-                        style={{ objectFit: "cover" }}
-                        className="rounded-lg w-full "
-                      />
-                    </div>
-                    <div
-                      className="p-1 sm:p-4 w-full flex justify-center items-center"
-                      onClick={() => router.push(`/magane-garrage/${car.id}`)}
-                    >
-                      <Edit className="w-4 h-4 text-black dark:text-white mx-2" />
-                      <h3 className="text-lg max-sm:text-sm font-semibold text-black dark:text-white">
-                        {car.brand + " " + car.model}
-                      </h3>
+              <div className="w-full z-0 relative z-0">
+                  <div className="p-2 z-0 border border-border shadow-sm  bg-white dark:bg-muted rounded-md cursor-pointer">
+                    <div className="flex flex-col justify-between gap-1 sm:px-1">
+                      <div className="relative flex-shrink-0 w-full h-24 sm:h-48 min-h-24 sm:min-h-48 max-h-24 sm:max-h-48">
+                        <Image
+                          src={car.imageUrl || "/placeholder.svg"}
+                          alt={car.brand + " " + car.model}
+                          fill
+                          style={{ objectFit: "cover" }}
+                          className="rounded-lg w-full "
+                        />
+                      </div>
+                      <div className="p-0 sm:p-1 w-full flex justify-center items-center">
+                        <div className="flex justify-center items-center gap-2">
+                          <div
+                              className="p-1 sm:p-4 w-full flex justify-center items-center"
+                              onClick={() => router.push(`/magane-garrage/${car.id}`)}
+                            >
+                            <Edit className="w-4 h-4 text-black dark:text-white mx-2" />
+                            <h3 className="text-lg flex items-center max-sm:text-xs px-1 min-h-[36px] sm:min-h-[60px] w-fit overflow-hidden text-center font-semibold whitespace-wrap">
+                              {car.brand + " " + car.model}
+                            </h3>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
             </Link>
           ))}
         </div>

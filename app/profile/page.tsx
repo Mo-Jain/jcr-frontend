@@ -21,7 +21,7 @@ export default function Profile() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="h-full min-h-[88vh] sm:min-h-[90vh] bg-background">
       <main className="container mx-auto px-4 py-8 pb-16 sm:pb-8">
         <div className="flex flex-col items-center justify-center space-y-4">
           <div className="relative">
@@ -75,7 +75,7 @@ export default function Profile() {
                 >
                   <div className="flex items-center">
                     <CarFrontIcon className="w-8 h-8 fill-gray-600 stroke-gray-600 dark:fill-white dark:stroke-white stroke-[5px]" />
-                    <span className="mx-2 max-sm:text-sm ">Manage Garrage</span>
+                    <span className="mx-2 max-sm:text-sm select-none">Manage Garrage</span>
                   </div>
                   <div className="border-t-2 border-r-2 rotate-45 sm:mr-4 mr-2 w-2 h-2 border-gray-600 dark:border-gray-400"></div>
                 </div>
@@ -85,7 +85,7 @@ export default function Profile() {
                 >
                   <div className="flex items-center">
                     <UserIcon className="w-7 h-7 stroke-[12px] fill-gray-600 stroke-gray-600 dark:fill-white dark:stroke-white " />
-                    <span className="mx-2 max-sm:text-sm dark:text-white">
+                    <span className="mx-2 max-sm:text-sm dark:text-white select-none">
                       Manage Profile
                     </span>
                   </div>
@@ -97,7 +97,7 @@ export default function Profile() {
                 >
                   <div className="flex items-center">
                     <Users className="w-7 h-7 text-gray-600 dark:text-white " />
-                    <span className="mx-2 max-sm:text-sm dark:text-white">
+                    <span className="mx-2 max-sm:text-sm dark:text-white select-none">
                       Manage Customers
                     </span>
                   </div>

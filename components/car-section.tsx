@@ -49,7 +49,7 @@ export function CarSection() {
             {cars.length > 0 ? (
               <div
                 key={cars.length}
-                className="grid z-0 grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-6"
+                className="grid z-0 grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3"
               >
                 {cars.map((car) => (
                   <Link
