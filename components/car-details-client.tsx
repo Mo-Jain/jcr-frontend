@@ -135,6 +135,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
   }
 
   const handleDelete = async () => {
+    if (!isAdmin) return;
     setIsDeleting(true);
     try {
       await axios.delete(`${BASE_URL}/api/v1/car/${car.id}`, {
@@ -165,6 +166,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
   };
 
   const handleUpdate = async () => {
+    if (!isAdmin) return;
     setIsLoading(true);
     let imageUrl: string | undefined = undefined;
 
@@ -342,6 +344,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
 
   async function handleDeleteBooking(bookingId: number) {
     //add code to delete the booking
+    if (!isAdmin) return;
     try {
       const res = await axios.delete(
         `${BASE_URL}/api/v1/booking/${bookingId}`,
@@ -402,6 +405,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
           </div>
         </div>
         <div className="text-center w-5 h-5"></div>
+        {isAdmin && (
         <div
           className="mr-4 cursor-pointer hover:bg-gray-100 dark:hover:bg-muted p-2 rounded-sm"
           onClick={() => {
@@ -410,8 +414,9 @@ export function CarDetailsClient({ carId }: { carId: number }) {
           }}
         >
           <Trash2 className=" h-6 w-6" />
-        </div>{" "}
-        {/* Spacer for alignment */}
+        </div>
+
+          )}
       </div>
 
       <div>
@@ -694,6 +699,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
                               </div>
                             </div>
                           </div>
+                          {isAdmin && (
                           <div
                             className="text-center ml-4"
                             onClick={() => {
@@ -704,6 +710,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
                           >
                             <Trash2 className="h-6 w-6 hover:text-red-500" />
                           </div>
+                          )}
                         </div>
                         <div className="p-3 max-sm:p-2 flex bg-gray-200 dark:bg-muted items-center text-green-600 dark:text-green-400 gap-2">
                           <CarIcon className="w-8 h-3 stroke-green-600 dark:stroke-green-400 fill-green-600 dark:fill-green-400 stroke-[4px]" />
