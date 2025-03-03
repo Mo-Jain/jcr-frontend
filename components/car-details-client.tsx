@@ -155,7 +155,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
     } catch (error) {
       console.log(error);
       toast({
-        description: `Car failed to delete`,
+        description: `Car failed to delete, please delete all bookings first`,
         className:
           "text-black bg-white border-0 rounded-md shadow-mg shadow-black/5 font-normal",
         variant: "destructive",
