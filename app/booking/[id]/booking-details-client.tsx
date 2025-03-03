@@ -442,8 +442,8 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
       setErrors((prev) => ({ ...prev, [type]: "" }));
     }
   };
-  
-  function getHeader(
+
+   function getHeader(
     status: string,
     startDate: string,
     startTime: string,
@@ -461,15 +461,15 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
     const currDate = new Date();
     if (status === "Upcoming") {
       if (startDateTime >= currDate) {
-        headerText = "Scheduled pickup on";
+        headerText = "Pickup scheduled on";
       } else {
-        headerText = "Scheduled pickup was on";
+        headerText = "Pickup was scheduled on";
       }
     } else if (status === "Ongoing") {
       if (endDateTime < currDate) {
-        headerText = "Scheduled return was on";
+        headerText = "Return was scheduled on";
       } else {
-        headerText = "Scheduled return by";
+        headerText = "Return scheduled by";
       }
     } else if (status === "Completed") {
       headerText = "Booking ended at";
@@ -477,6 +477,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
 
     return headerText;
   }
+
 
   const getDocumentList = (type: "documents" | "photos" | "selfie") => {
     let documentList: {

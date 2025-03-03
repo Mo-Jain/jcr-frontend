@@ -450,15 +450,15 @@ const BookingCard = ({
     const currDate = new Date();
     if (status === "Upcoming") {
       if (startDateTime >= currDate) {
-        headerText = "Scheduled pickup on";
+        headerText = "Pickup scheduled on";
       } else {
-        headerText = "Scheduled pickup was on";
+        headerText = "Pickup was scheduled on";
       }
     } else if (status === "Ongoing") {
       if (endDateTime < currDate) {
-        headerText = "Scheduled return was on";
+        headerText = "Return was scheduled on";
       } else {
-        headerText = "Scheduled return by";
+        headerText = "Return scheduled by";
       }
     } else if (status === "Completed") {
       headerText = "Booking ended at";
