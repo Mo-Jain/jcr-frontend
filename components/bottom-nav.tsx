@@ -57,7 +57,7 @@ export function BottomNav() {
 
   return (
     <div className="relative">
-      <div className="w-full h-[50px] sm:hidden"></div>
+      <div className="w-full h-[48px] sm:hidden"></div>
       <nav className="fixed z-[99999] bottom-0 left-0 right-0 border-t dark:border-border bg-white bg-opacity-60 dark:bg-black dark:bg-opacity-50 backdrop-blur-lg  sm:hidden">
         {name ? (
           <div className="flex justify-around py-2">
