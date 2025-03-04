@@ -61,17 +61,17 @@ function getReturnTime(startDate: string, startTime: string) {
 }
 
 function getTimeUntilBooking(startTime: string, status: string) {
-  if (status === "Completed") return "Trip has ended";
-  if (status === "Ongoing") return "Trip has started";
+  if (status === "Completed") return "Booking has ended";
+  if (status === "Ongoing") return "Booking has started";
   const now = new Date();
   const start = new Date(startTime);
   const diffTime = start.getTime() - now.getTime();
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-  if (diffDays < 0) return "Trip has started";
-  if (diffDays === 0) return "Trip start window opens Today";
-  if (diffDays === 1) return "Trip start window opens in 1 day";
-  return `Trip start window opens in ${diffDays} days`;
+  if (diffDays < 0) return "Booking has started";
+  if (diffDays === 0) return "Booking will start Today";
+  if (diffDays === 1) return "Booking will start in 1 day";
+  return `Booking will start in ${diffDays} days`;
 }
 
 export interface Booking {
