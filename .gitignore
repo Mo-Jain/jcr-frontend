@@ -12,7 +12,7 @@
 
 # testing
 /coverage
-
+/android
 # next.js
 /.next/
 /out/
