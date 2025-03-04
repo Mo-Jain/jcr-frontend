@@ -404,9 +404,12 @@ export function CarDetailsClient({ carId }: { carId: number }) {
             </div>
           </div>
         </div>
-        <h2 className="text-lg font-semibold">{car?.brand} {car?.model}</h2>
-        <div className="text-center w-5 h-5"></div>
-        {isAdmin && (
+        <div>
+          <h2 className="text-lg text-center font-semibold">{car?.brand} {car?.model}</h2>
+          <p className="text-xs text-center">Car ID: {car?.id}</p>
+        </div>
+        
+        {isAdmin ? (
         <div
           className="mr-4 cursor-pointer hover:bg-gray-100 dark:hover:bg-muted p-2 rounded-sm"
           onClick={() => {
@@ -416,13 +419,14 @@ export function CarDetailsClient({ carId }: { carId: number }) {
         >
           <Trash2 className=" h-6 w-6" />
         </div>
-
+        ) : (
+          <div className="text-center w-5 h-5"></div>
           )}
       </div>
 
       <div>
         <div className="flex flex-col sm:flex-row gap-2 sm:border-b border-border h-full">
-          <div className=" flex flex-col justify-center sm:py-4 items-center w-full min-h-full">
+          <div className=" flex flex-col sm:border-r border-border px-1 justify-center sm:py-4 items-center w-full min-h-full">
             <div className="relative w-full max-sm:px-2  my-2 h-fit">
               <div className="h-[240px] sm:h-[275px] ">
                 <Image
