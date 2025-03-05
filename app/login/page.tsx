@@ -26,10 +26,12 @@ export default function LoginPage() {
   const { setName } = useUserStore();
   const router = useRouter();
   const {setCars} = useCarStore();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // Implement login logic here
+    setIsLoading(true);
     try {
       const res = await axios.post(
         `${BASE_URL}/api/v1/signin`,
@@ -68,6 +70,7 @@ export default function LoginPage() {
         duration: 2000,
       });
     }
+    setIsLoading(false);
   };
 
   return (
@@ -125,7 +128,19 @@ export default function LoginPage() {
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
             <Button type="submit" className="w-full">
-              Login
+              {isLoading ? (
+                    <>
+                      <span>Please wait</span>
+                      <div className="flex items-end py-1 h-full">
+                        <span className="sr-only">Loading...</span>
+                        <div className="h-1 w-1 bg-white mx-[2px] border-border rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                        <div className="h-1 w-1 bg-white mx-[2px] border-border rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                        <div className="h-1 w-1 bg-white mx-[2px] border-border rounded-full animate-bounce"></div>
+                      </div>
+                  </>
+                ) : (
+                  <span>Login</span>
+                )}
             </Button>
           </CardFooter>
         </form>

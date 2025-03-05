@@ -116,12 +116,6 @@ export default function BookingStartClient({
         newErrors.documents = "Documents are mandatory";
     } else if (uploadedFiles.documents.length === 0)
       newErrors.documents = "Documents are mandatory";
-
-    if (uploadedFiles.photos.length === 0)
-      newErrors.photos = "Photos are mandatory";
-    if (uploadedFiles.selfie.length === 0)
-      newErrors.selfie = "Selfie is mandatory";
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -249,14 +243,6 @@ export default function BookingStartClient({
     }
     setIsLoading(true);
     try {
-      if (uploadedFiles.selfie.length == 0) {
-        setIsLoading(false);
-        return;
-      }
-      if (uploadedFiles.photos.length == 0) {
-        setIsLoading(false);
-        return;
-      }
       let overallProgress = 1;
 
       setProgress(overallProgress);
@@ -281,27 +267,34 @@ export default function BookingStartClient({
       setLoadingMessage("Uploaded Aadhar");
 
       const photoFiles = [];
-      setLoadingMessage("Uploading Car Photos");
-      for (const file of uploadedFiles.photos) {
-        const res = await uploadToDrive(file, booking.bookingFolderId);
-        if (res.error) {
-          throw new Error("Failed to upload car photos");
-          return;
+      if(uploadedFiles.photos.length > 0) {
+        setLoadingMessage("Uploading Car Photos");
+        for (const file of uploadedFiles.photos) {
+          const res = await uploadToDrive(file, booking.bookingFolderId);
+          if (res.error) {
+            throw new Error("Failed to upload car photos");
+            return;
+          }
+          photoFiles.push(res);
+          overallProgress += Math.round((file.size / totalSize) * 100) * 0.97;
+          setProgress(overallProgress);
         }
-        photoFiles.push(res);
-        overallProgress += Math.round((file.size / totalSize) * 100) * 0.97;
-        setProgress(overallProgress);
       }
-      setLoadingMessage("Uploading Selfie");
-      const resSelfie = await uploadToDrive(
-        uploadedFiles.selfie[0],
-        booking.bookingFolderId,
-      );
+      let resSelfie
+      if(uploadedFiles.selfie.length > 0) {
+        setLoadingMessage("Uploading Selfie");
+        resSelfie = await uploadToDrive(
+          uploadedFiles.selfie[0],
+          booking.bookingFolderId,
+        );
+      }
+
+
       setLoadingMessage("Uploaded Selfie");
       const selfieSize = uploadedFiles.selfie[0].size;
       overallProgress += Math.round((selfieSize / totalSize) * 100) * 0.97;
       setProgress(overallProgress);
-      if (resSelfie.error) {
+      if (resSelfie && resSelfie.error) {
         throw new Error("Failed to upload selfie photo");
         return;
       }
@@ -325,7 +318,7 @@ export default function BookingStartClient({
           paymentMethod,
           notes,
           documents: docFiles.length > 0 ? docFiles : undefined,
-          selfieUrl: resSelfie.url,
+          selfieUrl: resSelfie ? resSelfie.url : undefined,
           carImages: photoFiles,
         },
         {
