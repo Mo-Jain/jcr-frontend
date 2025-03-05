@@ -61,7 +61,7 @@ export default function HeaderRight({
           <PopoverTrigger className="w-[50px] p-2 rounded-sm border border-border">
             <CarIcon className="w-8 h-5 stroke-[4px] dark:stroke-blue-200 dark:fill-blue-200 stroke-primary fill-primary" />
           </PopoverTrigger>
-          <PopoverContent className="border-border bg-background">
+          <PopoverContent className="border-border p-1 px-2 bg-background">
             <CarsFilters />
           </PopoverContent>
         </Popover>

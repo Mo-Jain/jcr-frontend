@@ -456,7 +456,7 @@
 
   #water {
     fill: #039be5;
-    animation: fillWater 3s ease-in-out forwards;
+    animation: fillWater 1s ease-in-out forwards;
     stroke-width: 1px;
     z-index: 1;
   }

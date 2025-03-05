@@ -128,11 +128,11 @@ export default function CarsFilters() {
     setSelectedCars(newSelection);
   };
   return (
-    <div className="sm:border-t border-border sm:py-1">
+    <div className="sm:border-t p-0 border-border sm:py-1">
       {cars.map((car) => {
         console.log("car.colorOfBooking", car.colorOfBooking);
         return (
-          <div className="flex items-center  space-x-3 " key={car.id}>
+          <div className="flex items-center space-x-3 " key={car.id}>
             <input
               type="checkbox"
               id={car.id.toString()}
@@ -141,10 +141,10 @@ export default function CarsFilters() {
               style={{ accentColor: car.colorOfBooking }}
               className={cn("h-4 w-4 rounded-none")}
             />
-            <div className="flex items-center justify-between w-full px-[4px]">
+            <div className="flex items-center justify-between w-full px-0">
               <label
                 htmlFor={car.id.toString()}
-                className="text-sm font-medium text-center py-2 leading-none text-gray-600 dark:text-gray-200 peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                className="text-sm font-medium py-2 leading-none text-gray-600 dark:text-gray-200 peer-disabled:cursor-not-allowed peer-disabled:opacity-70 max-w-[165px]"
               >
                 {car.brand + " " + car.model}
               </label>

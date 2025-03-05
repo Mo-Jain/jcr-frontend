@@ -47,16 +47,11 @@ export function NavBar() {
   return (
     <div className="relative">
       <Redirect />
-      <nav className="fixed w-full max-sm:pt-[30px] border-border top-0 left-0 z-[99999] py-1 flex items-center rounded-none cursor-normal bg-blue-400 dark:bg-[#181818] bg-opacity-60 dark:bg-opacity-60 backdrop-blur-lg justify-between px-4">
-        <div className="flex  max-sm:flex-row-reverse w-full transition-all duration-300">
-          {name && (
-            <div className="max-sm:w-25 flex sm:hidden items-center">
-              <span className="h-6 w-6 px-5 mr-[6px]"></span>
-            </div>
-          )}
+      <nav className="fixed w-full max-sm:pt-[30px] border-border top-0 left-0 z-[99999] py-1 flex items-center rounded-none cursor-normal bg-white/30 dark:bg-white/10 backdrop-blur-lg justify-between px-4">
+        <div className="flex w-full transition-all duration-300">
           <Link
             href="/"
-            className={`flex-grow rounded-none flex sm:ml-4 justify-center items-center sm:justify-start`}
+            className={`flex-grow w-fit rounded-none flex sm:ml-4 items-center justify-start`}
           >
             <div className="flex items-start">
               <Logo1 className="h-[40px] sm:h-[50px] fill-[#039BE5] stroke-[1px]" />
@@ -82,19 +77,19 @@ export function NavBar() {
           <div className="w-18 space-x-2  flex text-right ">
             <div className="flex items-center text-zinc-700 dark:text-gray-200 max-sm:hidden space-x-2 justify-around">
               <div
-                className={`px-2 hover:text-blue-700 ${selectedTab == "home" ? "text-blue-700 border-b-blue-700" : ""} border-transparent transition-all border duration-300 border-y-4 p-2 cursor-pointer font-bold`}
+                className={`px-2 hover:text-blue-700 ${selectedTab == "home" ? "text-blue-700 border-b-blue-700" : ""} border-transparent transition-all border duration-300 border-y-4 p-1 cursor-pointer font-bold`}
                 onClick={() => router.push("/")}
               >
                 Home
               </div>
               <div
-                className={`px-2 hover:text-blue-700 ${selectedTab == "bookings" ? "text-blue-700 border-b-blue-700" : ""} border-transparent transition-all border duration-300 border-y-4 p-2 cursor-pointer font-bold`}
+                className={`px-2 hover:text-blue-700 ${selectedTab == "bookings" ? "text-blue-700 border-b-blue-700" : ""} border-transparent transition-all border duration-300 border-y-4 p-1 cursor-pointer font-bold`}
                 onClick={() => router.push("/bookings")}
               >
                 Bookings
               </div>
               <div
-                className={`px-2 hover:text-blue-700 ${selectedTab == "calendar" ? "text-blue-700 border-b-blue-700" : ""} border-transparent transition-all border duration-300 border-y-4 p-2 cursor-pointer font-bold`}
+                className={`px-2 hover:text-blue-700 ${selectedTab == "calendar" ? "text-blue-700 border-b-blue-700" : ""} border-transparent transition-all border duration-300 border-y-4 p-1 cursor-pointer font-bold`}
                 onClick={() => router.push("/calendar")}
               >
                 {" "}
@@ -102,7 +97,7 @@ export function NavBar() {
               </div>
             </div>
             <div
-              className={`flex flex-col items-center px-2 hover:text-blue-700 max-sm:hidden ${selectedTab == "profile" ? "text-blue-700 border-b-blue-700" : ""} border-transparent transition-all border duration-300 border-y-4 p-2 cursor-pointer font-bold`}
+              className={`flex flex-col items-center px-2 hover:text-blue-700 max-sm:hidden ${selectedTab == "profile" ? "text-blue-700 border-b-blue-700" : ""} border-transparent transition-all border duration-300 border-y-4 p-1 cursor-pointer font-bold`}
               onClick={() => router.push("/profile")}
             >
               {imageUrl ? (
@@ -128,7 +123,7 @@ export function NavBar() {
           </div>
         )}
       </nav>
-      <div className="w-full h-[62px] max-sm:h-[80px]"></div>
+      <div className="w-full h-[58px] max-sm:h-[80px]"></div>
     </div>
   );
 }
