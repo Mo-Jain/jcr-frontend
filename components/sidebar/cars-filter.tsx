@@ -123,6 +123,7 @@ export default function CarsFilters() {
       customerContact: event.customerContact,
       carId: event.carId,
       carName: event.carName,
+      isAdmin: event.isAdmin
     }));
     setEvents(mappedEvents);
     setSelectedCars(newSelection);

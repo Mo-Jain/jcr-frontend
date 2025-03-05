@@ -157,6 +157,7 @@ export function EventSummaryPopup({
         customerContact: event.customerContact,
         carId: event.carId,
         carName: event.carName,
+        isAdmin: event.isAdmin
       };
       const updatedEvents = events.map((e) =>
         e.id === event.id ? editedEvent : e,
@@ -191,7 +192,8 @@ export function EventSummaryPopup({
                 BookingId : {event.id}
               </div>
             </DialogTitle>
-            <div className="flex justify-end w-full items-center w-full mr-4 mb-2">
+            {event.isAdmin &&
+              <div className="flex justify-end w-full items-center w-full mr-4 mb-2">
               <div className="flex space-x-2">
                 <Button variant="ghost" size="icon" onClick={handleEdit}>
                   <Edit2 className="h-4 w-4" />
@@ -207,7 +209,7 @@ export function EventSummaryPopup({
                   <Trash2 className="h-4 w-4" />
                 </Button>
               </div>
-            </div>
+            </div>}
           </DialogHeader>
 
           <div className="p-4 h-full w-full max-sm:mt-6">
