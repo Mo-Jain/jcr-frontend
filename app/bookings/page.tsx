@@ -96,7 +96,7 @@ export default function Bookings() {
   const {events,setEvents} = useEventStore();
   const [selectedCar, setSelectedCar] = useState<string>("All");
   const [bookings, setBookings] = useState<Booking[]>([]);
-  const [selectedStatus, setSelectedStatus] = useState<BookingStatus>("All");
+  const [selectedStatus, setSelectedStatus] = useState<BookingStatus>("Upcoming");
   const [isAddBookingOpen, setIsAddBookingOpen] = useState(false);
   const [filteredBookings, setFilteredBookings] = useState<Booking[]>([]);
   const [isLoading, setIsLoading] = useState(true);
