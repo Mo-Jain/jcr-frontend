@@ -164,7 +164,7 @@ export function EventRenderer({
         }}
         className={`z-10 line-clamp-1 mb-[1px] bg-[#039BE5] max-sm:h-fit h-[18px] flex justify-start 
           items-center cursor-pointer rounded-sm  font-semibold p-[1px]
-          text-xs text-white whitespace-nowrap overflow-ellipsis`}
+          text-[10px] sm:text-xs text-white whitespace-nowrap overflow-ellipsis`}
       >
         {event.id + " : " + event.carName}
       </div>
