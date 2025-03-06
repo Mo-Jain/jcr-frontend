@@ -281,11 +281,14 @@ export function AddCustomer({
                   <Input
                     name="contact"
                     value={contact}
+                    type="number"
                     placeholder="Add contact number"
-                    maxLength={10}
+                    max={9999999999}
                     onChange={(e) => {
-                      setContact(e.target.value);
-                      setErrors((prev) => ({ ...prev, contact: "" }));
+                      if (e.target.value.length <= 10) {
+                        setContact(e.target.value);
+                        setErrors((prev) => ({ ...prev, contact: "" }));
+                      }
                     }}
                     className={inputClassName("contact")}
                   />

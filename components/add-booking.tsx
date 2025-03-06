@@ -434,12 +434,14 @@ export function AddBookingDialog({
                   </Label>
                   <Input
                     value={contact}
-                    type="text"
+                    type="number"
                     id="contact"
-                    maxLength={10}
+                    max={9999999999}
                     onChange={(e) => {
-                      setContact(e.target.value);
-                      setErrors((prev) => ({ ...prev, contact: "" }));
+                      if (e.target.value.length <= 10) {
+                        setContact(e.target.value);
+                        setErrors((prev) => ({ ...prev, contact: "" }));
+                      }
                     }}
                     className="w-2/3 border-input max-sm:text-xs max-sm:placeholder:text-xs sm:min-w-[130px] w-full focus:border-blue-400 focus-visible:ring-blue-400 
                   [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
