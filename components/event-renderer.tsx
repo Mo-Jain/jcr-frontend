@@ -16,6 +16,8 @@ interface EventRendererProps {
   view: "month" | "week" | "day";
   events: CalendarEventType[];
   hour?: number;
+  setAllEvents?: React.Dispatch<React.SetStateAction<CalendarEventType[]>>;
+  setIsOpenEventDialog?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export function EventRenderer({
@@ -23,6 +25,8 @@ export function EventRenderer({
   view,
   events,
   hour,
+  setAllEvents,
+  setIsOpenEventDialog
 }: EventRendererProps) {
   const { openEventSummary } = useEventStore();
   const isSmallScreen = useMediaQuery({ query: "(max-width: 640px)" });
@@ -33,6 +37,7 @@ export function EventRenderer({
   const { wrappedEvents, setWrappedEvents } = useWrappedEvent();
   const { cars } = useCarStore();
 
+  
   useEffect(() => {
     Initialize();
   }, [date, events]);
@@ -95,7 +100,7 @@ export function EventRenderer({
     if (setWrappedEvents) setWrappedEvents(newWrappedEvents);
     const currentDate = date.startOf("day");
 
-    const extendedEvents = events.filter((event) => {
+    const newExtendedEvents = events.filter((event) => {
       const eventStart = dayjs(event.startDate).startOf("day");
       const eventEnd = dayjs(event.endDate).startOf("day");
       return (
@@ -106,30 +111,31 @@ export function EventRenderer({
 
     const filledRows: number[] = [];
     let index = 0;
-    extendedEvents.forEach((event) => {
+    newExtendedEvents.forEach((event) => {
       const eventRow = eventsRow?.find((e) => e.id === event.id);
       //find eventRow in wrappedEvents
       if (!eventRow) return;
-      const wrappedEvent = wrappedEvents?.find((e) => e.id === eventRow?.id);
+      const weekStart = date.startOf("week");
+      const wrappedEvent  = wrappedEvents?.find((e) => {
+        return (
+          (e.startDate.isSame(weekStart, "day") &&
+          (e.endDate.isSame(date, "day") || 
+          e.endDate.isAfter(date, "day")))&&
+          e.id === eventRow?.id
+        )
+      });
       if (wrappedEvent) {
-        if (
-          (wrappedEvent.startDate.isBefore(date, "day") &&
-            wrappedEvent.endDate.isAfter(date, "day")) ||
-          wrappedEvent.endDate.isSame(date, "day") ||
-          wrappedEvent.startDate.isSame(date, "day")
-        ) {
-          if (wrappedEvent.startDate.isSame(date, "day")) {
-            setIsWrapped(true);
-          }
-          filledRows.push(index);
-          index++;
-        } else {
-          filledRows.push(eventRow.rowIndex);
+        if (wrappedEvent.startDate.isSame(date, "day")) {
+          setIsWrapped(true);
         }
+        filledRows.push(index);
+        index++;
       } else {
         filledRows.push(eventRow.rowIndex);
       }
     });
+
+    if(setAllEvents) setAllEvents([...newExtendedEvents,...newSortedEvents,])
 
     const rows = [0, 1, 2, 3, 4];
     const newEmptyRows = rows.filter((row) => !filledRows.includes(row));
@@ -172,7 +178,7 @@ export function EventRenderer({
           marginTop,
           backgroundColor: car?.colorOfBooking,
         }}
-        className={`z-10 line-clamp-1 my-[1px] bg-[#039BE5] max-sm:h-fit h-[18px] flex justify-start 
+        className={`z-10 line-clamp-1 mb-[1px] bg-[#039BE5] max-sm:h-fit h-[18px] flex justify-start 
           items-center cursor-pointer rounded-sm  font-semibold p-[1px]
           text-xs text-white whitespace-nowrap overflow-ellipsis`}
       >
@@ -181,14 +187,7 @@ export function EventRenderer({
     );
   };
 
-  const findOffset = (
-    index: number,
-    event: CalendarEventType | WrappedEvent,
-    isWrap: boolean = false,
-  ) => {
-    const weekEnd = event.startDate.endOf("week");
-    const weekendDuration = weekEnd.diff(event.startDate, "days") + 1;
-    const eventDuration = event.endDate.diff(event.startDate, "days") + 1;
+  const getTopMargin = (index: number) => {
     let temp = emptyRows[index];
     let cnt = 0;
     while (temp > 0) {
@@ -200,15 +199,35 @@ export function EventRenderer({
       if (emptyRows[index - 1] == temp) break;
       cnt++;
     }
+    
 
     if (index == 0 && isWrapped) {
       cnt = 0;
     }
 
+    return `${isSmallScreen ? cnt *20 : cnt*19}px`;
+  }
+
+  const handleClickMore = (e:React.MouseEvent) => {
+    if(setIsOpenEventDialog){
+        e.stopPropagation();
+        setIsOpenEventDialog(true);
+    }
+  }
+
+  const findOffset = (
+    index: number,
+    event: CalendarEventType | WrappedEvent,
+    isWrap: boolean = false,
+  ) => {
+    const weekEnd = event.startDate.endOf("week");
+    const weekendDuration = weekEnd.diff(event.startDate, "days") + 1;
+    const eventDuration = event.endDate.diff(event.startDate, "days") + 1;
+    
     let width = `calc((100% + 1px) * ${Math.min(eventDuration, weekendDuration)} - 1px)`;
-    let marginTop = `${isSmallScreen ? cnt * 13 : cnt * 19}px`;
+    let marginTop = getTopMargin(index);
     if (isWrap) {
-      width = `calc((100% + 2px)*${eventDuration} - 1px)`;
+      width = `calc((100% + 1px)*${eventDuration} - 1px)`;
       marginTop = "0";
     }
     return { width, marginTop };
@@ -220,6 +239,7 @@ export function EventRenderer({
         view === "month" ? "flex flex-col" : "flex"
       }`}
     >
+      
       {view === "month" && (
         <>
           {wrappedEvents?.map((e, index) => {
@@ -247,13 +267,11 @@ export function EventRenderer({
                   return renderEvent(event, index, width, marginTop);
                 })}
               <div
+                style={{marginTop: getTopMargin(emptyRows.length - 1)}}
                 className="z-10 line-clamp-1 h-[18px] max-sm:h-[12px] w-full m-0 flex justify-start 
                 items-center cursor-pointer rounded-sm hover:bg-gray-300 dark:hover:bg-zinc-700 text-[7px] font-semibold sm:text-xs p-[2px]
                 text-zinc-700 dark:text-gray-300 px-1"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  // Add logic to open a modal or show more events for the day
-                }}
+                onClick={handleClickMore}
               >
                 {`${noOfEvents * -1 + 1} more`}
               </div>

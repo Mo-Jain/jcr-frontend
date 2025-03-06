@@ -15,7 +15,7 @@ import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
 import { RenderFileList } from "../app/profile/manage-customer/render-file-list";
-import { Phone, Upload, User } from "lucide-react";
+import { Phone, Upload } from "lucide-react";
 import { createFolder } from "@/app/actions/folder";
 import { uploadToDrive } from "@/app/actions/upload";
 import UserIcon from "@/public/user.svg";

@@ -22,6 +22,7 @@ import { toast } from "@/hooks/use-toast";
 import axios from "axios";
 import { BASE_URL } from "@/lib/config";
 
+
 interface BookingData {
   startDate: string;
   endDate: string;
@@ -71,46 +72,12 @@ const REQUIRED_FIELDS = [
   "customerContact",
 ];
 
-function isValidDate(dateStr: string): boolean {
-  const regex = /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-\d{4}$/;
-  if (!regex.test(dateStr)) return false;
-
-  const [day, month, year] = dateStr.split("-").map(Number);
-  const date = new Date(year, month - 1, day);
-  return (
-    date.getDate() === day &&
-    date.getMonth() === month - 1 &&
-    date.getFullYear() === year
-  );
-}
 
 function isValidTime(timeStr: string): boolean {
   const regex = /^([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/;
   return regex.test(timeStr);
 }
 
-function formatDate(date: string | number): string {
-  try {
-    let jsDate;
-    if (typeof date === "number") {
-      jsDate = new Date((date - 25569) * 86400 * 1000);
-    } else {
-      jsDate = new Date(date);
-    }
-
-    if (isNaN(jsDate.getTime())) {
-      throw new Error("Invalid date");
-    }
-
-    const day = String(jsDate.getDate()).padStart(2, "0");
-    const month = String(jsDate.getMonth() + 1).padStart(2, "0");
-    const year = jsDate.getFullYear();
-
-    return `${day}-${month}-${year}`;
-  } catch {
-    throw new Error(`Invalid date format: ${date}`);
-  }
-}
 
 function formatTime(time: string | number): string {
   if (typeof time === "number") {
@@ -139,7 +106,14 @@ function formatTime(time: string | number): string {
     throw new Error(`Invalid time format: ${time}`);
   }
 }
+const excelSerialNumberToDate = (serial: number) => {
+  if (!serial || isNaN(serial)) return null;
 
+  // Excel starts from Jan 1, 1900, and incorrectly considers 1900 a leap year
+  const excelEpoch = new Date(1899, 11, 30); // 30-Dec-1899 (Base date for Excel)
+  
+  return new Date(excelEpoch.getTime() + serial * 24 * 60 * 60 * 1000); // Convert days to milliseconds
+};
 //eslint-disable-next-line @typescript-eslint/no-explicit-any
 function validateData(data: any): BookingData {
   // Check required fields
@@ -148,16 +122,10 @@ function validateData(data: any): BookingData {
       throw new Error(`Missing required field: ${field}`);
     }
   }
-
-  // Format and validate dates and times
-  const startDate = formatDate(data.startDate);
-  const endDate = formatDate(data.endDate);
+ 
   const startTime = formatTime(data.startTime);
   const endTime = formatTime(data.endTime);
 
-  if (!isValidDate(startDate))
-    throw new Error(`Invalid start date: ${startDate}`);
-  if (!isValidDate(endDate)) throw new Error(`Invalid end date: ${endDate}`);
   if (!isValidTime(startTime))
     throw new Error(`Invalid start time: ${startTime}`);
   if (!isValidTime(endTime)) throw new Error(`Invalid end time: ${endTime}`);
@@ -173,9 +141,12 @@ function validateData(data: any): BookingData {
     throw new Error("Total earnings must be a number");
   }
 
+  const startDate = excelSerialNumberToDate(data.startDate);
+  const endDate = excelSerialNumberToDate(data.endDate);
+
   return {
-    startDate,
-    endDate,
+    startDate: startDate ? startDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) :  "", // Convert to string for backend
+    endDate : endDate ? endDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : " ",
     startTime,
     endTime,
     allDay: Boolean(data.allDay),

@@ -127,7 +127,7 @@ export default function LoginPage() {
             </div>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full text-white">
               {isLoading ? (
                     <>
                       <span>Please wait</span>
