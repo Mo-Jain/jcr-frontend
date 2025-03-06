@@ -145,7 +145,7 @@ export default function CarsFilters() {
             <div className="flex items-center justify-between w-full px-0">
               <label
                 htmlFor={car.id.toString()}
-                className="text-sm font-medium py-2 leading-none text-gray-600 dark:text-gray-200 peer-disabled:cursor-not-allowed peer-disabled:opacity-70 max-w-[165px]"
+                className="text-sm font-medium py-2 leading-none text-gray-600 dark:text-gray-200 peer-disabled:cursor-not-allowed peer-disabled:opacity-70 max-w-[155px]"
               >
                 {car.brand + " " + car.model}
               </label>

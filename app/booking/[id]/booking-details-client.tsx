@@ -631,8 +631,8 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
               )}
             </p>
           </div>
-          <div className="text-right">
-            <div className="relative flex items-center sm:h-24 sm:w-36 rounded-md border border-border h-12 mb-2">
+          <div className="text-right flex flex-col items-end w-fit">
+            <div className="relative flex items-center sm:h-24 sm:w-36 rounded-md border border-border h-20 w-32 mb-2">
               {booking.carImageUrl !== "" ? (
                 <Image
                   src={booking.carImageUrl}
@@ -646,7 +646,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
                 <CarIcon className="w-full dark:stroke-blue-200 p-1  dark:fill-blue-200 stroke-black fill-black" />
               )}
             </div>
-            <p className="text-sm font-semibold text-[#4B4237] dark:text-gray-400">
+            <p className="text-sm font-semibold text-[#4B4237] max-sm:max-w-[180px] dark:text-gray-400">
               {booking.carName}
             </p>
             <p className="text-xs text-blue-500">{booking.carPlateNumber}</p>

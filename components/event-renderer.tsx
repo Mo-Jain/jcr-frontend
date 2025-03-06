@@ -208,10 +208,10 @@ export function EventRenderer({
     const weekendDuration = weekEnd.diff(event.startDate, "days") + 1;
     const eventDuration = event.endDate.diff(event.startDate, "days") + 1;
     
-    let width = `calc((100% + 1px) * ${Math.min(eventDuration, weekendDuration)} - 1px)`;
+    let width = `calc((100% + 1.5px) * ${Math.min(eventDuration, weekendDuration)} - 1px)`;
     let marginTop = getTopMargin(index);
     if (isWrap) {
-      width = `calc((100% + 1px)*${eventDuration} - 1px)`;
+      width = `calc((100% + 1.5px)*${eventDuration} - 1px)`;
       marginTop = "0";
     }
     return { width, marginTop };
