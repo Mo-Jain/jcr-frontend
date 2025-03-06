@@ -44,7 +44,7 @@ const MonthEarnings = () => {
       <div className="px-4 py-3 border-b border-gray-300 dark:border-border">
         <h3 className="font-semibold text-md">This Month Earnings</h3>
       </div>
-      <div className="  py-1 rounded-md h-[300px]  ">
+      <div className="  py-1 rounded-md h-[300px] scrollbar-hide overflow-y-scroll ">
         {flag ? (
           <div className="flex flex-col gap-1 scrollbar-hide rounded-lg overflow-y-scroll">
             {earnings.map((earning: Earning) => {
