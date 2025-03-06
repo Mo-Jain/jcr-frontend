@@ -40,7 +40,7 @@ export function EventRenderer({
   
   useEffect(() => {
     Initialize();
-  }, [date, events]);
+  }, [date,events]);
 
   const noOfEvents = emptyRows.length - sortedEvents.length;
 
@@ -72,32 +72,6 @@ export function EventRenderer({
 
     setSortedEvents(newSortedEvents);
 
-    const newWrappedEvents = wrappedEvents || [];
-    newSortedEvents.forEach((event) => {
-      const newEventsRow = eventsRow || [];
-      const isPresent = newEventsRow.find((e) => e.id === event.id);
-      let startDate = event.startDate.startOf("day");
-      const endDate = event.endDate.startOf("day");
-      let weekEnd = startDate.endOf("week").startOf("day");
-      let weekendDuration = weekEnd.diff(startDate, "days");
-      let eventDuration = endDate.diff(startDate, "days");
-      if (eventDuration < weekendDuration || isPresent) return;
-
-      while (!startDate.isAfter(endDate)) {
-        startDate = weekEnd.add(1, "day").startOf("day");
-        if (startDate.isAfter(endDate)) break;
-        weekEnd = startDate.endOf("week").startOf("day");
-        weekendDuration = weekEnd.diff(startDate, "days");
-        eventDuration = endDate.diff(startDate, "days");
-        const endDate1 = weekEnd.isAfter(event.endDate, "day")
-          ? event.endDate.startOf("day")
-          : weekEnd;
-
-        newWrappedEvents.push({ id: event.id, startDate, endDate: endDate1 });
-      }
-    });
-
-    if (setWrappedEvents) setWrappedEvents(newWrappedEvents);
     const currentDate = date.startOf("day");
 
     const newExtendedEvents = events.filter((event) => {
@@ -111,21 +85,25 @@ export function EventRenderer({
 
     const filledRows: number[] = [];
     let index = 0;
+    console.log("date",date.date());
     newExtendedEvents.forEach((event) => {
       const eventRow = eventsRow?.find((e) => e.id === event.id);
+      console.log("eventRow",eventRow)
       //find eventRow in wrappedEvents
-      if (!eventRow) return;
       const weekStart = date.startOf("week");
       const wrappedEvent  = wrappedEvents?.find((e) => {
         return (
           (e.startDate.isSame(weekStart, "day") &&
           (e.endDate.isSame(date, "day") || 
           e.endDate.isAfter(date, "day")))&&
-          e.id === eventRow?.id
+          e.id === event.id
         )
       });
-      if (wrappedEvent) {
-        if (wrappedEvent.startDate.isSame(date, "day")) {
+      console.log("wrappedEvent",wrappedEvent)
+
+      if (wrappedEvent || !eventRow) {
+        //check if the wrapped event start today so that its top margin should be zero else it would count the margin for itself
+        if (wrappedEvent && wrappedEvent.startDate.isSame(date, "day")) {
           setIsWrapped(true);
         }
         filledRows.push(index);
@@ -134,6 +112,9 @@ export function EventRenderer({
         filledRows.push(eventRow.rowIndex);
       }
     });
+    const currWrappedEvents = wrappedEvents
+    console.log("filledRows",filledRows);
+    console.log("wrappedEvent",currWrappedEvents);
 
     if(setAllEvents) setAllEvents([...newExtendedEvents,...newSortedEvents,])
 
@@ -150,8 +131,11 @@ export function EventRenderer({
         event.startDate.isSame(date, "day") &&
         event.endDate.isAfter(date, "day")
       ) {
-        newEventsRow.push({ id: event.id, rowIndex: newEmptyRows[index] });
-        index++;
+        const isPresent = newEventsRow.find((e) => e.id === event.id);
+        if (!isPresent) {
+          newEventsRow.push({ id: event.id, rowIndex: newEmptyRows[index] });
+          index++;
+        }
       }
     });
 
@@ -168,7 +152,7 @@ export function EventRenderer({
 
     return (
       <div
-        key={event.id}
+        key={index}
         onClick={(e) => {
           e.stopPropagation();
           openEventSummary(event);
@@ -205,7 +189,7 @@ export function EventRenderer({
       cnt = 0;
     }
 
-    return `${isSmallScreen ? cnt *20 : cnt*19}px`;
+    return `${ cnt*19}px`;
   }
 
   const handleClickMore = (e:React.MouseEvent) => {

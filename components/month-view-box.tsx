@@ -66,7 +66,7 @@ export default function MonthViewBox({
           className={cn(
             "text-center text-xs sm:text-sm",
             isToday &&
-              "flex  h-6 w-6 sm:h-6 sm:w-6 p-[1px] items-center justify-center rounded-full bg-blue-800 text-white",
+              "flex  h-6 w-6 p-[1px] items-center justify-center rounded-full bg-blue-800 text-white",
           )}
         >
           {isFirstDayOfMonth ? day.format("MMM D") : day.format("D")}

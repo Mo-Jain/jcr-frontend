@@ -314,7 +314,7 @@ export default function Bookings() {
               Completed
             </Button>
           </div>
-          {filteredBookings.length > 0 && (
+          {bookings.length > 0 && (
             <Button
               className="max-sm:hidden bg-primary text-white hover:bg-opacity-10 dark:text-black shadow-lg"
               onClick={handleAddBooking}
@@ -396,12 +396,16 @@ export default function Bookings() {
                 <p className="text-center text-lg sm:text-2xl text-gray-400 font-bold">
                   Click below to create your first booking
                 </p>
-                <Button
-                  className="bg-blue-600 text-white dark:text-black hover:bg-opacity-80  shadow-lg"
+                
+                <div
                   onClick={() => setIsAddBookingOpen(true)}
+                  className={cn(
+                    "bg-primary px-[15px]  overflow-hidden text-white dark:text-black shadow-lg  rounded-md w-12 h-12 flex items-center",
+                    cars && cars.length > 0 ? "cursor-pointer" : "cursor-not-allowed",
+                  )}
                 >
-                  <Plus className="text-20 h-60 w-60 stroke-[4px]" />
-                </Button>
+                  <Plus className="w-8 h-8 stroke-10" />
+                </div>
               </div>
             ) : (
               <div className="w-full h-full py-28 gap-2 flex justify-center items-center">

@@ -3,8 +3,11 @@ import { BASE_URL } from "@/lib/config";
 import {
   CalendarEventType,
   useCarStore,
+  useEventRows,
   useEventStore,
   useUserStore,
+  useWrappedEvent,
+  WrappedEvent,
 } from "@/lib/store";
 import axios from "axios";
 import SplashScreen from "./SplashScreen";
@@ -18,6 +21,8 @@ const Initiate = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { setEvents } = useEventStore();
   const [eventsData, setEventsData] = useState<CalendarEventType[]>([]);
+  const { eventsRow, setEventsRow } = useEventRows();
+  const { wrappedEvents, setWrappedEvents } = useWrappedEvent();
 
   useEffect(() => {
     setIsLoading(true);
@@ -62,22 +67,58 @@ const Initiate = () => {
   }, []);
 
   useEffect(() => {
-    const mappedEvents: CalendarEventType[] = eventsData.map((event) => ({
-      id: event.id,
-      startDate: dayjs(event.startDate),
-      status: event.status,
-      startTime: event.startTime,
-      endDate: dayjs(event.endDate),
-      endTime: event.endTime,
-      color: event.color,
-      allDay: event.allDay,
-      customerName: event.customerName,
-      customerContact: event.customerContact,
-      carId: event.carId,
-      carName: event.carName,
-      isAdmin: event.isAdmin,
-    }));
+    const newWrappedEvents: WrappedEvent[] = [];
+    const mappedEvents: CalendarEventType[] = [];
+    eventsData.map((event) => {
+      const newEvent ={
+          id: event.id,
+          startDate: dayjs(event.startDate),
+          status: event.status,
+          startTime: event.startTime,
+          endDate: dayjs(event.endDate),
+          endTime: event.endTime,
+          color: event.color,
+          allDay: event.allDay,
+          customerName: event.customerName,
+          customerContact: event.customerContact,
+          carId: event.carId,
+          carName: event.carName,
+          isAdmin: event.isAdmin,
+          }
+      mappedEvents.push(newEvent);
+      let startDate = newEvent.startDate.startOf("day");
+      const endDate = newEvent.endDate.startOf("day");
+      let weekEnd = startDate.endOf("week").startOf("day");
+      let weekendDuration = weekEnd.diff(startDate, "days");
+      let eventDuration = endDate.diff(startDate, "days");
+      if (eventDuration < weekendDuration) return;
 
+      //breaking events into multiple rows and adding them to the newWrappedEvents array
+      while (!startDate.isAfter(endDate)) {
+        startDate = weekEnd.add(1, "day").startOf("day");
+        if (startDate.isAfter(endDate)) break;
+        weekEnd = startDate.endOf("week").startOf("day");
+        weekendDuration = weekEnd.diff(startDate, "days");
+        eventDuration = endDate.diff(startDate, "days");
+        const endDate1 = weekEnd.isAfter(newEvent.endDate, "day")
+          ? newEvent.endDate.startOf("day")
+          : weekEnd;
+        const isPresent = newWrappedEvents.find((e) =>  (
+          e.id === newEvent.id &&
+          e.startDate.date() === startDate.date()
+        ));
+
+        if(isPresent) continue;
+        const wrappedEvent = {
+          id: newEvent.id,
+          startDate,
+          endDate: endDate1
+        };
+        newWrappedEvents.push(wrappedEvent);
+      }
+    });
+
+    setWrappedEvents(newWrappedEvents);
     setEvents(mappedEvents);
   }, [eventsData, setEvents]);
 
