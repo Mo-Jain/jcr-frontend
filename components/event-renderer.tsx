@@ -85,10 +85,9 @@ export function EventRenderer({
 
     const filledRows: number[] = [];
     let index = 0;
-    console.log("date",date.date());
     newExtendedEvents.forEach((event) => {
       const eventRow = eventsRow?.find((e) => e.id === event.id);
-      console.log("eventRow",eventRow)
+      
       //find eventRow in wrappedEvents
       const weekStart = date.startOf("week");
       const wrappedEvent  = wrappedEvents?.find((e) => {
@@ -99,8 +98,6 @@ export function EventRenderer({
           e.id === event.id
         )
       });
-      console.log("wrappedEvent",wrappedEvent)
-
       if (wrappedEvent || !eventRow) {
         //check if the wrapped event start today so that its top margin should be zero else it would count the margin for itself
         if (wrappedEvent && wrappedEvent.startDate.isSame(date, "day")) {
@@ -112,9 +109,6 @@ export function EventRenderer({
         filledRows.push(eventRow.rowIndex);
       }
     });
-    const currWrappedEvents = wrappedEvents
-    console.log("filledRows",filledRows);
-    console.log("wrappedEvent",currWrappedEvents);
 
     if(setAllEvents) setAllEvents([...newExtendedEvents,...newSortedEvents,])
 
@@ -163,8 +157,8 @@ export function EventRenderer({
           backgroundColor: car?.colorOfBooking,
         }}
         className={`z-10 line-clamp-1 mb-[1px] bg-[#039BE5] max-sm:h-fit h-[18px] flex justify-start 
-          items-center cursor-pointer rounded-sm  font-semibold p-[1px]
-          text-[10px] sm:text-xs text-white whitespace-nowrap overflow-ellipsis`}
+          items-center cursor-pointer font-semibold max-sm:p-[2.2px] p-[1px]
+           rounded-[3px] sm:rounded-sm bg-[#039BE5] text-[9px] sm:text-xs text-white whitespace-nowrap overflow-ellipsis`}
       >
         {event.id + " : " + event.carName}
       </div>

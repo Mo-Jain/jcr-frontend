@@ -70,24 +70,24 @@ const HeaderEvent = ({
     let index = 0;
     extendedEvents.forEach((event) => {
       const eventRow = eventsRow?.find((e) => e.id === event.id);
+
       //find eventRow in wrappedEvents
-      if (!eventRow) return;
-      const wrappedEvent = wrappedEvents?.find((e) => e.id === eventRow?.id);
-      if (wrappedEvent) {
-        if (
-          (dayjs(wrappedEvent.startDate).isBefore(date, "day") &&
-            dayjs(wrappedEvent.endDate).isAfter(date, "day")) ||
-          dayjs(wrappedEvent.endDate).isSame(date, "day") ||
-          dayjs(wrappedEvent.startDate).isSame(date, "day")
-        ) {
-          if (dayjs(wrappedEvent.startDate).isSame(date, "day")) {
-            setIsWrapped(true);
-          }
-          filledRows.push(index);
-          index++;
-        } else {
-          filledRows.push(eventRow.rowIndex);
+      const weekStart = date.startOf("week");
+      const wrappedEvent  = wrappedEvents?.find((e) => {
+        return (
+          (e.startDate.isSame(weekStart, "day") &&
+          (e.endDate.isSame(date, "day") || 
+          e.endDate.isAfter(date, "day")))&&
+          e.id === event.id
+        )
+      });
+      if (wrappedEvent || !eventRow) {
+        //check if the wrapped event start today so that its top margin should be zero else it would count the margin for itself
+        if (wrappedEvent && wrappedEvent.startDate.isSame(date, "day")) {
+          setIsWrapped(true);
         }
+        filledRows.push(index);
+        index++;
       } else {
         filledRows.push(eventRow.rowIndex);
       }
@@ -128,7 +128,7 @@ const HeaderEvent = ({
     const singleEventWidth = "100%";
 
     let width = `calc(${singleEventWidth} * ${Math.min(eventDuration, weekendDuration)} - 1px)`;
-    let marginTop = `${isSmallScreen ? cnt * 13 : cnt * 19}px`;
+    let marginTop = `${cnt * 19}px`;
     if (isWrap) {
       width = `calc(${singleEventWidth}*${eventDuration} - 1px)`;
       marginTop = "0";
@@ -158,7 +158,7 @@ const HeaderEvent = ({
           backgroundColor: car?.colorOfBooking,
         }}
         className={cn(
-          "my-[1px]  h-[18px] w-full flex items-center text-[12px] justify-center cursor-pointer rounded-[3px] sm:rounded-sm bg-[#039BE5] text-[7px] sm:text-xs text-white overflow-hidden whitespace-nowrap",
+          "my-[1px]  h-[18px] w-full flex items-center justify-center cursor-pointer rounded-[3px] sm:rounded-sm bg-[#039BE5] text-[8px] sm:text-xs text-white overflow-hidden whitespace-nowrap",
           isSmallScreen ? "" : "px-2 ",
         )}
       >
