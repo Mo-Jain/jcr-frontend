@@ -93,10 +93,10 @@ const HeaderEvent = ({
       }
     });
 
-    setNoOfEvents(filledRows.length);
 
     const rows = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
     const newEmptyRows = rows.filter((row) => !filledRows.includes(row));
+    setNoOfEvents(filledRows.length + newSortedEvents.length );
     setEmptyRows(newEmptyRows);
   };
 
@@ -167,6 +167,8 @@ const HeaderEvent = ({
     );
   };
 
+  let wrappedEventsLength = 0;
+
   return (
     <div
       key={index}
@@ -202,9 +204,12 @@ const HeaderEvent = ({
           </>
         ) : (
           <>
-            {wrappedEvents?.slice(0, 2).map((e, index) => {
+            {wrappedEvents.map((e, index) => {
+              if(wrappedEventsLength>=2) return;
               const event = events.find((event) => event.id === e.id);
               if (!event || !e.startDate.isSame(date, "day")) return null;
+              wrappedEventsLength += 1;
+
               const { width, marginTop } = findOffset(index, e, true);
               return renderEvent(event, index, width, marginTop);
             })}
