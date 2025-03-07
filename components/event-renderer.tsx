@@ -9,7 +9,6 @@ import {
 } from "@/lib/store";
 import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
-import { useMediaQuery } from "react-responsive";
 
 interface EventRendererProps {
   date: dayjs.Dayjs;

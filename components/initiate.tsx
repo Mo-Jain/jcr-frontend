@@ -3,7 +3,6 @@ import { BASE_URL } from "@/lib/config";
 import {
   CalendarEventType,
   useCarStore,
-  useEventRows,
   useEventStore,
   useUserStore,
   useWrappedEvent,
