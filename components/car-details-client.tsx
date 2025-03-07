@@ -665,7 +665,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
                               onClick={() =>
                                 router.push("/booking/" + booking.id)
                               }
-                              className="w-6 h-6 text-blue-500 cursor-pointer hover:text-red-600 dark:hover:text-red-400"
+                              className="w-4 h-4 sm:w-6 sm:h-6 text-blue-500 cursor-pointer hover:text-red-600 dark:hover:text-red-400"
                             />
                           </div>
                         </div>
@@ -721,7 +721,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
                               setIsDialogOpen(true);
                             }}
                           >
-                            <Trash2 className="h-6 w-6 hover:text-red-500" />
+                            <Trash2 className="w-4 h-4 sm:h-6 sm:w-6 hover:text-red-500" />
                           </div>
                           )}
                         </div>

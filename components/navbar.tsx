@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import Logo1 from "@/public/logo1.svg";
 import LogoText from "@/public/logo_text.svg";
 import { usePathname, useRouter } from "next/navigation";
@@ -9,12 +8,14 @@ import { useEffect, useState } from "react";
 import { useUserStore } from "@/lib/store";
 import Redirect from "./redirect";
 import Image from "next/image";
+import { useMediaQuery } from "react-responsive";
 
 export function NavBar() {
   const [selectedTab, setSelectedTab] = useState("home");
   const pathname = usePathname();
   const router = useRouter();
   const { name, imageUrl } = useUserStore();
+  const isSmallScreen = useMediaQuery({ maxWidth: 640 });
   const gethortName = () => {
     if (!name) return;
     const nameArray = name.trim().split(" ");
@@ -44,20 +45,26 @@ export function NavBar() {
     }
   }, [pathname]);
 
+  const handleClick = () => {
+    if (!isSmallScreen) {
+      router.push("/");
+    }
+  };
+
   return (
     <div className="relative">
       <Redirect />
       <nav className="fixed w-full max-sm:pt-[30px] border-border top-0 left-0 z-[99999] py-1 flex items-center rounded-none cursor-normal bg-white/30 dark:bg-white/10 backdrop-blur-lg justify-between px-4">
         <div className="flex w-full transition-all duration-300">
-          <Link
-            href="/"
-            className={`flex-grow w-fit rounded-none flex sm:ml-4 items-center justify-start`}
+          <div
+            onClick={handleClick}
+            className={`flex-grow w-fit cursor-pointer rounded-none flex sm:ml-4 items-center justify-start`}
           >
             <div className="flex items-start">
               <Logo1 className="h-[40px] sm:h-[50px] fill-[#039BE5] stroke-[1px]" />
             </div>
             <LogoText className="ml-[-10px] sm:ml-[-5px] dark:stroke-white w-10 sm:w-14 h-7" />
-          </Link>
+          </div>
           <div
             className={`sm:w-full ${name ? "sm:ml-48" : ""} flex justify-center items-center`}
           >

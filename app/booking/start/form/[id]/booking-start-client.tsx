@@ -779,7 +779,7 @@ export default function BookingStartClient({
             htmlFor="terms"
             className="text-sm font-medium text-blue-400 underline cursor-pointer leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
           >
-            <Link href="/terms-and-conditions" target="_blank">
+            <Link href="/terms-and-conditions">
               I agree to all the terms and conditions{" "}
             </Link>
             <span className="text-red-500">*</span>

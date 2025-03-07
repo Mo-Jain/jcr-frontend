@@ -1,7 +1,21 @@
+"use client";
+
+import BackArrow from "@/public/back-arrow.svg";
+import { useRouter } from "next/navigation";
+
 export default function TermsAndConditions() {
+  const router = useRouter();
   return (
     <div className="min-h-screen bg-white">
       <header className="bg-blue-200 dark:bg-[#181818] text-primary-foreground py-8">
+      <div
+          className="mr-2 rounded-md font-bold w-fit  cursor-pointer dark:hover:bg-gray-800 hover:bg-gray-200"
+          onClick={() => router.back()}
+        >
+          <div className="h-10 w-9 flex border-border border justify-center items-center rounded-md ">
+            <BackArrow className="h-7 w-7 stroke-0 fill-gray-800 dark:fill-blue-300" />
+          </div>
+        </div>
         <div className="container mx-auto px-4 whitespace-nowrap">
           <div className="flex flex-col items-center justify-center text-center text-black dark:text-white">
             <h1 className="text-2xl sm:text-4xl font-bold mb-2">
