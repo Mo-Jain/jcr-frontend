@@ -40,11 +40,11 @@ function formatDateTime(dateString: string) {
   });
 }
 
-function getReturnTime(startDate: string, startTime: string) {
+function getReturnTime(startDate: string, startTime: string,status:string) {
   const [hours, minutes] = startTime.split(":").map(Number);
   const currDate = new Date();
   currDate.setHours(hours);
-  currDate.setMinutes(minutes); // Subtract 30 minutes
+  currDate.setMinutes(status === "Upcoming" ? minutes-30 : minutes); // Subtract 30 minutes
 
   // Format back to HH:MM
   const newHours = currDate.getHours().toString().padStart(2, "0");
@@ -52,7 +52,7 @@ function getReturnTime(startDate: string, startTime: string) {
 
   const pickup = new Date(startDate);
 
-  if (newHours === "23" && Number(newMinutes) >= 30) {
+  if (newHours === "23" && Number(newMinutes) >= 30 && status === "Upcoming") {
     pickup.setDate(pickup.getDate() - 1); // Add a day
   }
 
@@ -498,9 +498,14 @@ const BookingCard = ({
                     booking.endTime,
                   )}
                 </p>
+                { booking.status ==="Upcoming" ?
                 <p className="font-semibold text-[#5B4B49] max-sm:text-xs dark:text-gray-400">
-                  {getReturnTime(booking.end, booking.endTime)}{" "}
+                  {getReturnTime(booking.start, booking.startTime,booking.status)}{" "}
                 </p>
+                :
+                <p className="font-semibold text-[#5B4B49] max-sm:text-xs dark:text-gray-400">
+                  {getReturnTime(booking.end, booking.endTime,booking.status)}{" "}
+                </p>}
               </div>
               <div className="flex items-center justify-between w-fit ">
                 <div className="flex items-center sm:pr-10">

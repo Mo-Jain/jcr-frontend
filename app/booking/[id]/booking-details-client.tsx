@@ -564,7 +564,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
       <div className="flex items-center justify-between px-2 pb-2 border-b border-gray-300 dark:border-muted">
         <div
           className="mr-2 rounded-md font-bold  cursor-pointer dark:hover:bg-gray-800 hover:bg-gray-200"
-          onClick={() => router.back()}
+          onClick={() => router.push("/bookings")}
         >
           <div className="h-10 w-9 flex border-border border justify-center items-center rounded-md ">
             <BackArrow className="h-7 w-7 stroke-0 fill-gray-800 dark:fill-blue-300" />

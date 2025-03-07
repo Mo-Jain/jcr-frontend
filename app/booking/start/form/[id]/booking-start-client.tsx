@@ -111,11 +111,7 @@ export default function BookingStartClient({
     if (!paymentMethod) newErrors.paymentMethod = "This field is mandatory";
     if (!termsAccepted)
       newErrors.terms = "You must accept the terms and conditions";
-    if (documents) {
-      if (uploadedFiles.documents.length === 0 && documents.length === 0)
-        newErrors.documents = "Documents are mandatory";
-    } else if (uploadedFiles.documents.length === 0)
-      newErrors.documents = "Documents are mandatory";
+ 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -287,13 +283,13 @@ export default function BookingStartClient({
           uploadedFiles.selfie[0],
           booking.bookingFolderId,
         );
+        const selfieSize = uploadedFiles.selfie[0].size;
+        overallProgress += Math.round((selfieSize / totalSize) * 100) * 0.97;
+        setProgress(overallProgress);
       }
 
-
       setLoadingMessage("Uploaded Selfie");
-      const selfieSize = uploadedFiles.selfie[0].size;
-      overallProgress += Math.round((selfieSize / totalSize) * 100) * 0.97;
-      setProgress(overallProgress);
+      
       if (resSelfie && resSelfie.error) {
         throw new Error("Failed to upload selfie photo");
         return;
@@ -384,7 +380,7 @@ export default function BookingStartClient({
         </span>
         <span className="text-sm">{bookingId}</span>
       </div>
-      <form onSubmit={handleSubmit} className="space-y-6 max-sm:mb-12">
+      <form className="space-y-6 max-sm:mb-12">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-4">
             <div className="flex justify-between space-x-2 items-center">
@@ -816,7 +812,7 @@ export default function BookingStartClient({
             </div>
           ) : (
             <Button
-              type="submit"
+              onClick={handleSubmit}
               disabled={isLoading}
               className={`bg-blue-600 text-white hover:bg-opacity-80 w-full ${isLoading && "rounded-e-none cursor-not-allowed opacity-50"}`}
             >
