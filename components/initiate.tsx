@@ -21,8 +21,7 @@ const Initiate = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { setEvents } = useEventStore();
   const [eventsData, setEventsData] = useState<CalendarEventType[]>([]);
-  const { eventsRow, setEventsRow } = useEventRows();
-  const { wrappedEvents, setWrappedEvents } = useWrappedEvent();
+  const { setWrappedEvents } = useWrappedEvent();
 
   useEffect(() => {
     setIsLoading(true);
@@ -117,6 +116,7 @@ const Initiate = () => {
         newWrappedEvents.push(wrappedEvent);
       }
     });
+
 
     setWrappedEvents(newWrappedEvents);
     setEvents(mappedEvents);

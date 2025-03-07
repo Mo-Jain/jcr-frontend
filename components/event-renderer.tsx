@@ -29,7 +29,6 @@ export function EventRenderer({
   setIsOpenEventDialog
 }: EventRendererProps) {
   const { openEventSummary } = useEventStore();
-  const isSmallScreen = useMediaQuery({ query: "(max-width: 640px)" });
   const [emptyRows, setEmptyRows] = useState<number[]>([0, 1, 2, 3, 4]);
   const [isWrapped, setIsWrapped] = useState<boolean>(false);
   const [sortedEvents, setSortedEvents] = useState<CalendarEventType[]>([]);
