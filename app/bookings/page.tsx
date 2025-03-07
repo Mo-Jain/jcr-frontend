@@ -131,6 +131,20 @@ export default function Bookings() {
     }
   }, [selectedBookings]);
 
+  const getBookingLength = (status: string) => {
+    let length = 0;
+    if (status === "All"){
+      length = bookings.length;
+    }else if (status === "Upcoming"){
+      length = bookings.filter(booking => booking.status === "Upcoming").length;
+    }else if (status === "Ongoing"){
+      length = bookings.filter(booking => booking.status === "Ongoing").length;
+    }else if (status === "Completed"){
+      length = bookings.filter(booking => booking.status === "Completed").length;
+    }
+    return length > 0 ? ` (${length})` : "";
+  }
+
   const handleDelete = async () => {
     setIsDeleting(true);
     try {
@@ -278,7 +292,7 @@ export default function Bookings() {
               className={`rounded-sm ${selectedStatus === "All" ? "bg-blue-400 hover:bg-blue-500 text-white dark:text-black" : "hover:bg-blue-100 bg-transparent border-border dark:text-white dark:hover:bg-zinc-700 text-black"}`}
               onClick={() => setSelectedStatus("All")}
             >
-              All
+              All{getBookingLength("All")}
             </Button>
             <Button
               variant={selectedStatus === "Upcoming" ? "default" : "outline"}
@@ -289,7 +303,7 @@ export default function Bookings() {
               }
               onClick={() => setSelectedStatus("Upcoming")}
             >
-              Upcoming
+              Upcoming{getBookingLength("Upcoming")}
             </Button>
             <Button
               variant={selectedStatus === "Ongoing" ? "default" : "outline"}
@@ -300,7 +314,7 @@ export default function Bookings() {
               }
               onClick={() => setSelectedStatus("Ongoing")}
             >
-              Ongoing
+              Ongoing{getBookingLength("Ongoing")}
             </Button>
             <Button
               variant={selectedStatus === "Completed" ? "default" : "outline"}
@@ -311,7 +325,7 @@ export default function Bookings() {
               }
               onClick={() => setSelectedStatus("Completed")}
             >
-              Completed
+              Completed{getBookingLength("Completed")}
             </Button>
           </div>
           {bookings.length > 0 && (
