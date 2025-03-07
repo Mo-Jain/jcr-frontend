@@ -308,22 +308,22 @@ export function CarDetailsClient({ carId }: { carId: number }) {
     });
   }
 
-  function getReturnTime(startDate: string, startTime: string) {
+  function getReturnTime(startDate: string, startTime: string,status:string) {
     const [hours, minutes] = startTime.split(":").map(Number);
     const currDate = new Date();
     currDate.setHours(hours);
-    currDate.setMinutes(minutes); // Subtract 30 minutes
-
+    currDate.setMinutes(status === "Upcoming" ? minutes-30 : minutes); // Subtract 30 minutes
+  
     // Format back to HH:MM
     const newHours = currDate.getHours().toString().padStart(2, "0");
     const newMinutes = currDate.getMinutes().toString().padStart(2, "0");
-
+  
     const pickup = new Date(startDate);
-
-    if (newHours === "23" && Number(newMinutes) >= 30) {
+  
+    if (newHours === "23" && Number(newMinutes) >= 30 && status === "Upcoming") {
       pickup.setDate(pickup.getDate() - 1); // Add a day
     }
-
+  
     const date = pickup.toDateString().replaceAll(" ", ", ");
     return `${date} ${newHours}:${newMinutes}`;
   }
@@ -656,7 +656,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
                               )}
                             </p>
                             <p className="font-semibold text-[#5B4B49] max-sm:text-sm dark:text-gray-400">
-                              {getReturnTime(booking.end, booking.endTime)}{" "}
+                              {getReturnTime(booking.end, booking.endTime,booking.status)}{" "}
                             </p>
                           </div>
                           <div className="flex items-center ml-2 gap-[2px] sm:gap-2 justify-center">
