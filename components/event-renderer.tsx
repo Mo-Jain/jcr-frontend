@@ -34,15 +34,16 @@ export function EventRenderer({
   const [isWrapped, setIsWrapped] = useState<boolean>(false);
   const [sortedEvents, setSortedEvents] = useState<CalendarEventType[]>([]);
   const { eventsRow, setEventsRow } = useEventRows();
-  const { wrappedEvents, setWrappedEvents } = useWrappedEvent();
+  const { wrappedEvents } = useWrappedEvent();
   const { cars } = useCarStore();
+  const [currWrappedEvents,setCurrWrappedEvents] = useState<WrappedEvent[]>([]);
+  const [noOfEvents, setNoOfEvents] = useState(0);
 
   
   useEffect(() => {
     Initialize();
   }, [date,events]);
 
-  const noOfEvents = emptyRows.length - sortedEvents.length;
 
   const Initialize = () => {
     let filteredEvents = events.filter((event: CalendarEventType) => {
@@ -85,6 +86,7 @@ export function EventRenderer({
 
     const filledRows: number[] = [];
     let index = 0;
+    let newCurrWrappedEvents: WrappedEvent[] = [];
     newExtendedEvents.forEach((event) => {
       const eventRow = eventsRow?.find((e) => e.id === event.id);
       
@@ -98,6 +100,9 @@ export function EventRenderer({
           e.id === event.id
         )
       });
+      if(wrappedEvent){
+        newCurrWrappedEvents.push(wrappedEvent);
+      }
       if (wrappedEvent || !eventRow) {
         //check if the wrapped event start today so that its top margin should be zero else it would count the margin for itself
         if (wrappedEvent && wrappedEvent.startDate.isSame(date, "day")) {
@@ -133,6 +138,15 @@ export function EventRenderer({
       }
     });
 
+    newCurrWrappedEvents = newCurrWrappedEvents.sort((a, b) => {
+      const durationA = a.endDate.diff(a.startDate, "minute"); // Get duration in minutes
+      const durationB = b.endDate.diff(b.startDate, "minute");
+      return durationB - durationA; // Sort in descending order (longest first)
+    });
+    setNoOfEvents(newExtendedEvents.length + newSortedEvents.length);
+    console.log("date",date.date());
+    console.log("emptyRows",emptyRows);
+    setCurrWrappedEvents(newCurrWrappedEvents);
     if (setEventsRow) setEventsRow(newEventsRow);
   };
 
@@ -220,7 +234,7 @@ export function EventRenderer({
       
       {view === "month" && (
         <>
-          {wrappedEvents?.map((e, index) => {
+          {currWrappedEvents.slice(0,currWrappedEvents.length > 5 ? 4 : currWrappedEvents.length)?.map((e, index) => {
             // return null;
             const event = events.find((event) => event.id === e.id);
             if (!event || !e.startDate.isSame(date, "day")) return null;
@@ -228,7 +242,7 @@ export function EventRenderer({
             return renderEvent(event, index, width, marginTop);
           })}
 
-          {noOfEvents >= 0 ? (
+          {noOfEvents <= 5 ? (
             <>
               {sortedEvents.map((event, index) => {
                 const { width, marginTop } = findOffset(index, event);
@@ -237,6 +251,8 @@ export function EventRenderer({
             </>
           ) : (
             <>
+              {currWrappedEvents.length < 4 &&
+                <>
               {sortedEvents
                 .slice(0, emptyRows.length - 1)
                 .map((event, index) => {
@@ -244,6 +260,7 @@ export function EventRenderer({
                   const { width, marginTop } = findOffset(index, event);
                   return renderEvent(event, index, width, marginTop);
                 })}
+                </>}
               <div
                 style={{marginTop: getTopMargin(emptyRows.length - 1)}}
                 className="z-10 line-clamp-1 h-[18px] max-sm:h-[12px] w-full m-0 flex justify-start 
@@ -251,7 +268,7 @@ export function EventRenderer({
                 text-zinc-700 dark:text-gray-300 px-1"
                 onClick={handleClickMore}
               >
-                {`${noOfEvents * -1 + 1} more`}
+                {`${noOfEvents -4} more`}
               </div>
             </>
           )}

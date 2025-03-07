@@ -67,7 +67,7 @@ const Initiate = () => {
   }, []);
 
   useEffect(() => {
-    const newWrappedEvents: WrappedEvent[] = [];
+    let newWrappedEvents: WrappedEvent[] = [];
     const mappedEvents: CalendarEventType[] = [];
     eventsData.map((event) => {
       const newEvent ={
