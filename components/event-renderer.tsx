@@ -144,8 +144,7 @@ export function EventRenderer({
       return durationB - durationA; // Sort in descending order (longest first)
     });
     setNoOfEvents(newExtendedEvents.length + newSortedEvents.length);
-    console.log("date",date.date());
-    console.log("emptyRows",emptyRows);
+
     setCurrWrappedEvents(newCurrWrappedEvents);
     if (setEventsRow) setEventsRow(newEventsRow);
   };
@@ -190,6 +189,9 @@ export function EventRenderer({
       temp--;
       if (emptyRows[index - 1] == temp) break;
       cnt++;
+    }
+    if(emptyRows.length == 0 && sortedEvents.length === 0){
+      cnt =4;
     }
     
 
@@ -263,9 +265,11 @@ export function EventRenderer({
                 </>}
               <div
                 style={{marginTop: getTopMargin(emptyRows.length - 1)}}
-                className="z-10 line-clamp-1 h-[18px] max-sm:h-[12px] w-full m-0 flex justify-start 
-                items-center cursor-pointer rounded-sm hover:bg-gray-300 dark:hover:bg-zinc-700 text-[7px] font-semibold sm:text-xs p-[2px]
-                text-zinc-700 dark:text-gray-300 px-1"
+                className={`z-10 line-clamp-1 mb-[1px] max-sm:h-fit h-[18px] flex justify-start 
+                  items-center cursor-pointer font-semibold max-sm:p-[2.2px] p-[1px]
+                   rounded-[3px] sm:rounded-sm text-[9px] sm:text-xs hover:bg-gray-300 dark:hover:bg-zinc-700 text-zinc-700 dark:text-gray-300 whitespace-nowrap overflow-ellipsis`}
+              
+                
                 onClick={handleClickMore}
               >
                 {`${noOfEvents -4} more`}
