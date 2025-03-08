@@ -1,9 +1,9 @@
 "use client";
 
-import type React from "react";
 import { useEffect, useState } from "react";
 import { Edit2, Trash2, Phone, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Calendar from "@/public/date-and-time.svg";
 import {
   Dialog,
   DialogContent,
@@ -23,6 +23,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { RenderFileList } from "./render-file-list";
 import { Customer, Document } from "./page";
 import { uploadToDrive } from "@/app/actions/upload";
+import { Label } from "@/components/ui/label";
+import { DatePicker } from "@/components/ui/datepicker";
 
 enum Status {
   pending = "pending",
@@ -85,6 +87,7 @@ export function CustomerPopup({
   const [isLoading, setIsLoading] = useState(false);
   const [isDocumentsDeleting, setIsDocumentsDeleting] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [joiningDate, setJoiningDate] = useState<Date>(new Date(customer.joiningDate));
 
   function handleAction() {
     if (action === "Delete") {
@@ -224,6 +227,7 @@ export function CustomerPopup({
           contact: contact,
           address: address,
           documents: updatedDocuments,
+          joiningDate: joiningDate.toLocaleDateString("en-US"),
         },
         {
           headers: {
@@ -239,6 +243,7 @@ export function CustomerPopup({
         contact,
         address,
         folderId: customer.folderId,
+        joiningDate: joiningDate.toLocaleDateString("en-US"),
         documents: res.data.documents,
       };
       setCustomers((prev) =>
@@ -333,32 +338,55 @@ export function CustomerPopup({
             <div className=" space-y-4 w-[90%]">
               <div className="flex items-center space-x-2">
                 <UserIcon className="h-6 w-6 mt-1 mr-3 stroke-[12px] fill-black dark:fill-white stroke-black dark:stroke-white" />
-                <div>
-                  {isEditing ? (
-                    <Input
-                      name="bookedBy"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      className="bg-muted text-sm"
-                    />
-                  ) : (
-                    <p className="text-sm font-semibold">{name}</p>
-                  )}
+                <div className="flex justify-between items-center gap-1 w-full">
+                  <div>
+                    <Label htmlFor="name" className={`text-sm ${isEditing && "ml-2"}`}>Name</Label>
+                    <div>
+                    {isEditing ? (
+                      <Input
+                        name="name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        className="bg-muted text-sm"
+                      />
+                    ) : (
+                      <p className="text-sm font-semibold">{name}</p>
+                    )}
+                    </div>
+                  </div>
+                  <div>
+                    <div>
+                      <Label htmlFor="name" className={`text-sm ${isEditing && "ml-2"}`}>Contact</Label>
+                      {isEditing ? (
+                        <Input
+                          name="bookedBy"
+                          value={contact}
+                          maxLength={10}
+                          onChange={(e) => setContact(e.target.value)}
+                          className="bg-muted text-sm"
+                        />
+                      ) : (
+                        <p className="text-sm font-semibold">{contact}</p>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
               <div className="flex items-center space-x-2">
-                <Phone className="h-6 w-6 mr-3 text-black dark:text-white" />
-                <div>
-                  {isEditing ? (
-                    <Input
-                      name="bookedBy"
-                      value={contact}
-                      maxLength={10}
-                      onChange={(e) => setContact(e.target.value)}
-                      className="bg-muted text-sm"
-                    />
+              <Calendar className="h-5 w-5 mr-3 flex-shrink-0 fill-black dark:fill-white stroke-black dark:stroke-white stroke-[1px]" />
+                <div className="flex items-center gap-2 ">
+                <Label htmlFor="joinning" className={`text-sm`}>Joining Date</Label>
+                {isEditing ? (
+                    <DatePicker
+                        className="max-sm:w-[120px]"
+                        date={joiningDate}
+                        setDate={setJoiningDate}/>
                   ) : (
-                    <p className="text-sm font-semibold">{contact}</p>
+                    <p className="text-sm font-semibold">{joiningDate.toLocaleString("en-GB", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })}</p>
                   )}
                 </div>
               </div>
@@ -394,7 +422,7 @@ export function CustomerPopup({
                         <>
                           {isEditing && (
                             <Button
-                              className="cursor-pointer bg-gray-200 dark:bg-muted dark:text-white text-black hover:bg-gray-300 dark:hover:bg-secondary hover:bg-opacity-30"
+                              className="cursor-pointer bg-gray-200 p-3 dark:bg-muted dark:text-white text-black hover:bg-gray-300 dark:hover:bg-secondary hover:bg-opacity-30"
                               onClick={() => {
                                 setAction("delete the documents of");
                                 setIsDialogOpen(true);
@@ -411,9 +439,9 @@ export function CustomerPopup({
                         onClick={() => {
                           document.getElementById("documents")?.click();
                         }}
-                        className="flex items-center justify-center  bg-gray-300 max-sm:text-sm hover:bg-gray-400 dark:bg-muted dark:hover:bg-gray-900 w-fit cursor-pointer text-secondary-foreground px-2 py-1 rounded-sm hover:bg-gray-200 transition-colors"
+                        className="flex items-center justify-center  bg-gray-300 text-sm hover:bg-gray-400 dark:bg-muted dark:hover:bg-gray-900 w-fit cursor-pointer text-secondary-foreground px-2 py-1 rounded-sm hover:bg-gray-200 transition-colors"
                       >
-                        <Upload className="mr-2 h-4 w-4" />
+                        <Upload className="mr-2  h-4 w-4" />
                         <span>Choose file</span>
                       </div>
                     )}

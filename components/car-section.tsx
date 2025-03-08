@@ -62,6 +62,7 @@ export function CarSection() {
                       imageUrl={car.imageUrl}
                       plateNumber={car.plateNumber}
                       color={car.colorOfBooking}
+                      bookingLength={car.bookingLength}
                     />
                   </Link>
                 ))}

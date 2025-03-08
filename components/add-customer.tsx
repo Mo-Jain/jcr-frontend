@@ -20,12 +20,16 @@ import { createFolder } from "@/app/actions/folder";
 import { uploadToDrive } from "@/app/actions/upload";
 import UserIcon from "@/public/user.svg";
 import LocationIcon from "@/public/location.svg";
+import { DatePicker } from "./ui/datepicker";
+import Calendar from "@/public/date-and-time.svg";
+
 
 interface Customer {
   id: number;
   name: string;
   contact: string;
   address?: string;
+  joiningDate: string;
   documents?: Document[];
   folderId: string;
 }
@@ -59,6 +63,7 @@ export function AddCustomer({
   const [isLoading, setIsLoading] = useState(false);
   const [documents, setDocuments] = useState<File[]>([]);
   const [progress, setProgress] = useState(0);
+  const [joiningDate, setJoiningDate] = useState<Date>(new Date());
 
   const validateForm = () => {
     const newErrors: FormErrors = {};
@@ -146,6 +151,7 @@ export function AddCustomer({
           contact,
           address,
           folderId: folder.folderId,
+          joiningDate: joiningDate.toLocaleDateString("en-US"),
           documents: updatedDocuments,
         },
         {
@@ -164,6 +170,7 @@ export function AddCustomer({
         contact,
         address,
         folderId: folder.folderId || "",
+        joiningDate: joiningDate.toLocaleDateString("en-US"),
         documents: res.data.documents,
       };
       console.log("customer", customer);
@@ -239,8 +246,10 @@ export function AddCustomer({
 
   const inputClassName = (fieldName: "name" | "contact" | "address") =>
     cn(
-      "rounded-none shadow-none border-transparent border-b-2 border-b-border text-sm focus-visible:ring-0 focus-visible:border-b-blue-400",
+      "rounded-none shadow-none border-transparent px-2  border-b-2 border-b-border text-sm focus-visible:ring-0 focus-visible:border-b-blue-400",
       errors[fieldName] && "border-b-red-500 focus:border-b-red-500",
+      "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+
     );
 
   return (
@@ -255,48 +264,57 @@ export function AddCustomer({
             </DialogTitle>
           </DialogHeader>
           <div className="px-6 pb-2 h-full w-full max-sm:mt-6">
-            <div className=" space-y-2 w-[90%]">
-              <div className="flex items-center space-x-2">
+            <div className=" space-y-2 w-[95%]">
+              <div className="flex items-center space-x-2 w-full">
                 <UserIcon className="h-6 w-6 mt-1 mr-3 stroke-[12px] fill-black dark:fill-white stroke-black dark:stroke-white" />
-                <div>
-                  <Input
-                    type="text"
-                    name="name"
-                    value={name}
-                    placeholder="Add name"
-                    onChange={(e) => {
-                      setName(e.target.value);
-                      setErrors((prev) => ({ ...prev, name: "" }));
-                    }}
-                    className={inputClassName("name")}
-                  />
-                  {errors.name && (
-                    <p className="text-red-500 text-sm mt-1">{errors.name}</p>
-                  )}
+                <div className="flex justify-between items-center gap-2 w-full">
+                  <div>
+                    <Input
+                      type="text"
+                      name="name"
+                      value={name}
+                      placeholder="Add name"
+                      onChange={(e) => {
+                        setName(e.target.value);
+                        setErrors((prev) => ({ ...prev, name: "" }));
+                      }}
+                      className={inputClassName("name")}
+                    />
+                    {errors.name && (
+                      <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+                    )}
+                  </div>
+                  <div>
+                    <Input
+                      name="contact"
+                      value={contact}
+                      type="number"
+                      placeholder="Add contact number"
+                      max={9999999999}
+                      onChange={(e) => {
+                        if (e.target.value.length <= 10) {
+                          setContact(e.target.value);
+                          setErrors((prev) => ({ ...prev, contact: "" }));
+                        }
+                      }}
+                      className={inputClassName("contact")}
+                    />
+                    {errors.contact && (
+                      <p className="text-red-500 text-sm mt-1">
+                        {errors.contact}
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
               <div className="flex items-center space-x-2">
-                <Phone className="h-6 w-6 mr-3 text-black dark:text-white" />
-                <div>
-                  <Input
-                    name="contact"
-                    value={contact}
-                    type="number"
-                    placeholder="Add contact number"
-                    max={9999999999}
-                    onChange={(e) => {
-                      if (e.target.value.length <= 10) {
-                        setContact(e.target.value);
-                        setErrors((prev) => ({ ...prev, contact: "" }));
-                      }
-                    }}
-                    className={inputClassName("contact")}
-                  />
-                  {errors.contact && (
-                    <p className="text-red-500 text-sm mt-1">
-                      {errors.contact}
-                    </p>
-                  )}
+                <Calendar className="h-5 w-5 mr-3 flex-shrink-0 fill-black dark:fill-white stroke-black dark:stroke-white stroke-[1px]" />
+                  <div className="flex items-center gap-2 ">
+                  <Label htmlFor="joinning" className={`text-sm`}>Joining Date</Label>
+                      <DatePicker
+                          className="max-sm:w-[120px]"
+                          date={joiningDate}
+                          setDate={setJoiningDate}/>
                 </div>
               </div>
 
@@ -329,10 +347,10 @@ export function AddCustomer({
                     onClick={() => {
                       document.getElementById("documents")?.click();
                     }}
-                    className="flex items-center justify-center  bg-gray-300 max-sm:text-sm hover:bg-gray-400 dark:bg-muted dark:hover:bg-gray-900 w-fit cursor-pointer text-secondary-foreground px-2 py-1 rounded-sm hover:bg-gray-200 transition-colors"
+                    className="flex items-center justify-center  bg-gray-300 text-sm hover:bg-gray-400 dark:bg-muted dark:hover:bg-gray-900 w-fit cursor-pointer text-secondary-foreground px-2 py-1 rounded-sm hover:bg-gray-200 transition-colors"
                   >
                     <Upload className="mr-2 h-4 w-4" />
-                    <span className="text-sm whitespace-nowrap">
+                    <span className="whitespace-nowrap">
                       Choose file
                     </span>
                   </div>

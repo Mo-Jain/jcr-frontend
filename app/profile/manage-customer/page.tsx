@@ -28,6 +28,7 @@ export interface Customer {
   contact: string;
   address?: string;
   folderId: string;
+  joiningDate: string;
   documents?: Document[];
 }
 

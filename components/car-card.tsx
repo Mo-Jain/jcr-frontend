@@ -6,14 +6,21 @@ interface CarCardProps {
   imageUrl: string;
   plateNumber: string;
   color: string;
+  bookingLength: number;
 }
 
-export function CarCard({ name, imageUrl, plateNumber }: CarCardProps) {
+export function CarCard({ name, imageUrl, plateNumber,bookingLength }: CarCardProps) {
   return (
     <div className="w-full z-0 relative z-0">
       <div className="p-2 z-0 border border-border shadow-sm  bg-white dark:bg-muted rounded-md cursor-pointer">
-        <div className="flex flex-col justify-between gap-1 sm:px-1">
-          <div className="relative flex-shrink-0 h-24 sm:h-48">
+        <div className="flex flex-col relative justify-between gap-1 sm:px-1 rounded-sm z-0">
+          <div className="absolute top-0 right-0 flex items-center gap-1 z-10">
+            {bookingLength>0 &&
+            <span
+            className="h-2 w-2 sm:h-3 sm:w-3 flex justify-center items-center text-xs p-1 text-center bg-blue-400 text-white rounded-full shadow-sm shadow-gray-500 dark:shadow-black font-extrabold"
+            ></span>}
+          </div>
+          <div className="relative z-0 flex-shrink-0 h-24 sm:h-48">
             <Image
               src={imageUrl || "/placeholder.svg"}
               alt={name}
@@ -23,12 +30,12 @@ export function CarCard({ name, imageUrl, plateNumber }: CarCardProps) {
             />
           </div>
           <div className="p-0 sm:p-1 w-full flex justify-center items-center">
-            <div className="flex justify-center items-center w-full gap-2">
-              <div className="flex flex-col gap-1 w-full justify-center min-h-[56px] sm:min-h-[100px] items-center">
+            <div className="flex justify-center items-center  border-black w-full gap-2">
+              <div className="flex flex-col gap-1 w-full justify-center min-h-[56px] sm:min-h-[104px] items-center">
                 <h3 className="md:text-md  lg:text-lg flex items-center justify-center max-sm:text-xs px-1  w-full overflow-hidden text-center font-semibold whitespace-wrap">
                   <span className="max-w-full whitespace-wrap">{name.toLocaleUpperCase()}</span>
                 </h3>
-                <div className="max-sm:max-w-[107px] max-sm:max-h-[20px]">
+                <div className="max-sm:max-w-[107px] max-sm:max-h-[20px] ">
                   <div className="flex justify-center sm:-mt-3 items-center gap-1 p-1 sm:p-1 border-[3.5px] w-fit scale-[0.40] sm:scale-[0.50] lg:scale-[0.60]  border-gray-400 rounded-sm max-sm:scaled-container ">
                     <div className="flex flex-col items-center justify-between">
                       <Ashoka className="h-2 w-2 stroke-blue-300 stroke-[7px] fill-blue-300" />
@@ -40,6 +47,7 @@ export function CarCard({ name, imageUrl, plateNumber }: CarCardProps) {
                       {plateNumber}
                     </span>
                   </div>
+                    
                 </div>
               </div>
             </div>
