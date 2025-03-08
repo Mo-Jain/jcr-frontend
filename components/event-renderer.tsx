@@ -8,7 +8,7 @@ import {
   WrappedEvent,
 } from "@/lib/store";
 import dayjs from "dayjs";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 interface EventRendererProps {
   date: dayjs.Dayjs;
@@ -38,12 +38,7 @@ export function EventRenderer({
   const [noOfEvents, setNoOfEvents] = useState(0);
 
   
-  useEffect(() => {
-    Initialize();
-  }, [date,events]);
-
-
-  const Initialize = () => {
+  const Initialize = useCallback(() => {
     let filteredEvents = events.filter((event: CalendarEventType) => {
       if (view === "month") {
         return (
@@ -128,7 +123,6 @@ export function EventRenderer({
       if(wrappedEvent) return;
       dialogEvents.push(extendedEvent);
     })
-
     
     if(setAllEvents) setAllEvents([
       ...newCurrWrappedEvents.map(event => event.id),
@@ -165,7 +159,14 @@ export function EventRenderer({
    
     setNoOfEvents(newExtendedEvents.length + newSortedEvents.length);
     if (setEventsRow) setEventsRow(newEventsRow);
-  };
+  //eslint-disable-next-line react-hooks/exhaustive-deps
+  },[date,events,eventsRow,wrappedEvents,setAllEvents,setEventsRow]);
+
+  
+  useEffect(() => {
+    Initialize();
+  }, [Initialize]);
+
 
   const renderEvent = (
     event: CalendarEventType,

@@ -133,14 +133,17 @@ export default function Bookings() {
 
   const getBookingLength = (status: string) => {
     let length = 0;
+    const newBookings = bookings.filter(
+      (booking) => (selectedCar === "All" || booking.carId.toString() === selectedCar))
+
     if (status === "All"){
-      length = bookings.length;
+      length = newBookings.length;
     }else if (status === "Upcoming"){
-      length = bookings.filter(booking => booking.status === "Upcoming").length;
+      length = newBookings.filter(booking => booking.status === "Upcoming").length;
     }else if (status === "Ongoing"){
-      length = bookings.filter(booking => booking.status === "Ongoing").length;
+      length = newBookings.filter(booking => booking.status === "Ongoing").length;
     }else if (status === "Completed"){
-      length = bookings.filter(booking => booking.status === "Completed").length;
+      length = newBookings.filter(booking => booking.status === "Completed").length;
     }
     return length > 0 ? ` (${length})` : "";
   }

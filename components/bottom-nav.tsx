@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useUserStore } from "@/lib/store";
 import HomeIcon from "@/public/home1.svg";
 import BookingIcon from "@/public/online-booking.svg";
@@ -33,7 +33,20 @@ export function BottomNav() {
   const [selectedTab, setSelectedTab] = useState<string>("home");
   const pathname = usePathname();
   const { name, imageUrl } = useUserStore();
-  const [shortName, setShortName] = useState<string>("");
+  const gethortName = useCallback(() => {
+      if (!name) return;
+      const nameArray = name.trim().split(" ");
+      let shortName = "";
+      if (nameArray.length > 0) {
+        shortName = nameArray[0][0] + nameArray[nameArray.length - 1][0];
+      } else {
+        shortName = nameArray[0][0];
+      }
+      return shortName.toLocaleUpperCase();
+    },[name]);
+
+  const [shortName, setShortName] = useState(gethortName());
+
 
   useEffect(() => {
     const matchedTab =
@@ -44,16 +57,9 @@ export function BottomNav() {
   }, [pathname]);
 
   useEffect(() => {
-    setShortName(getShortName(name));
-  }, [name]);
+    setShortName(gethortName());
+  }, [setShortName,gethortName]);
 
-  function getShortName(fullName: string | null): string {
-    if (!fullName) return "";
-    const nameArray = fullName.trim().split(" ");
-    return nameArray.length > 1
-      ? (nameArray[0][0] + nameArray[nameArray.length - 1][0]).toUpperCase()
-      : nameArray[0][0].toUpperCase();
-  }
 
   return (
     <div className="relative">
@@ -67,7 +73,7 @@ export function BottomNav() {
                   <ProfileIcon
                     selected={selectedTab === id}
                     imageUrl={imageUrl}
-                    shortName={shortName}
+                    shortName={shortName || ""}
                   />
                 ) : (
                   Icon && (

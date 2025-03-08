@@ -113,7 +113,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
       }
     };
     fetchData();
-  }, []);
+  }, [carId,router]);
 
   if (!car) {
     return (

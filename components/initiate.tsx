@@ -49,7 +49,7 @@ const Initiate = () => {
     };
     setIsLoading(false);
     fetchData();
-  }, []);
+  }, [router,setCars,setName,setImageUrl]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -122,7 +122,7 @@ const Initiate = () => {
 
     setWrappedEvents(newWrappedEvents);
     setEvents(mappedEvents);
-  }, [eventsData, setEvents]);
+  }, [eventsData, setEvents,setWrappedEvents]);
 
   if (!isLoading) return <SplashScreen />;
   return <InitiateScreen />;

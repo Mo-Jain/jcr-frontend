@@ -30,6 +30,7 @@ export function DatePicker({
   useEffect(() => {
     if (handleDateChange && dateType) handleDateChange(dateType);
     setDateText(format(date, "MMM d, yyyy"));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date, dateType]);
 
   const handleDateTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {

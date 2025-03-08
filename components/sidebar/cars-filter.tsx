@@ -37,15 +37,13 @@ export default function CarsFilters() {
             authorization: `Bearer ` + localStorage.getItem("token"),
           },
         });
-        console.log("res1.data.bookings", res1.data.bookings);
         setAllEvents(res1.data.bookings);
-        console.log("bookings", allEvents);
       } catch (error) {
         console.log(error);
       }
     }
     fetchData();
-  }, []);
+  }, [setAllEvents]);
 
   const handleColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setColor(event.target.value);

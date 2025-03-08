@@ -1,4 +1,4 @@
-import { CalendarEventType, useDateStore, useEventStore, useViewStore } from "@/lib/store";
+import {  useDateStore, useEventStore, useViewStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 import dayjs from "dayjs";
 import React, { useState } from "react";

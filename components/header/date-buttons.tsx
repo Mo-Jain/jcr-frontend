@@ -36,7 +36,7 @@ const DateButtons = ({ open }: { open: boolean }) => {
 
   useEffect(() => {
     setSelectedMonth(months[selectedMonthIndex]);
-  }, [selectedMonthIndex]);
+  }, [selectedMonthIndex,months]);
 
   if (!hydrated) {
     return null; // Render nothing on the first render to match server and client HTML

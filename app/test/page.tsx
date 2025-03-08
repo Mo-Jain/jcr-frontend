@@ -6,11 +6,11 @@ import { BASE_URL } from "@/lib/config";
 import axios from "axios";
 import React, { useState } from "react"
 
-const page = () => {
+const Page = () => {
     const [joiningDate, setJoiningDate] = useState<Date>(new Date());
     const handleClick = async() => {
         try{
-            const res = await axios.put(`${BASE_URL}/api/v1/customer/set-joining-date/all`,
+            await axios.put(`${BASE_URL}/api/v1/customer/set-joining-date/all`,
                 {
                     date: joiningDate.toLocaleDateString("en-US"),
                 },
@@ -51,4 +51,4 @@ const page = () => {
   )
 };
 
-export default page;
+export default Page;

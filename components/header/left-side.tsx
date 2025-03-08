@@ -25,7 +25,7 @@ export default function HeaderLeft({
 
   useEffect(() => {
     setSideBarOpen(true);
-  }, []);
+  }, [setSideBarOpen]);
 
   const handleTodayClick = () => {
     switch (selectedView) {

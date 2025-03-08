@@ -1,4 +1,4 @@
-import { CalendarEventType, useCarStore, useEventStore } from "@/lib/store";
+import {  useCarStore, useEventStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 import dayjs from "dayjs";
 import { useEffect, useRef, useState } from "react";

@@ -4,7 +4,7 @@ import Logo1 from "@/public/logo1.svg";
 import LogoText from "@/public/logo_text.svg";
 import { usePathname, useRouter } from "next/navigation";
 import { ThemeToggle } from "./theme-toggle";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useUserStore } from "@/lib/store";
 import Redirect from "./redirect";
 import Image from "next/image";
@@ -16,7 +16,7 @@ export function NavBar() {
   const router = useRouter();
   const { name, imageUrl } = useUserStore();
   const isSmallScreen = useMediaQuery({ maxWidth: 640 });
-  const gethortName = () => {
+  const gethortName = useCallback(() => {
     if (!name) return;
     const nameArray = name.trim().split(" ");
     let shortName = "";
@@ -26,12 +26,12 @@ export function NavBar() {
       shortName = nameArray[0][0];
     }
     return shortName.toLocaleUpperCase();
-  };
+  },[name]);
   const [shortName, setShortName] = useState(gethortName());
 
   useEffect(() => {
     setShortName(gethortName());
-  }, [name]);
+  }, [setShortName,gethortName]);
 
   useEffect(() => {
     if (pathname.startsWith("/booking")) {

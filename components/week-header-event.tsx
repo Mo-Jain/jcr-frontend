@@ -8,7 +8,7 @@ import {
 } from "@/lib/store";
 import { cn } from "@/lib/utils";
 import dayjs, { Dayjs } from "dayjs";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 
 const HeaderEvent = ({
@@ -36,11 +36,8 @@ const HeaderEvent = ({
   const isSmallScreen = useMediaQuery({ query: "(max-width: 640px)" });
   const { cars } = useCarStore();
 
-  useEffect(() => {
-    Initialize();
-  }, [date, events]);
 
-  const Initialize = () => {
+  const Initialize = useCallback(() => {
     const filteredEvents = events.filter((event: CalendarEventType) => {
       return (
         dayjs(event.startDate).isSame(date, "days") &&
@@ -98,7 +95,11 @@ const HeaderEvent = ({
     const newEmptyRows = rows.filter((row) => !filledRows.includes(row));
     setNoOfEvents(filledRows.length + newSortedEvents.length );
     setEmptyRows(newEmptyRows);
-  };
+  },[date, events,eventsRow,wrappedEvents]);
+
+  useEffect(() => {
+    Initialize();
+  }, [Initialize]);
 
   const findOffset = (
     index: number,

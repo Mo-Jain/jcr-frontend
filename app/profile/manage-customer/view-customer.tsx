@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Edit2, Trash2, Phone, Upload } from "lucide-react";
+import { Edit2, Trash2,  Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Calendar from "@/public/date-and-time.svg";
 import {
