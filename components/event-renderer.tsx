@@ -15,7 +15,7 @@ interface EventRendererProps {
   view: "month" | "week" | "day";
   events: CalendarEventType[];
   hour?: number;
-  setAllEvents?: React.Dispatch<React.SetStateAction<CalendarEventType[]>>;
+  setAllEvents?: React.Dispatch<React.SetStateAction<string[]>>;
   setIsOpenEventDialog?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -87,7 +87,6 @@ export function EventRenderer({
     let newCurrWrappedEvents: WrappedEvent[] = [];
     newExtendedEvents.forEach((event) => {
       const eventRow = eventsRow?.find((e) => e.id === event.id);
-      
       //find eventRow in wrappedEvents
       const weekStart = date.startOf("week");
       const wrappedEvent  = wrappedEvents?.find((e) => {
@@ -113,16 +112,38 @@ export function EventRenderer({
       }
     });
 
-    if(setAllEvents) setAllEvents([...newExtendedEvents,...newSortedEvents,])
+    console.log("date",date.date());
+    newCurrWrappedEvents = newCurrWrappedEvents.sort((a, b) => {
+      const durationA = a.endDate.diff(a.startDate, "minute"); // Get duration in minutes
+      const durationB = b.endDate.diff(b.startDate, "minute");
+      return durationB - durationA; // Sort in descending order (longest first)
+    });
+    setCurrWrappedEvents(newCurrWrappedEvents);
+    console.log("newCurrWrappedEvents",newCurrWrappedEvents);
+    const dialogEvents:CalendarEventType[] = []
+    eventsRow.forEach((event) => {
+      const extendedEvent = newExtendedEvents.find((e) => e.id === event.id);
+      if(!extendedEvent) return;
+      const wrappedEvent = newCurrWrappedEvents.find((e) => e.id === event.id);
+      if(wrappedEvent) return;
+      dialogEvents.push(extendedEvent);
+    })
+
+    
+    if(setAllEvents) setAllEvents([
+      ...newCurrWrappedEvents.map(event => event.id),
+      ...dialogEvents.map(event => event.id),
+      ...newSortedEvents.map(event => event.id)])
 
     const rows = [0, 1, 2, 3, 4];
     const newEmptyRows = rows.filter((row) => !filledRows.includes(row));
+    if(newEmptyRows[newEmptyRows.length-1]!==4) newEmptyRows.push(4);
     setEmptyRows(() => {
       return newEmptyRows;
     });
 
     index = 0;
-    const newEventsRow = eventsRow || [];
+    let newEventsRow = eventsRow || []; 
     newSortedEvents.forEach((event) => {
       if (
         event.startDate.isSame(date, "day") &&
@@ -136,14 +157,13 @@ export function EventRenderer({
       }
     });
 
-    newCurrWrappedEvents = newCurrWrappedEvents.sort((a, b) => {
-      const durationA = a.endDate.diff(a.startDate, "minute"); // Get duration in minutes
-      const durationB = b.endDate.diff(b.startDate, "minute");
-      return durationB - durationA; // Sort in descending order (longest first)
+    newEventsRow = newEventsRow.sort((a, b) => {
+      return a.rowIndex - b.rowIndex;
     });
-    setNoOfEvents(newExtendedEvents.length + newSortedEvents.length);
+    console.log(newEventsRow);
 
-    setCurrWrappedEvents(newCurrWrappedEvents);
+   
+    setNoOfEvents(newExtendedEvents.length + newSortedEvents.length);
     if (setEventsRow) setEventsRow(newEventsRow);
   };
 
@@ -188,10 +208,6 @@ export function EventRenderer({
       if (emptyRows[index - 1] == temp) break;
       cnt++;
     }
-    if(emptyRows.length == 0 && sortedEvents.length === 0){
-      cnt =4;
-    }
-    
 
     if (index == 0 && isWrapped) {
       cnt = 0;
@@ -234,7 +250,7 @@ export function EventRenderer({
       
       {view === "month" && (
         <>
-          {currWrappedEvents.slice(0,currWrappedEvents.length > 5 ? 4 : currWrappedEvents.length)?.map((e, index) => {
+          {currWrappedEvents.slice(0,4)?.map((e, index) => {
             // return null;
             const event = events.find((event) => event.id === e.id);
             if (!event || !e.startDate.isSame(date, "day")) return null;
@@ -242,7 +258,7 @@ export function EventRenderer({
             return renderEvent(event, index, width, marginTop);
           })}
 
-          {noOfEvents <= 5 ? (
+          {noOfEvents <= 4 ? (
             <>
               {sortedEvents.map((event, index) => {
                 const { width, marginTop } = findOffset(index, event);

@@ -13,6 +13,7 @@ import SplashScreen from "./SplashScreen";
 import InitiateScreen from "./InitiateScreen";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
+import { useRouter } from "next/navigation";
 
 const Initiate = () => {
   const { setName, setImageUrl } = useUserStore();
@@ -21,6 +22,7 @@ const Initiate = () => {
   const { setEvents } = useEventStore();
   const [eventsData, setEventsData] = useState<CalendarEventType[]>([]);
   const { setWrappedEvents } = useWrappedEvent();
+  const router = useRouter();
 
   useEffect(() => {
     setIsLoading(true);
@@ -42,6 +44,7 @@ const Initiate = () => {
         setCars(res1.data.cars);
       } catch (error) {
         console.log(error);
+        router.push('/login')
       }
     };
     setIsLoading(false);

@@ -16,7 +16,7 @@ export default function MonthViewBox({
   const [isOpenEventDialog,setIsOpenEventDialog] = useState(false);
   const { setDate } = useDateStore();
   const {setView} = useViewStore();
-  const [allEvents,setAllEvents] = useState<CalendarEventType[]>([]);
+  const [allEvents,setAllEvents] = useState<string[]>([]);
 
   if (!day) {
     return (
@@ -55,7 +55,7 @@ export default function MonthViewBox({
       onClick={handleClick}
     >
       {isOpenEventDialog &&
-      <EventDialog events={allEvents} date={day} setIsOpenEventDialog={setIsOpenEventDialog}/>}
+      <EventDialog allEvents={allEvents} date={day} setIsOpenEventDialog={setIsOpenEventDialog}/>}
       <div className=" flex flex-col min-h-6 items-center">
         {rowIndex === 0 && (
           <h4 className="text-[10px] font-medium sm:text-xs text-gray-500">

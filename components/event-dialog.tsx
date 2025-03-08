@@ -4,11 +4,11 @@ import dayjs from "dayjs";
 import { useEffect, useRef, useState } from "react";
 
 const EventDialog = ({
-  events,
+  allEvents,
   date,
   setIsOpenEventDialog,
 }: {
-  events: CalendarEventType[];
+  allEvents: string[];
   date: dayjs.Dayjs;
   setIsOpenEventDialog: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
@@ -16,7 +16,7 @@ const EventDialog = ({
   const { openEventSummary } = useEventStore();
   const [newDate, setNewDate] = useState<dayjs.Dayjs>(date);
   const dialogRef = useRef<HTMLDivElement>(null);
-
+  const {events} =useEventStore();
   useEffect(() => {
     setNewDate(date);
   }, [date]);
@@ -34,11 +34,13 @@ const EventDialog = ({
     };
   }, [setIsOpenEventDialog]);
 
-  const renderEvent = (event: CalendarEventType) => {
+  const renderEvent = (id: string,index:number) => {
+    const event = events.find((event) => event.id === id);
+    if(!event) return null;
     const car = cars.find((car) => car.id === event.carId);
     return (
       <div
-        key={event.id}
+        key={index}
         onClick={(e) => {
           e.stopPropagation();
           openEventSummary(event);
@@ -68,7 +70,7 @@ const EventDialog = ({
         <p className="text-center text-xs sm:text-sm">{newDate.format("ddd").toUpperCase()}</p>
         <p className="text-center text-md sm:text-lg">{newDate.date()}</p>
       </div>
-      {events.map((event) => renderEvent(event))}
+      {allEvents.map((id,index) => renderEvent(id,index))}
     </div>
     </>
   );
