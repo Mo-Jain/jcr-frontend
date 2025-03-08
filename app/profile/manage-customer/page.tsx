@@ -165,7 +165,7 @@ export default function CustomersPage() {
           </Card>
         ) : (
           <div key={2}>
-            {!isLoading ? (
+            {isLoading ? (
               <div className="w-full h-full py-28 gap-2 flex flex-col justify-center items-center">
                 <Users className={`sm:h-16 h-12 sm:w-16 w-12 text-gray-400 `} />
                 <p className="text-center text-lg sm:text-2xl text-gray-400 font-bold">
