@@ -35,7 +35,8 @@ const HeaderEvent = ({
   const [noOfEvents, setNoOfEvents] = useState(0);
   const isSmallScreen = useMediaQuery({ query: "(max-width: 640px)" });
   const { cars } = useCarStore();
-
+  const [currWrappedEvents,setCurrWrappedEvents] = useState<WrappedEvent[]>([]);
+  const [extendedEvents,setExtendedEvents] = useState<CalendarEventType[]>([]);
 
   const Initialize = useCallback(() => {
     const filteredEvents = events.filter((event: CalendarEventType) => {
@@ -45,8 +46,16 @@ const HeaderEvent = ({
       );
     });
 
+    const newSortedEvents = [...filteredEvents].sort((a, b) => {
+      const durationA = a.endDate.diff(a.startDate, "minute"); // Get duration in minutes
+      const durationB = b.endDate.diff(b.startDate, "minute");
+      return durationB - durationA; // Sort in descending order (longest first)
+    });
+
+    setSortedEvents(newSortedEvents);
+
     const currentDate = date.startOf("day");
-    const extendedEvents = events.filter((event) => {
+    const newExtendedEvents = events.filter((event) => {
       const eventStart = dayjs(event.startDate).startOf("day");
       const eventEnd = dayjs(event.endDate).startOf("day");
       return (
@@ -55,19 +64,12 @@ const HeaderEvent = ({
       );
     });
 
-    const newSortedEvents = [...filteredEvents].sort((a, b) => {
-      const durationA = dayjs(a.endDate).diff(dayjs(a.startDate), "minute"); // Get duration in minutes
-      const durationB = dayjs(b.endDate).diff(dayjs(b.startDate), "minute");
-      return durationB - durationA; // Sort in descending order (longest first)
-    });
-
-    setSortedEvents(newSortedEvents);
-
+    setExtendedEvents(newExtendedEvents);
     const filledRows: number[] = [];
     let index = 0;
-    extendedEvents.forEach((event) => {
+    let newCurrWrappedEvents: WrappedEvent[] = [];
+    newExtendedEvents.forEach((event) => {
       const eventRow = eventsRow?.find((e) => e.id === event.id);
-
       //find eventRow in wrappedEvents
       const weekStart = date.startOf("week");
       const wrappedEvent  = wrappedEvents?.find((e) => {
@@ -78,6 +80,9 @@ const HeaderEvent = ({
           e.id === event.id
         )
       });
+      if(wrappedEvent){
+        newCurrWrappedEvents.push(wrappedEvent);
+      }
       if (wrappedEvent || !eventRow) {
         //check if the wrapped event start today so that its top margin should be zero else it would count the margin for itself
         if (wrappedEvent && wrappedEvent.startDate.isSame(date, "day")) {
@@ -90,10 +95,17 @@ const HeaderEvent = ({
       }
     });
 
+    newCurrWrappedEvents = newCurrWrappedEvents.sort((a, b) => {
+      const durationA = a.endDate.diff(a.startDate, "minute"); // Get duration in minutes
+      const durationB = b.endDate.diff(b.startDate, "minute");
+      return durationB - durationA; // Sort in descending order (longest first)
+    });
+    setCurrWrappedEvents(newCurrWrappedEvents);
+
 
     const rows = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
     const newEmptyRows = rows.filter((row) => !filledRows.includes(row));
-    setNoOfEvents(filledRows.length + newSortedEvents.length );
+    setNoOfEvents(newExtendedEvents.length + newSortedEvents.length);
     setEmptyRows(newEmptyRows);
   },[date, events,eventsRow,wrappedEvents]);
 
@@ -168,8 +180,6 @@ const HeaderEvent = ({
     );
   };
 
-  let wrappedEventsLength = 0;
-
   return (
     <div
       key={index}
@@ -190,9 +200,9 @@ const HeaderEvent = ({
         className="flex flex-col w-full min-h-[39px] sm:min-h-[57px] transition-all duration-500 ease-in-out"
         style={{ maxHeight: isEventHidden ? "40px sm:60px" : "" }}
       >
-        {noOfEvents + sortedEvents.length < 4 || !isEventHidden ? (
+        {noOfEvents  < 4 || !isEventHidden ? (
           <>
-            {wrappedEvents?.map((e, index) => {
+            {currWrappedEvents?.map((e, index) => {
               const event = events.find((event) => event.id === e.id);
               if (!event || !e.startDate.isSame(date, "day")) return null;
               const { width, marginTop } = findOffset(index, e, true);
@@ -205,25 +215,23 @@ const HeaderEvent = ({
           </>
         ) : (
           <>
-            {wrappedEvents.map((e, index) => {
-              if(wrappedEventsLength>=2) return;
+            {currWrappedEvents.slice(0,2).map((e, index) => {
               const event = events.find((event) => event.id === e.id);
               if (!event || !e.startDate.isSame(date, "day")) return null;
-              wrappedEventsLength += 1;
 
               const { width, marginTop } = findOffset(index, e, true);
               return renderEvent(event, index, width, marginTop);
             })}
-            {sortedEvents.slice(0, (2 - noOfEvents) | 0).map((event, index) => {
+            {sortedEvents.slice(0, (2 - extendedEvents.length) | 0).map((event, index) => {
               const { width, marginTop } = findOffset(index, event);
               return renderEvent(event, index, width, marginTop);
             })}
           </>
         )}
       </div>
-      {noOfEvents + sortedEvents.length >= 4 && isEventHidden && (
+      {!(noOfEvents  < 4 || !isEventHidden) && (
         <div className="text-xs sm:text-sm px-2">
-          +{noOfEvents + sortedEvents.length - 2}
+          +{noOfEvents - 2}
         </div>
       )}
     </div>

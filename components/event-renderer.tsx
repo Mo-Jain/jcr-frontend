@@ -107,14 +107,12 @@ export function EventRenderer({
       }
     });
 
-    console.log("date",date.date());
     newCurrWrappedEvents = newCurrWrappedEvents.sort((a, b) => {
       const durationA = a.endDate.diff(a.startDate, "minute"); // Get duration in minutes
       const durationB = b.endDate.diff(b.startDate, "minute");
       return durationB - durationA; // Sort in descending order (longest first)
     });
     setCurrWrappedEvents(newCurrWrappedEvents);
-    console.log("newCurrWrappedEvents",newCurrWrappedEvents);
     const dialogEvents:CalendarEventType[] = []
     eventsRow.forEach((event) => {
       const extendedEvent = newExtendedEvents.find((e) => e.id === event.id);
