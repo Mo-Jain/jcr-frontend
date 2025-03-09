@@ -76,7 +76,7 @@ const MonthEarnings = () => {
         ) : (
           <div className="w-full h-full flex flex-col justify-center items-center">
             <IndianRupee
-              className={`sm:h-16 h-12 sm:w-16 w-12 stroke-[2px] text-gray-400 `}
+              className={`sm:h-16 h-12 sm:w-16 w-12 stroke-[2px] text-gray-400`}
             />
             <p className="text-center text-lg sm:text-2xl text-gray-400 font-bold">
               No earnings yet

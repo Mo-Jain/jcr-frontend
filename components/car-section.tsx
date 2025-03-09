@@ -13,6 +13,7 @@ import Calendar from "@/public/calendar.svg";
 import UserIcon from "@/public/user.svg";
 import TakeAction from "./take-action";
 import MonthEarnings from "./month-earnings";
+import Customers from "./customers";
 
 export function CarSection() {
   const [isOpen, setIsOpen] = useState(false);
@@ -94,6 +95,7 @@ export function CarSection() {
               <div className="">
                 <MonthEarnings />
               </div>
+              <Customers/>
             </div>
           </section>
         </div>

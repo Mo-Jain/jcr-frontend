@@ -17,7 +17,7 @@ export function CarCard({ name, imageUrl, plateNumber,bookingLength }: CarCardPr
           <div className="absolute top-0 right-0 flex items-center gap-1 z-10">
             {bookingLength>0 &&
             <span
-            className="h-2 w-2 sm:h-3 sm:w-3 flex justify-center items-center text-xs p-1 text-center bg-blue-400 text-white rounded-full shadow-sm shadow-gray-500 dark:shadow-black font-extrabold"
+            className="h-2 w-2 sm:h-3 sm:w-3 flex justify-center items-center text-xs p-1 text-center bg-blue-400 text-white rounded-full shadow-sm font-extrabold"
             ></span>}
           </div>
           <div className="relative z-0 flex-shrink-0 h-24 sm:h-48">
