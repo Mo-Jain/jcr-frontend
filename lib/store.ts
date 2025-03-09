@@ -23,7 +23,8 @@ export type Car = {
   imageUrl: string;
   colorOfBooking: string;
   price: number;
-  bookingLength: number;
+  ongoingBooking: number;
+  upcomingBooking: number;
 };
 
 interface CarStore {

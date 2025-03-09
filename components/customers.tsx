@@ -1,7 +1,7 @@
 "use client";
 import { BASE_URL } from "@/lib/config";
 import axios from "axios";
-import { IndianRupee, Users } from "lucide-react";
+import {  Users } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import DoughnutGraph from "./doughnut-graph";
 import Image from "next/image";

@@ -1,23 +1,34 @@
 import Image from "next/image";
 import Ashoka from "@/public/ashoke-chakra.svg";
+import { cn } from "@/lib/utils";
 
 interface CarCardProps {
   name: string;
   imageUrl: string;
   plateNumber: string;
   color: string;
-  bookingLength: number;
+  ongoingBooking: number;
+  upcomingBooking:number;
 }
 
-export function CarCard({ name, imageUrl, plateNumber,bookingLength }: CarCardProps) {
+export function CarCard({ name, imageUrl, plateNumber,ongoingBooking,upcomingBooking }: CarCardProps) {
+
   return (
     <div className="w-full z-0 relative z-0">
       <div className="p-2 z-0 border border-border shadow-sm  bg-white dark:bg-muted rounded-md cursor-pointer">
         <div className="flex flex-col relative justify-between gap-1 sm:px-1 rounded-sm z-0">
-          <div className="absolute top-0 right-0 flex items-center gap-1 z-10">
-            {bookingLength>0 &&
+          <div className="absolute -top-1 -right-1 flex items-center gap-1 z-10">
+            {/* upcoming booking */}
+            {upcomingBooking >0 &&
             <span
-            className="h-2 w-2 sm:h-3 sm:w-3 flex justify-center items-center text-xs p-1 text-center bg-blue-400 text-white rounded-full shadow-sm font-extrabold"
+            className={cn("h-2 w-2 sm:h-3 sm:w-3 flex justify-center items-center text-xs p-1 text-center bg-blue-400 text-white rounded-full shadow-sm font-extrabold",
+            )}
+            >{upcomingBooking > 1 ? upcomingBooking : ""}</span>}
+            {/* ongoing booking */}
+            {ongoingBooking >0 &&
+            <span
+            className={cn("h-2 w-2 sm:h-3 sm:w-3 flex justify-center items-center text-xs p-1 text-center bg-green-400 text-white rounded-full shadow-sm font-extrabold",
+            )}
             ></span>}
           </div>
           <div className="relative z-0 flex-shrink-0 h-24 sm:h-48">

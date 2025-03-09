@@ -125,7 +125,8 @@ export function AddCarDialog({ isOpen, setIsOpen }: AddCarDialogProps) {
         imageUrl: selectedImage ? selectedImage : "",
         colorOfBooking: color,
         price,
-        bookingLength: 0
+        upcomingBooking: 0,
+        ongoingBooking: 0,
       };
       setCars([...cars, car]);
       setCarBrand("");

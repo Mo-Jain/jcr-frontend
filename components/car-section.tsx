@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import {  useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus, PlusSquare } from "lucide-react";
 import { CarCard } from "./car-card";
@@ -30,13 +30,14 @@ export function CarSection() {
       {name ? (
         <div >
           <section className="py-6 bg-white bg-opacity-30 dark:bg-opacity-10 rounded-t-md backdrop-blur-lg sm:px-4 px-2">
-            <div className="flex justify-between items-center border-b border-border pb-5 mb-3 px-4">
-              <h1
-                style={{ fontFamily: "var(--font-equinox), sans-serif" }}
-                className="sm:text-3xl text-xl font-black font-myfont"
-              >
-                {name.split(" ")[0]}&apos;s GARRAGE
-              </h1>
+            <div className="flex justify-between items-center sm:px-4 px-2">
+                <h1
+                  style={{ fontFamily: "var(--font-equinox), sans-serif" }}
+                  className="sm:text-3xl text-xl font-black font-myfont"
+                >
+                  {name.split(" ")[0]}&apos;s GARRAGE
+                </h1>
+                
               {cars.length > 0 && (
                 <Button
                   className="bg-blue-600 rounded-sm text-white bg-primary hover:bg-opacity-80  shadow-lg"
@@ -47,10 +48,24 @@ export function CarSection() {
                 </Button>
               )}
             </div>
+            <div className="flex items-center gap-2 w-full px-4 mt-2 border-b border-border pb-3 mb-1">
+              <div className="flex items-center gap-1 text-sm">
+                <span
+                  className="h-2 w-2 sm:h-3 sm:w-3 flex justify-center items-center text-xs p-1 text-center bg-blue-400 text-white rounded-full shadow-sm font-extrabold"
+                  ></span>
+                  <span>Upcoming</span>
+              </div>
+              <div className="flex items-center gap-1 text-sm">
+                <span
+                className="h-2 w-2 sm:h-3 sm:w-3 flex justify-center items-center text-xs p-1 text-center bg-green-400 text-white rounded-full shadow-sm font-extrabold"
+                ></span>
+                  <span>Ongoing</span>
+              </div>
+            </div>
             {cars.length > 0 ? (
               <div
                 key={cars.length}
-                className="grid z-0 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3"
+                className="grid z-0 grid-cols-2 mt-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3"
               >
                 {cars.map((car) => (
                   <Link
@@ -63,7 +78,8 @@ export function CarSection() {
                       imageUrl={car.imageUrl}
                       plateNumber={car.plateNumber}
                       color={car.colorOfBooking}
-                      bookingLength={car.bookingLength}
+                      ongoingBooking={car.ongoingBooking}
+                      upcomingBooking={car.upcomingBooking}
                     />
                   </Link>
                 ))}
