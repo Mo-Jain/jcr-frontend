@@ -197,7 +197,7 @@ export function AddCarDialog({ isOpen, setIsOpen }: AddCarDialogProps) {
     <>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="h-auto overflow-y-auto dark:border-gray-800 ">
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form  className="space-y-4">
             <DialogHeader>
               <DialogTitle>
                 <div></div>
@@ -388,9 +388,9 @@ export function AddCarDialog({ isOpen, setIsOpen }: AddCarDialogProps) {
                 )}
               </div>
             </div>
-            <div>
+            <div className="flex gap-1 items-center">
               <Button
-                type="submit"
+                onClick={handleSubmit}
                 disabled={isLoading}
                 className={`bg-blue-600 dark:text-white hover:bg-opacity-80 w-full ${isLoading && "cursor-not-allowed opacity-50"}`}
               >
@@ -408,6 +408,14 @@ export function AddCarDialog({ isOpen, setIsOpen }: AddCarDialogProps) {
                   <span>Create</span>
                 )}
               </Button>
+              {!isLoading &&
+              <Button
+                variant="destructive"
+                onClick={() => setIsOpen(false)}
+                className="border border-input w-full sm:hidden w-full"
+              >
+                Cancel
+              </Button>}
             </div>
           </form>
         </DialogContent>

@@ -152,7 +152,7 @@ export function AddBookingDialog({
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-
+    console.log("submitted")
     if (!validateForm()) {
       toast({
         description: `Please fill all mandatory fields`,
@@ -292,7 +292,7 @@ export function AddBookingDialog({
               Add Booking
             </DialogTitle>
           </DialogHeader>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form  className="space-y-4">
             <div className="flex items-center gap-4">
               <CarFrontIcon className="w-6 h-4 dark:stroke-blue-200 dark:fill-blue-200 stroke-[6px] stroke-black fill-black flex-shrink-0" />
               <Label htmlFor="car" className="w-1/3">
@@ -308,7 +308,7 @@ export function AddBookingDialog({
               >
                 <SelectTrigger
                   id="car"
-                  className="w-2/3 border-input focus:border-blue-400 focus:ring-blue-400 focus-visible:ring-blue-400 focus:outline-none"
+                  className="w-2/3 border-input focus:border-blue-400 focus:ring-blue-400 max-sm:max-w-[190px] focus-visible:ring-blue-400 focus:outline-none"
                 >
                   <SelectValue placeholder="Select a car" />
                 </SelectTrigger>
@@ -497,7 +497,7 @@ export function AddBookingDialog({
             </div>
             <div className="flex items-center gap-2 sm:gap-4">
               <Button
-                type="submit"
+                onClick={handleSubmit}
                 disabled={isLoading}
                 className={`bg-blue-600 dark:text-white hover:bg-opacity-80 w-full ${isLoading && "cursor-not-allowed opacity-50"}`}
               >
@@ -525,6 +525,13 @@ export function AddBookingDialog({
                 </Button>
               )}
             </div>
+            <Button
+              variant="destructive"
+              onClick={() => setIsOpen(false)}
+              className="border border-input w-full sm:hidden w-full"
+            >
+              Cancel
+            </Button> 
           </form>
         </DialogContent>
       </Dialog>
