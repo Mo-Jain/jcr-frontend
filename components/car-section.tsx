@@ -108,10 +108,10 @@ export function CarSection() {
             </h1>
             <div className="grid z-0 sm:grid-cols-2 lg:grid-cols-3 gap-3 lg:grid-cols-[minmax(400px,_1fr)_minmax(400px,_1fr)_1fr]">
               <TakeAction />
+              <Customers/>
               <div className="">
                 <MonthEarnings />
               </div>
-              <Customers/>
             </div>
           </section>
         </div>
