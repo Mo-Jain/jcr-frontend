@@ -527,7 +527,10 @@ export function AddBookingDialog({
             </div>
             <Button
               variant="destructive"
-              onClick={() => setIsOpen(false)}
+              onClick={(e) => {
+                e.preventDefault()
+                setIsOpen(false)
+              }}
               className="border border-input w-full sm:hidden w-full"
             >
               Cancel
