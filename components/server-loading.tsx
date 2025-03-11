@@ -4,7 +4,7 @@ import Rocket from './RocketSVG';
 import Server from '@/public/server.svg';
 
 const ServerLoading = () => {
-    const [timer, setTimer] = useState(0);
+    const [timer, setTimer] = useState(40);
 
     useEffect(() => {
         if (timer > 0) {
