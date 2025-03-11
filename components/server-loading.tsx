@@ -16,7 +16,7 @@ const ServerLoading = () => {
     }, [timer]);
 
     return (
-        <div style={{ zIndex: 99999 }} className="fixed top-0 left-0 z-10000 bg-white/30 dark:bg-black/20 backdrop-blur-lg flex flex-col items-center justify-center w-screen h-screen">
+        <div style={{ zIndex: 999999 }} className="fixed top-0 left-0 z-10000 bg-white/30 dark:bg-black/20 backdrop-blur-lg flex flex-col items-center justify-center w-screen h-screen">
             <div className="flex flex-col items-center">
                 <div className="relative">
                     <div className="absolute top-[-15%] left-[32%] w-20 h-28 flex items-center justify-center">
