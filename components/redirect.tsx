@@ -10,7 +10,7 @@ const Redirect = () => {
   const pathname = usePathname();
 
   useEffect(() => {
-    if (pathname !== "/" && pathname !== "/login" && !name) {
+    if (pathname !== "/" && pathname !== "/auth" && !name) {
       // router.push('/');
     }
   }, [name, router, pathname]);

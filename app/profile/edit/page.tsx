@@ -13,7 +13,7 @@ import LoadingScreen from "@/components/loading-screen";
 import { useUserStore } from "@/lib/store";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
-import { uploadToDriveWTParent } from "@/app/actions/upload";
+import { uploadToDrive, uploadToDriveWTParent } from "@/app/actions/upload";
 import Update from "@/public/updated.svg";
 
 interface User {
@@ -39,11 +39,20 @@ export default function ProfilePage() {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [newName, setNewName] = useState(user?.name);
+  const [users, setUsers] = useState<string[]>();
+  const [error,setError] = useState<string>("");
 
   // This would typically come from your authentication system
   useEffect(() => {
     const fetchData = async () => {
       try {
+        
+        const res1 = await axios.get(`${BASE_URL}/api/v1/users`, {
+          headers: {
+            "Content-type": "application/json",
+          },
+        });
+        setUsers(res1.data.users);
         const res = await axios.get(`${BASE_URL}/api/v1/me`, {
           headers: {
             "Content-type": "application/json",
@@ -160,11 +169,20 @@ export default function ProfilePage() {
         const currentDate = new Date();
         const unixTimestamp = Math.floor(currentDate.getTime() / 1000);
 
-        const resImage = await uploadToDriveWTParent(
-          file,
-          "profile",
-          user.name + " " + unixTimestamp,
-        );
+        let resImage;
+        if(user.profileFolderId){
+          resImage = await uploadToDrive(
+            file,
+            user.profileFolderId
+          );
+        }
+        else{
+          resImage = await uploadToDriveWTParent(
+            file,
+            "profile",
+            user.name + " " + unixTimestamp,
+          );
+        }
 
         if (resImage.error || !resImage.url) {
           setIsLoading(false);
@@ -214,6 +232,7 @@ export default function ProfilePage() {
 
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
+    setError("");
   };
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -223,6 +242,11 @@ export default function ProfilePage() {
   const handleUpdateUsername = async () => {
     // Here you would typically update the username in your backend
     try {
+      const newUsername = username.trim();
+      if(users && users.includes(newUsername)){
+        setError(`Username ${newUsername} is already taken`);
+        return;
+      }
       setUsername(username.trim());
       await axios.put(
         `${BASE_URL}/api/v1/me`,
@@ -301,6 +325,7 @@ export default function ProfilePage() {
         setIsEditingPassword(false);
         setShowPassword(false);
         setIsEditingName(false);
+        setError("");
       }
     }
   };
@@ -434,6 +459,7 @@ export default function ProfilePage() {
             <div
               className={`h-px ${isEditingUsername ? "bg-blue-500" : "bg-gray-200"}`}
             />
+            <p className="text-red-500 text-xs">{error}</p>
           </div>
 
           {/* Password section */}

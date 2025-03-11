@@ -6,17 +6,21 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useRouter } from "next/navigation";
 import CarFrontIcon from "@/public/car-front.svg";
 import UserIcon from "@/public/user.svg";
+import Customers from "@/public/customers.svg";
+import Users from "@/public/users.svg";
 import { useUserStore } from "@/lib/store";
-import { Users } from "lucide-react";
+
 
 export default function Profile() {
   const router = useRouter();
-  const { name, imageUrl, setName, setImageUrl } = useUserStore();
+  const { name, imageUrl, userId,setName, setImageUrl,setUserId } = useUserStore();
+
 
   const handleLogout = () => {
     localStorage.setItem("token", "");
     setName("");
     setImageUrl("");
+    setUserId(-1);
     router.push("/");
   };
 
@@ -57,8 +61,8 @@ export default function Profile() {
           ) : (
             <div className="space-y-2">
               <Button
-                className="w-full bg-blue-600 text-white border-border dark:text-gray-600"
-                onClick={() => router.push("/login")}
+                className="w-full bg-blue-600 text-white border-border"
+                onClick={() => router.push("/auth")}
               >
                 Login
               </Button>
@@ -96,13 +100,27 @@ export default function Profile() {
                   onClick={() => router.push("/profile/manage-customer")}
                 >
                   <div className="flex items-center">
-                    <Users className="w-7 h-7 text-gray-600 dark:text-white " />
+                  <Customers className="w-7 h-7 stroke-0 fill-gray-600 stroke-gray-600 dark:fill-white dark:stroke-white " />
                     <span className="mx-2 max-sm:text-sm dark:text-white select-none">
                       Manage Customers
                     </span>
                   </div>
                   <div className="border-t-2 border-r-2 rotate-45 sm:mr-4 mr-2 w-2 h-2 border-gray-600 dark:border-gray-400"></div>
                 </div>
+                {userId == 1 &&
+                  <div
+                    className="flex items-center justify-between p-2 cursor-pointer rounded-md dark:hover:bg-zinc-700 hover:bg-gray-200"
+                    onClick={() => router.push("/profile/manage-users")}
+                  >
+                    <div className="flex items-center">
+                    <Users className="w-7 h-7 stroke-0 fill-gray-600 stroke-gray-600 dark:fill-white dark:stroke-white " />
+                      <span className="mx-2 max-sm:text-sm dark:text-white select-none">
+                        Manage Users
+                      </span>
+                    </div>
+                    <div className="border-t-2 border-r-2 rotate-45 sm:mr-4 mr-2 w-2 h-2 border-gray-600 dark:border-gray-400"></div>
+                  </div>
+                }
               </CardContent>
             </Card>
           )}

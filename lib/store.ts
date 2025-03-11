@@ -13,6 +13,8 @@ interface UserStore {
   setName: (value: string) => void;
   imageUrl: string;
   setImageUrl: (value: string) => void;
+  userId: number;
+  setUserId: (value: number) => void;
 }
 
 export type Car = {
@@ -65,6 +67,13 @@ type EventStore = {
   closeEventSummary: () => void;
 };
 
+type ServerStore ={
+  isServerLoading: boolean;
+  setIsServerLoading: (isServerLoading:boolean) => void;
+  isInitiateComplete:boolean;
+  setIsInitiateComplete: (isInitiateComplete:boolean) => void;
+}
+
 interface ToggleSideBarType {
   isSideBarOpen: boolean;
   setSideBarOpen: (flag: boolean) => void;
@@ -80,6 +89,14 @@ type EventStore1 = {
 export const useEventRows = create<EventStore1>((set) => ({
   eventsRow: [],
   setEventsRow: (eventsRow) => set({ eventsRow }),
+}));
+
+export const useServerStore = create<ServerStore>((set) => ({
+  isServerLoading: false,
+  setIsServerLoading: (isServerLoading:boolean) => set({ isServerLoading }),
+
+  isInitiateComplete: false, // Track if InitiateScreen has disappeared
+  setIsInitiateComplete: (status:boolean) => set({ isInitiateComplete: status }),
 }));
 
 export type WrappedEvent = {
@@ -109,6 +126,10 @@ export const useUserStore = create<UserStore>()(
         imageUrl: "",
         setImageUrl: (value: string) => {
           set({ imageUrl: value });
+        },
+        userId: -1,
+        setUserId: (value: number) => {
+          set({ userId: value });
         },
       }),
       { name: "user_data", skipHydration: true },

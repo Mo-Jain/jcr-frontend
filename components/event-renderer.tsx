@@ -152,8 +152,6 @@ export function EventRenderer({
     newEventsRow = newEventsRow.sort((a, b) => {
       return a.rowIndex - b.rowIndex;
     });
-    console.log(newEventsRow);
-
    
     setNoOfEvents(newExtendedEvents.length + newSortedEvents.length);
     if (setEventsRow) setEventsRow(newEventsRow);

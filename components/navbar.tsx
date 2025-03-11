@@ -75,7 +75,7 @@ export function NavBar() {
           <div className="py-2">
             <div
               className="w-full font-bold select-none text-zinc-700 dark:text-gray-200 cursor-pointer hover:text-blue-700 hover:dark:text-blue-700"
-              onClick={() => router.push("/login")}
+              onClick={() => router.push("/auth")}
             >
               Login
             </div>

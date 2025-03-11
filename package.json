@@ -36,7 +36,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
     "dayjs": "^1.11.13",
-    "framer-motion": "^12.4.1",
+    "framer-motion": "^12.4.7",
     "googleapis": "^144.0.0",
     "lucide-react": "^0.473.0",
     "mime-types": "^2.1.35",

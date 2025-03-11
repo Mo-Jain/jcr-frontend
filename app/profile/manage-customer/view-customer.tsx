@@ -13,7 +13,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Clock, CheckCircle, XCircle, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import UserIcon from "@/public/user.svg";
 import LocationIcon from "@/public/location.svg";
 import axios from "axios";
@@ -26,38 +26,8 @@ import { uploadToDrive } from "@/app/actions/upload";
 import { Label } from "@/components/ui/label";
 import { DatePicker } from "@/components/ui/datepicker";
 
-enum Status {
-  pending = "pending",
-  confirmed = "confirmed",
-  cancelled = "cancelled",
-  inProgress = "inProgress",
-  completed = "completed",
-}
-export const BookingStatusIcon = ({
-  status,
-  className,
-}: {
-  status?: Status;
-  className?: string;
-}) => {
-  const statusIcons = {
-    pending: <Clock className={`text-yellow-500 ${className}`} />,
-    confirmed: <CheckCircle className={`text-green-500 ${className}`} />,
-    cancelled: <XCircle className={`text-red-500 ${className}`} />,
-    inProgress: (
-      <Loader2 className={`text-blue-500 animate-spin ${className}`} />
-    ),
-    completed: <CheckCircle className={`text-green-500 ${className}`} />,
-  };
 
-  return status ? (
-    statusIcons[status]
-  ) : (
-    <Clock className={`text-gray-500 ${className}`} />
-  );
-};
-
-interface EventSummaryPopupProps {
+interface CustomerPopupInterface {
   customer: Customer;
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -69,7 +39,7 @@ export function CustomerPopup({
   isOpen,
   setIsOpen,
   setCustomers,
-}: EventSummaryPopupProps) {
+}: CustomerPopupInterface) {
   const [action, setAction] = useState<
     "Delete" | "Update" | "delete the documents of"
   >("Delete");
@@ -356,10 +326,10 @@ export function CustomerPopup({
                   </div>
                   <div>
                     <div>
-                      <Label htmlFor="name" className={`text-sm ${isEditing && "ml-2"}`}>Contact</Label>
+                      <Label htmlFor="contact" className={`text-sm ${isEditing && "ml-2"}`}>Contact</Label>
                       {isEditing ? (
                         <Input
-                          name="bookedBy"
+                          name="contact"
                           value={contact}
                           maxLength={10}
                           onChange={(e) => setContact(e.target.value)}

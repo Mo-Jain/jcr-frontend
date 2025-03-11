@@ -41,7 +41,7 @@ export interface Document {
   type: string;
 }
 
-interface AddCarDialogProps {
+interface AddCustomerDialogProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setCustomers: React.Dispatch<React.SetStateAction<Customer[]>>;
@@ -55,7 +55,7 @@ export function AddCustomer({
   isOpen,
   setIsOpen,
   setCustomers,
-}: AddCarDialogProps) {
+}: AddCustomerDialogProps) {
   const [name, setName] = useState<string>("");
   const [contact, setContact] = useState<string>("");
   const [address, setAddress] = useState<string>("");
