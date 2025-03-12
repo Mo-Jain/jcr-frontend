@@ -4,7 +4,7 @@ import Rocket from './RocketSVG';
 import Server from '@/public/server.svg';
 
 const ServerLoading = () => {
-    const [timer, setTimer] = useState(40);
+    const [timer, setTimer] = useState(55);
 
     useEffect(() => {
         if (timer > 0) {
@@ -20,12 +20,12 @@ const ServerLoading = () => {
             <div className="flex flex-col items-center">
                 <div className="relative">
                     <div className="absolute top-[-15%] left-[32%] w-20 h-28 flex items-center justify-center">
-                        <Rocket className="fill-black dark:fill-white stroke-black dark:stroke-white" />
+                        <Rocket className="" />
                     </div>
-                    <Server className="w-44 h-44 stroke-black dark:stroke-white fill-black dark:fill-white" />
+                    <Server className="w-44 h-44 fill-blue-600 dark:fill-blue-400" />
                 </div>
                 <p>Server is initiating...</p>
-                <p>Please wait, server might take 
+                <p>Please wait, server might take up to  
                     <span className="text-green-600 dark:text-green-400"> {timer} secs </span>   
                     to start
                 </p>
