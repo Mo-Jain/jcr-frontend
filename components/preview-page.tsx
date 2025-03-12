@@ -1,4 +1,5 @@
 'use client'
+
 import { PDFViewer } from "@react-pdf/renderer";
 import PDFDocument from "./pdf-document";
 import { Booking } from "@/app/booking/[id]/page";
