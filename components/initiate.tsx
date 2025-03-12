@@ -121,7 +121,7 @@ const Initiate = () => {
   if(isInitiateComplete && isServerLoading) {
     return <ServerLoading />
   } 
-  else if (isLoading){
+  else if (isLoading && !isInitiateComplete){
     return <SplashScreen />
   }  
   return <InitiateScreen />;
