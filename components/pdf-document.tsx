@@ -289,7 +289,7 @@ const PDFDocument = ({ booking }: { booking: Booking }) => {
         <View style={styles.divider} />
         <View style={styles.section}>
           <Text style={styles.textHeading}>Some more details</Text>
-          <View style={styles.row}>
+          <View >
             <View>
               <View style={{display:"flex",flexDirection:"row"}}>
                   <Text style={{...styles.text,...styles.bold}}>Odometer Reading: </Text>

@@ -32,7 +32,7 @@ export default function LoginPage() {
     if(name){
       router.push('/');
     }
-  },[name])
+  },[name,router])
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

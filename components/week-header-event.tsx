@@ -42,7 +42,7 @@ const HeaderEvent = ({
     const filteredEvents = events.filter((event: CalendarEventType) => {
       return (
         dayjs(event.startDate).isSame(date, "days") &&
-        event.endDate.isAfter(date, "days")
+        dayjs(event.endDate).isAfter(date, "days")
       );
     });
 
@@ -171,7 +171,7 @@ const HeaderEvent = ({
           backgroundColor: car?.colorOfBooking,
         }}
         className={cn(
-          "my-[1px]  h-[18px] w-full flex items-center justify-center cursor-pointer rounded-[3px] sm:rounded-sm bg-[#039BE5] text-[8px] sm:text-xs text-white overflow-hidden whitespace-nowrap",
+          "my-[1px] relative  h-[18px] w-full z-20 flex items-center justify-center cursor-pointer rounded-[3px] sm:rounded-sm bg-[#039BE5] text-[8px] sm:text-xs text-white overflow-hidden whitespace-nowrap",
           isSmallScreen ? "" : "px-2 ",
         )}
       >
@@ -197,7 +197,7 @@ const HeaderEvent = ({
         {currentDate.format("DD")}{" "}
       </div>
       <div
-        className="flex flex-col w-full min-h-[39px] sm:min-h-[57px] transition-all duration-500 ease-in-out"
+        className="flex flex-col  w-full min-h-[39px] sm:min-h-[57px]"
         style={{ maxHeight: isEventHidden ? "40px sm:60px" : "" }}
       >
         {noOfEvents  < 4 || !isEventHidden ? (
@@ -214,7 +214,7 @@ const HeaderEvent = ({
             })}
           </>
         ) : (
-          <>
+          <div className="z-10">
             {currWrappedEvents.slice(0,2).map((e, index) => {
               const event = events.find((event) => event.id === e.id);
               if (!event || !e.startDate.isSame(date, "day")) return null;
@@ -226,7 +226,7 @@ const HeaderEvent = ({
               const { width, marginTop } = findOffset(index, event);
               return renderEvent(event, index, width, marginTop);
             })}
-          </>
+          </div>
         )}
       </div>
       {!(noOfEvents  < 4 || !isEventHidden) && (

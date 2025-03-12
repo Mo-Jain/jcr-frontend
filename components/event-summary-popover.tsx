@@ -181,6 +181,16 @@ export function EventSummaryPopup({
     }
   };
 
+  const getBookingStatus = () => {
+    if( event.status === "Upcoming"){
+      return "Booking yet to Start";
+    } else if(event.status === "Ongoing"){
+      return "Booking in Progress";
+    } else if(event.status === "Completed"){
+      return "Booking Completed";
+    }
+  }
+
   return (
     <>
       <div className="fixed top-0 left-0 h-screen w-screen z-10 bg-black/50 backdrop-blur-sm"></div>
@@ -292,7 +302,7 @@ export function EventSummaryPopup({
                   className="h-5 w-5 mt-1 mr-3"
                 />
                 <div>
-                  <p className="text-sm font-medium">Booking yet to Start</p>
+                  <p className="text-sm font-medium">{getBookingStatus()}</p>
                 </div>
               </div>
             </div>
