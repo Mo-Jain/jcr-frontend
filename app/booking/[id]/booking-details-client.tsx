@@ -612,7 +612,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
                 className="cursor-pointer"
               >
                 <ExportIcon className="mr-2 h-4 w-4 stroke-1 stroke-black dark:stroke-white dark:fill-white" />
-                <ExportButton booking={booking}/> run 
+                <ExportButton booking={booking}/> 
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
