@@ -1,3 +1,5 @@
+'use client'
+
 import ExportButton from "@/components/export-button";
 import React from "react"
 

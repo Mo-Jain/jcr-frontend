@@ -1,3 +1,5 @@
+'use client'
+
 import PreviewPage from "@/components/preview-page";
 import React from "react"
 
