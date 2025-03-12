@@ -16,7 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Upload } from "lucide-react";
+import { ImportIcon } from "lucide-react";
 import * as XLSX from "xlsx";
 import { toast } from "@/hooks/use-toast";
 import axios from "axios";
@@ -301,7 +301,7 @@ export default function ExcelUploader() {
         onClick={() => fileInputRef.current?.click()}
         className="flex rounded-sm  items-center gap-2"
       >
-        <Upload className="h-4 w-4" />
+        <ImportIcon className="h-4 w-4" />
         Import
       </Button>
 

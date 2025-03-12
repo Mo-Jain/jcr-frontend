@@ -1,4 +1,5 @@
 "use client";
+
 import { BASE_URL } from "@/lib/config";
 import {
   CalendarEventType,
@@ -116,7 +117,6 @@ const Initiate = () => {
     };
     fetchData();
   }, [router,setCars,setName,setImageUrl,setEvents,setWrappedEvents,setIsServerLoading,setUserId]);
-
 
   if(isInitiateComplete && isServerLoading) {
     return <ServerLoading />

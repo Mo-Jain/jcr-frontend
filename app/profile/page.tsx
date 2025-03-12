@@ -9,6 +9,7 @@ import UserIcon from "@/public/user.svg";
 import Customers from "@/public/customers.svg";
 import Users from "@/public/users.svg";
 import { useUserStore } from "@/lib/store";
+import { cn } from "@/lib/utils";
 
 
 export default function Profile() {
@@ -96,7 +97,9 @@ export default function Profile() {
                   <div className="border-t-2 border-r-2 rotate-45 sm:mr-4 mr-2 w-2 h-2 border-gray-600 dark:border-gray-400"></div>
                 </div>
                 <div
-                  className="flex items-center justify-between p-2 cursor-pointer rounded-md dark:hover:bg-zinc-700 hover:bg-gray-200"
+                  className={cn("flex items-center justify-between p-2 cursor-pointer rounded-md dark:hover:bg-zinc-700 hover:bg-gray-200",
+                    userId == 1 ? "border-b border-border" : ""
+                  )}
                   onClick={() => router.push("/profile/manage-customer")}
                 >
                   <div className="flex items-center">

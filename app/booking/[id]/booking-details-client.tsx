@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Edit, MoreVertical, Trash2, Upload } from "lucide-react";
+import { Edit,  MoreVertical, Trash2, Upload } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -27,6 +27,8 @@ import { RenderFileList, RenderNewFileList } from "./render-file-list";
 import { uploadToDrive } from "@/app/actions/upload";
 import BookingStop from "@/components/booking-stop";
 import { useEventStore } from "@/lib/store";
+import ExportIcon from "@/public/File export.svg"
+import ExportButton from "@/components/export-button";
 
 interface BookingDetailsClientProps {
   booking: Booking;
@@ -561,7 +563,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
           </div>
         </div>
       )}
-      <div className="flex items-center justify-between px-2 pb-2 border-b border-gray-300 dark:border-muted">
+      <div className="flex items-center justify-between px-2 pb-2 border-b border-gray-300 dark:border-muted dark:text-white">
         <div
           className="mr-2 rounded-md font-bold  cursor-pointer dark:hover:bg-gray-800 hover:bg-gray-200"
           onClick={() => router.push("/bookings")}
@@ -605,6 +607,12 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
               >
                 <Trash2 className="mr-2 h-4 w-4" />
                 <span>Delete</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="cursor-pointer"
+              >
+                <ExportIcon className="mr-2 h-4 w-4 stroke-1 stroke-black dark:stroke-white dark:fill-white" />
+                <ExportButton booking={booking}/> run 
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

@@ -131,6 +131,7 @@ export default function Bookings() {
     }
   }, [selectedBookings]);
 
+
   const getBookingLength = (status: string) => {
     let length = 0;
     const newBookings = bookings.filter(
