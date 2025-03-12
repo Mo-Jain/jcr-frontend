@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,10 +23,16 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const { setName } = useUserStore();
+  const { name,setName } = useUserStore();
   const router = useRouter();
   const {setCars} = useCarStore();
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(()=>{
+    if(name){
+      router.push('/');
+    }
+  },[name])
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

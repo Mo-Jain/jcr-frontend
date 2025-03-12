@@ -576,7 +576,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
           <h2 className="text-xl font-bold">Booking {bookingStatus}</h2>
           <p className="text-sm text-blue-500">Booking ID: {booking.id}</p>
         </div>
-        <div className="mr-4">
+        <div className="mr-1 sm:mr-4 ">
           {isAdmin &&
           <DropdownMenu
             open={isDropDownOpen}
@@ -617,7 +617,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
             </DropdownMenuContent>
           </DropdownMenu>
           }
-        </div>{" "}
+        </div>
         {/* Spacer for alignment */}
       </div>
 
@@ -665,11 +665,12 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
       <div className="px-1 sm:px-4 py-4 border-b-4 border-gray-200 dark:border-muted">
         <h3 className="text-lg font-semibold mb-4 ">Booking Details</h3>
         <div className="flex items-center justify-center gap-8 max-sm:gap-2 mb-4">
-          <div>
+          <div className="w-full flex flex-col items-end">
+          <div className="w-fit">
             <p className="text-sm text-blue-500">From</p>
             {!isEditable || !isAdmin ? (
               <p className="font-semibold max-sm:text-sm">
-                {formatDateTime(startDate)} {booking.startTime}
+                {formatDateTime(startDate)} {booking.startTime.slice(0,5)}
               </p>
             ) : (
               <div className="flex space-x-2">
@@ -687,12 +688,15 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
               </div>
             )}
           </div>
-          <ArrowRight className="mt-4 w-12 stroke-0 fill-blue-400 flex-shrink-0" />
-          <div>
+          </div>
+          <div className="w-full flex justify-center">
+            <ArrowRight className="mt-4 w-12 stroke-0 fill-blue-400 flex-shrink-0" />
+          </div>
+          <div className="w-full">
             <p className="text-sm text-blue-500">To</p>
             {!isEditable || !isAdmin ? (
               <p className="font-semibold max-sm:text-sm">
-                {formatDateTime(endDate)} {booking.endTime}
+                {formatDateTime(endDate)} {booking.endTime.slice(0,5)}
               </p>
             ) : (
               <div className="flex space-x-2">
