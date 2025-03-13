@@ -24,12 +24,84 @@
     --input: 214.3 31.8% 91.4%;
     --ring: 214.3 31.8% 91.4%;
     --radius: 0.5rem;
+    --animate-up-right: upRight 2s ease-in-out infinite;
+    --animate-up-left: upLeft 2s ease-in-out infinite;
+    --animate-down-right: downRight 2s ease-in-out infinite;
+    --animate-down-left: downLeft 2s ease-in-out infinite;
 
-    /* Add smooth transition */
     transition:
       background-color 0.1s ease-in-out,
       color 0.1s ease-in-out;
   }
+  @keyframes upRight{
+    0%{
+      transform: translate(0,0);
+    }
+    25%{
+      transform: translate(116%,0);
+    }
+    50%{
+      transform: translate(116%,116%);
+    }
+    75%{
+      transform: translate(0,116%);
+    }
+    100%{
+      transform: translate(0,0);
+    }
+  }
+  @keyframes downRight{
+    0%{
+      transform: translate(0,0);
+    }
+    25%{
+      transform: translate(0,116%);
+    }
+    50%{
+      transform: translate(-116%,116%);
+    }
+    75%{
+      transform: translate(-116%,0);
+    }
+    100%{
+      transform: translate(0,0);
+    }
+  }
+  @keyframes downLeft{
+    0%{
+      transform: translate(0,0);
+    }
+    25%{
+      transform: translate(-116%,0);
+    }
+    50%{
+      transform: translate(-116%,-116%);
+    }
+    75%{
+      transform: translate(0,-116%);
+    }
+    100%{
+      transform: translate(0,0);
+    }
+  }
+  @keyframes upLeft{
+    0%{
+      transform: translate(0,0);
+    }
+    25%{
+      transform: translate(0,-116%);
+    }
+    50%{
+      transform: translate(116%,-116%);
+    }
+    75%{
+      transform: translate(116%,0);
+    }
+    100%{
+      transform: translate(0,0);
+    }
+  }
+
 
   .dark {
     --background: 120, 2%, 14%;
@@ -53,6 +125,20 @@
     --input: 103, 2%, 33%;
     --ring: 224.3 76.3% 48%;
   }
+  
+  .animate-up-right {
+    animation: var(--animate-up-right);
+  }
+  .animate-up-left {
+    animation: var(--animate-up-left);
+  }
+  .animate-down-right {
+    animation: var(--animate-down-right);
+  }
+  .animate-down-left {
+    animation: var(--animate-down-left);
+  }
+  
 
   input:focus,
   textarea:focus,
