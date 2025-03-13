@@ -7,6 +7,9 @@ import { BASE_URL } from "@/lib/config";
 import { useRouter } from "next/navigation";
 import BookingStop from "./booking-stop";
 import { Loader2 } from "lucide-react";
+import { EventSummaryPopup } from "./event-summary-popover";
+import dayjs from "dayjs";
+import { CalendarEventType } from "@/lib/store";
 
 export interface Booking {
   id: string;
@@ -117,6 +120,7 @@ const Booking = ({
   const [endOdometerReading, setEndOdometerReading] = useState(initialReading);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isOpenEventSummary, setIsOpenEventSummary] = useState(false);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleString("en-US", {
@@ -125,6 +129,19 @@ const Booking = ({
       year: "numeric",
     });
   };
+
+  const getEvent = () => {
+    const event:CalendarEventType = {
+      ...booking,
+      startDate: dayjs(booking.start),
+      endDate: dayjs(booking.end),
+      color: booking.carColor,
+      allDay: false,
+      isAdmin:false
+    }
+
+    return event;
+  }
 
   return (
     <>
@@ -142,15 +159,16 @@ const Booking = ({
         setBookings={setBookings}
         setIsLoading={setIsLoading}
       />
+      <EventSummaryPopup isOpen={isOpenEventSummary} onClose={() => setIsOpenEventSummary(false)} event={getEvent()} />
       <div
         key={booking.id}
-        onClick={() => router.push(`/booking/${booking.id}`)}
+        onClick={() => setIsOpenEventSummary(true)}
         className="flex cursor-pointer items-center shadow-sm justify-between w-full bg-gray-100 dark:bg-background rounded-sm p-1 gap-1 sm:p-2 "
       >
         <div className="flex flex-col items-center">
           <div
             style={{ backgroundColor: booking.carColor }}
-            className="sm:w-8 z-10 bg-green-200 flex-shrink-0 sm:h-8 w-6 h-6 rounded-md"
+            className=" z-1 bg-green-200 flex-shrink-0  rounded-md"
           />
         </div>
         <div className="flex items-center w-full justify-between  gap-1">
@@ -189,6 +207,7 @@ const Booking = ({
               e.stopPropagation();
               router.push(`/booking/start/form/${booking.id}`);
             }}
+          style={{ backgroundColor: booking.carColor }}
             className="rounded-full text-sm cursor-pointer bg-red-400 hover:bg-opacity-80 text-white py-1 px-2 sm:px-3"
           >
             Start

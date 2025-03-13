@@ -193,12 +193,11 @@ export function EventSummaryPopup({
 
   return (
     <>
-      <div className="fixed top-0 left-0 h-screen w-screen z-10 bg-black/50 backdrop-blur-sm"></div>
       <Dialog open={isOpen && !isActionDialogOpen} onOpenChange={onClose}>
         <DialogContent className="sm:max-w-[425px] z-20 border-border max-sm:min-h-[70%] flex flex-col p-0 items-center overflow-auto">
           <DialogHeader className="flex flex-row justify-between items-center w-full px-6 py-0">
             <DialogTitle>
-              <div className="flex justify-start w-full whitespace-nowrap mt-2">
+              <div className="flex justify-start w-full whitespace-nowrap mt-4">
                 BookingId : {event.id}
               </div>
             </DialogTitle>

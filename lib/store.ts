@@ -55,7 +55,7 @@ export type CalendarEventType = {
   customerContact: string;
   carId: number;
   carName: string;
-  isAdmin: string;
+  isAdmin: boolean;
 };
 
 type EventStore = {
