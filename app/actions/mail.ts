@@ -9,7 +9,7 @@ export async function sendEmailWithPDF(base64Pdf: string, recipient: string) {
     const pdfBuffer = Buffer.from(base64Pdf, "base64");
 
     // Configure Nodemailer
-    let transporter = nodemailer.createTransport({
+    const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
         user: process.env.EMAIL_USER, // Set in .env file
@@ -18,7 +18,7 @@ export async function sendEmailWithPDF(base64Pdf: string, recipient: string) {
     });
 
     // Email options
-    let mailOptions = {
+    const mailOptions = {
       from: process.env.EMAIL_USER,
       to: recipient,
       subject: "Booking Details",

@@ -85,6 +85,8 @@ function App() {
         // Convert ArrayBuffer to Base64 (to send via API)
         const base64Pdf = Buffer.from(arrayBuffer).toString("base64");
 
+        console.log("base64Pdf",base64Pdf)
+
         const pdfUrl = URL.createObjectURL(asPdf);
         
         // Create email content
