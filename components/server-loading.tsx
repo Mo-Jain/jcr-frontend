@@ -50,7 +50,7 @@ const ServerLoading = () => {
                                     onClick={() => setTooltipVisible((prev) => !prev)}
                                     />
                                     {tooltipVisible && (
-                                        <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-48 p-2 text-xs text-white  bg-black/50 dark:bg-white/30 backdrop-blur-lg rounded-md shadow-lg">
+                                        <div className="absolute top-full max-sm:left-[-300%] transform -translate-x-1/2 mt-2 w-48 p-2 text-xs text-white  bg-black/50 dark:bg-white/30 backdrop-blur-lg rounded-md shadow-lg">
                                             Server might take some time to load after inactivity. Please wait for sometime.
                                         </div>
                                         )}
