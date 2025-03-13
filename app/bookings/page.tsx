@@ -29,6 +29,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Loader from "@/components/loader";
 
 type BookingStatus = "Upcoming" | "Ongoing" | "Completed" | "Cancelled" | "All";
 
@@ -427,10 +428,7 @@ export default function Bookings() {
               </div>
             ) : (
               <div className="w-full h-full py-28 gap-2 flex justify-center items-center">
-                <span className="sr-only">Loading...</span>
-                <div className="h-8 w-8 bg-primary border-[2px] border-border rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-                <div className="h-8 w-8 bg-primary border-[2px] border-border rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-                <div className="h-8 w-8 bg-primary border-[2px] border-border rounded-full animate-bounce"></div>
+                <Loader/>
               </div>
             )}
           </div>

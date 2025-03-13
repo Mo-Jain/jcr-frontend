@@ -25,6 +25,8 @@ import { Customer, Document } from "./page";
 import { uploadToDrive } from "@/app/actions/upload";
 import { Label } from "@/components/ui/label";
 import { DatePicker } from "@/components/ui/datepicker";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import Loader from "@/components/loader";
 
 
 interface CustomerPopupInterface {
@@ -467,10 +469,7 @@ export function CustomerPopup({
                         Uploading Documents
                       </span>
                       <div className="flex items-end px-1 pb-2 h-full">
-                        <span className="sr-only">Loading...</span>
-                        <div className="h-1 w-1 bg-black dark:bg-white mx-[2px] border-border rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-                        <div className="h-1 w-1 bg-black dark:bg-white mx-[2px] border-border rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-                        <div className="h-1 w-1 bg-black dark:bg-white mx-[2px] border-border rounded-full animate-bounce"></div>
+                        <Loader/>
                       </div>
                     </div>
                   </div>

@@ -19,6 +19,7 @@ import { BASE_URL } from "@/lib/config";
 import BackArrow from "@/public/back-arrow.svg";
 import { useRouter } from "next/navigation";
 import { AddCustomer } from "@/components/add-customer";
+import Loader from "@/components/loader";
 
 // Sample customer data - in a real app, this would come from an API or database
 
@@ -174,10 +175,7 @@ export default function CustomersPage() {
               </div>
             ) : (
               <div className="w-full h-full py-28 gap-2 flex justify-center items-center">
-                <span className="sr-only">Loading...</span>
-                <div className="h-8 w-8 bg-primary border-[2px] border-border rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-                <div className="h-8 w-8 bg-primary border-[2px] border-border rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-                <div className="h-8 w-8 bg-primary border-[2px] border-border rounded-full animate-bounce"></div>
+                <Loader/>
               </div>
             )}
           </div>

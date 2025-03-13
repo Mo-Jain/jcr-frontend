@@ -20,7 +20,7 @@ const ServerLoading = () => {
             <div className="flex flex-col items-center">
                 <div className="relative">
                     <div className="absolute top-[-23%] left-[28%] w-24 h-32 flex items-center justify-center">
-                        <Rocket rocketStroke="white" className="fill-blue-300 stroke-yellow-600" />
+                        <Rocket className="fill-blue-300 stroke-yellow-600" />
                     </div>
                     <Server className="w-44 h-44 fill-green-400" />
                 </div>

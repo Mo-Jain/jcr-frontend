@@ -20,6 +20,7 @@ import { useRouter } from "next/navigation";
 import { UserPopup } from "./view-user";
 import { Adduser } from "./add-user";
 import { useUserStore } from "@/lib/store";
+import Loader from "@/components/loader";
 
 
 export interface User {
@@ -171,12 +172,7 @@ export default function UsersPage() {
                 </p>
               </div>
             ) : (
-              <div className="w-full h-full py-28 gap-2 flex justify-center items-center">
-                <span className="sr-only">Loading...</span>
-                <div className="h-8 w-8 bg-primary border-[2px] border-border rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-                <div className="h-8 w-8 bg-primary border-[2px] border-border rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-                <div className="h-8 w-8 bg-primary border-[2px] border-border rounded-full animate-bounce"></div>
-              </div>
+              <Loader/>
             )}
           </div>
         )}

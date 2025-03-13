@@ -4,7 +4,6 @@ import * as React from "react"
 import { motion } from "framer-motion";
 interface Props {
     className?: string,
-    rocketStroke?: string,
 }
 
 const PATH = ["M71 283V298",
@@ -55,7 +54,7 @@ const PATH = ["M71 283V298",
           id="Ship"
           animate={{ y: [15, 0, 15] }}
           strokeWidth={1}
-          stroke={props.rocketStroke}
+          stroke={"white"}
           transition= {{
             times:[0,1],
             duration:5,

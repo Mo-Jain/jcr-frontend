@@ -29,6 +29,7 @@ import BookingStop from "@/components/booking-stop";
 import { useEventStore } from "@/lib/store";
 import ExportIcon from "@/public/File export.svg"
 import ExportButton from "@/components/export-button";
+import Loader from "@/components/loader";
 
 interface BookingDetailsClientProps {
   booking: Booking;
@@ -556,10 +557,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
       {isDeleting && (
         <div className=" bg-black bg-opacity-80 fixed top-0 left-0 w-screen h-screen z-50 flex items-center justify-center">
           <div className="flex space-x-2 justify-center items-center w-screen h-screen">
-            <span className="sr-only">Loading...</span>
-            <div className="h-8 w-8 bg-primary border-[2px] border-border rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-            <div className="h-8 w-8 bg-primary border-[2px] border-border rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-            <div className="h-8 w-8 bg-primary border-[2px] border-border rounded-full animate-bounce"></div>
+            <Loader/>
           </div>
         </div>
       )}

@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Edit, IndianRupee, LogOut,  Trash2 } from "lucide-react";
+import { Edit, IndianRupee, Loader, LogOut,  Trash2 } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
@@ -385,10 +385,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
       {isDeleting && (
         <div className=" bg-black bg-opacity-80 fixed top-0 left-0 w-screen h-screen z-50 flex items-center justify-center">
           <div className="flex space-x-2 justify-center items-center w-screen h-screen">
-            <span className="sr-only">Loading...</span>
-            <div className="h-8 w-8 bg-primary border-[2px] border-border rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-            <div className="h-8 w-8 bg-primary border-[2px] border-border rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-            <div className="h-8 w-8 bg-primary border-[2px] border-border rounded-full animate-bounce"></div>
+            <Loader/>
           </div>
         </div>
       )}
