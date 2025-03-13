@@ -118,7 +118,7 @@ const Initiate = () => {
     fetchData();
   }, [router,setCars,setName,setImageUrl,setEvents,setWrappedEvents,setIsServerLoading,setUserId]);
 
-  if(isInitiateComplete && isServerLoading) {
+  if(!isInitiateComplete || isServerLoading) {
     return <ServerLoading />
   } 
   else if (isLoading && !isInitiateComplete){
