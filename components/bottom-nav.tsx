@@ -5,7 +5,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { useUserStore } from "@/lib/store";
-import HomeIcon from "@/public/home1.svg";
+import HomeIcon from "@/public/home.svg";
 import BookingIcon from "@/public/online-booking.svg";
 import CalendarIcon from "@/public/calendar.svg";
 

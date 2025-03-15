@@ -1,6 +1,6 @@
 "use client";
 
-import Logo1 from "@/public/logo1.svg";
+import Logo1 from "@/public/logo.svg";
 import LogoText from "@/public/logo_text.svg";
 import { usePathname, useRouter } from "next/navigation";
 import { ThemeToggle } from "./theme-toggle";
