@@ -41,7 +41,6 @@ export default function Home() {
       let newOpacity = 1 - (scrollY - fadeStart) / (fadeEnd - fadeStart);
       newOpacity = Math.max(newOpacity, 0); // Ensure it doesn't go below 0
       const duration = 200 * (fadeEnd - scrollY) / (fadeEnd - fadeStart);
-      console.log("duration", duration);
       setOpacity(newOpacity);
 
       // Clear any previous timeout to prevent unnecessary snapping
@@ -61,9 +60,6 @@ export default function Home() {
     };
   }, []);
 
-  useEffect(() => {
-    console.log("opacity", opacity);
-  }, [opacity]);
   return (
     <div className="min-h-screen z-0 my-0 bg-transparent">
       <main>
