@@ -53,7 +53,7 @@ export default function Profile() {
               </div>
               <Button
                 variant="outline"
-                className="hover:bg-gray-200 border-border dark:hover:bg-zinc-700 bg-transparent"
+                className="hover:bg-gray-200 active:scale-95 border-border dark:hover:bg-zinc-700 bg-transparent"
                 onClick={handleLogout}
               >
                 Logout
@@ -62,7 +62,7 @@ export default function Profile() {
           ) : (
             <div className="space-y-2">
               <Button
-                className="w-full bg-blue-600 text-white border-border"
+                className="w-full bg-blue-600 active:scale-95 text-white border-border"
                 onClick={() => router.push("/auth")}
               >
                 Login

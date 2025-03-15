@@ -393,7 +393,7 @@ export function CustomerPopup({
                         <>
                           {isEditing && (
                             <Button
-                              className="cursor-pointer bg-gray-200 p-3 dark:bg-muted dark:text-white text-black hover:bg-gray-300 dark:hover:bg-secondary hover:bg-opacity-30"
+                              className="cursor-pointer active:scale-95 bg-gray-200 p-3 dark:bg-muted dark:text-white text-black hover:bg-gray-300 dark:hover:bg-secondary hover:bg-opacity-30"
                               onClick={() => {
                                 setAction("delete the documents of");
                                 setIsDialogOpen(true);
@@ -479,7 +479,7 @@ export function CustomerPopup({
                       setAction("Update");
                       setIsDialogOpen(true);
                     }}
-                    className={`w-full ${isLoading && "cursor-not-allowed opacity-50"}`}
+                    className={`w-full ${isLoading && "cursor-not-allowed active:scale-95 opacity-50"}`}
                   >
                     <span className="text-white">Save Changes</span>
                   </Button>
@@ -499,7 +499,7 @@ export function CustomerPopup({
           </DialogHeader>
           <DialogFooter>
             <Button
-              className="max-sm:w-full bg-primary hover:bg-opacity-10 shadow-lg"
+              className="max-sm:w-full bg-primary hover:bg-opacity-10 active:scale-95 shadow-lg"
               onClick={() => {
                 handleAction();
                 setIsDialogOpen(false);

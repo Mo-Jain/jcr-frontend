@@ -814,7 +814,7 @@ export default function BookingStartClient({
             <Button
               onClick={handleSubmit}
               disabled={isLoading}
-              className={`bg-blue-600 text-white hover:bg-opacity-80 w-full ${isLoading && "rounded-e-none cursor-not-allowed opacity-50"}`}
+              className={`bg-blue-600 active:scale-95 text-white hover:bg-opacity-80 w-full ${isLoading && "rounded-e-none cursor-not-allowed opacity-50"}`}
             >
               <span>Create</span>
             </Button>
@@ -822,7 +822,7 @@ export default function BookingStartClient({
           {!isLoading && (
             <Button
               onClick={() => router.push("/booking/" + bookingId)}
-              className="bg-red-600 text-card text-white hover:bg-red-500 w-full"
+              className="bg-red-600 dark:bg-red-400 active:scale-95 text-card text-white hover:bg-red-500 w-full"
             >
               Cancel
             </Button>

@@ -437,7 +437,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
               {isEditable && (
                 <button
                   onClick={() => document.getElementById("carImage")?.click()}
-                  className="absolute top-2 right-2 bg-primary text-primary-foreground p-2 rounded-full hover:bg-primary/90 transition-colors"
+                  className="absolute active:scale-95 top-2 right-2 bg-primary text-primary-foreground p-2 rounded-full hover:bg-primary/90 transition-colors"
                 >
                   <Edit size={20} />
                   <Input
@@ -456,7 +456,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
                 {!isEditable ? (
                   <Button
                     onClick={() => setIsEditable(true)}
-                    className="bg-primary text-primary-foreground p-2 rounded-md hover:bg-primary/90 transition-colors"
+                    className="bg-primary active:scale-95 text-primary-foreground p-2 rounded-md hover:bg-primary/90 transition-colors"
                   >
                     <Edit size={20} />
                     <span>Edit Car Details</span>
@@ -469,7 +469,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
                         setAction("Update car");
                         setIsDialogOpen(true);
                       }}
-                      className={`mx-3 flex items-center bg-primary text-primary-foreground p-2 rounded-md hover:bg-primary/90 transition-colors ${isLoading && "cursor-not-allowed opacity-50"}`}
+                      className={`mx-3 flex active:scale-95 items-center bg-primary text-primary-foreground p-2 rounded-md hover:bg-primary/90 transition-colors ${isLoading && "cursor-not-allowed opacity-50"}`}
                     >
                       {isLoading ? (
                         <>
@@ -488,7 +488,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
                     {!isLoading && (
                       <Button
                         onClick={() => handleCancel()}
-                        className="mx-3 bg-secondary text-secondary-foreground p-2 rounded-md hover:bg-secondary/90 transition-colors"
+                        className="mx-3 bg-secondary active:scale-95 text-secondary-foreground p-2 rounded-md hover:bg-secondary/90 transition-colors"
                       >
                         <span>Cancel</span>
                       </Button>
@@ -758,7 +758,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
           </DialogHeader>
           <DialogFooter>
             <Button
-              className="max-sm:w-full hover:bg-black bg-black hover:bg-opacity-80 text-white  shadow-lg"
+              className="max-sm:w-full active:scale-95 hover:bg-black bg-black hover:bg-opacity-80 text-white  shadow-lg"
               onClick={() => {
                 handleAction();
                 setIsDialogOpen(false);

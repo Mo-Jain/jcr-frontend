@@ -582,7 +582,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
             modal={false}
           >
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
+              <Button variant="ghost" className="h-8 w-8 p-0 active:scale-95">
                 <span className="sr-only">Open menu</span>
                 <MoreVertical className="h-4 w-4" />
               </Button>
@@ -918,7 +918,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
                     <Button
                       variant="outline"
                       onClick={() => document.getElementById("selfie")?.click()}
-                      className="bg-transparent flex items-center justify-center text-xs sm:text-sm w-[130px] sm:w-[200px]"
+                      className="bg-transparent active:scale-95 flex items-center justify-center text-xs sm:text-sm w-[130px] sm:w-[200px]"
                     >
                       <Upload className="h-4 w-4" />
                       Choose File
@@ -945,7 +945,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
                 </p>
                 {isEditable && isAdmin && documents && (
                   <Button
-                    className="cursor-pointer p-2 bg-gray-200 dark:bg-muted dark:text-white text-black hover:bg-gray-300 dark:hover:bg-secondary hover:bg-opacity-30"
+                    className="cursor-pointer active:scale-95 p-2 bg-gray-200 dark:bg-muted dark:text-white text-black hover:bg-gray-300 dark:hover:bg-secondary hover:bg-opacity-30"
                     onClick={() => {
                       setAction("delete the documents of");
                       setIsDialogOpen(true);
@@ -969,7 +969,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
                     onClick={() =>
                       document.getElementById("documents")?.click()
                     }
-                    className="bg-transparent flex items-center justify-center text-xs sm:text-sm w-[130px] sm:w-[200px]"
+                    className="bg-transparent active:scale-95 flex items-center justify-center text-xs sm:text-sm w-[130px] sm:w-[200px]"
                   >
                     <Upload className="h-4 w-4" />
                     Choose File
@@ -1043,7 +1043,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
                   </p>
                   {isEditable && isAdmin && carImages && (
                     <Button
-                      className="cursor-pointer p-2 bg-gray-200 dark:bg-muted dark:text-white text-black hover:bg-gray-300 dark:hover:bg-secondary hover:bg-opacity-30"
+                      className="cursor-pointer active:scale-95 p-2 bg-gray-200 dark:bg-muted dark:text-white text-black hover:bg-gray-300 dark:hover:bg-secondary hover:bg-opacity-30"
                       onClick={() => {
                         setAction("delete the car photos of");
                         setIsDialogOpen(true);
@@ -1065,7 +1065,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
                     <Button
                       variant="outline"
                       onClick={() => document.getElementById("photos")?.click()}
-                      className="bg-transparent flex items-center justify-center text-xs sm:text-sm w-[130px] sm:w-[200px]"
+                      className="bg-transparent active:scale-95 flex items-center justify-center text-xs sm:text-sm w-[130px] sm:w-[200px]"
                     >
                       <Upload className="h-4 w-4" />
                       Choose File
@@ -1094,7 +1094,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
         <div className=" flex justify-center space-x-2 mt-2">
           {bookingStatus === "Upcoming" && (
             <Button
-              className="px-4 py-4 max-sm:w-full bg-blue-600 dark:text-black text-blue-100  shadow-lg"
+              className="px-4 py-4 max-sm:w-full active:scale-95 bg-blue-600 dark:text-black text-blue-100  shadow-lg"
               onClick={() => {
                 setAction("Start");
                 setIsDialogOpen(true);
@@ -1105,7 +1105,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
           )}
           {bookingStatus === "Ongoing" && (
             <Button
-              className="px-4 py-4 max-sm:w-full bg-blue-600 dark:text-black text-blue-100  shadow-lg"
+              className="px-4 py-4 max-sm:w-full active:scale-95 bg-blue-600 dark:text-black text-blue-100  shadow-lg"
               onClick={() => {
                 setAction("Stop");
                 setIsBookingStopOpen(true);
@@ -1124,7 +1124,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
             {!isLoading ? (
               <>
                 <Button
-                  className="px-4 py-4 max-sm:w-full min-w-[100px] bg-primary hover:bg-opacity-50 shadow-lg"
+                  className="px-4 py-4 max-sm:w-full active:scale-95 min-w-[100px] bg-primary hover:bg-opacity-50 shadow-lg"
                   onClick={() => {
                     setAction("Update");
                     setIsDialogOpen(true);
@@ -1133,7 +1133,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
                   <span className="">Update</span>
                 </Button>
                 <Button
-                  className="px-4 py-4 max-sm:w-full min-w-[100px] bg-primary hover:bg-opacity-50 shadow-lg"
+                  className="px-4 py-4 max-sm:w-full active:scale-95 min-w-[100px] bg-primary hover:bg-opacity-50 shadow-lg"
                   onClick={handleReset}
                 >
                   <span className="">Reset</span>

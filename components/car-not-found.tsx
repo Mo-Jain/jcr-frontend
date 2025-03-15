@@ -29,13 +29,13 @@ export default function CarNotFound() {
           </p>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
-          <Button asChild className="w-full">
+          <Button asChild className="w-full active:scale-95">
             <Link href="/profile/manage-garrage">
               <BackArrow className=" h-7 w-4 stroke-black fill-black" />
               Back to Car List
             </Link>
           </Button>
-          <Button asChild variant="outline" className="w-full">
+          <Button asChild variant="outline" className="w-full active:scale-95">
             <Link href="/">Go to Homepage</Link>
           </Button>
         </CardFooter>

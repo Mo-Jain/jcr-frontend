@@ -40,11 +40,11 @@ export function CarSection() {
                 
               {cars.length > 0 && (
                 <Button
-                  className="bg-blue-600 rounded-sm text-white bg-primary hover:bg-opacity-80  shadow-lg max-sm:p-2"
+                  className="bg-blue-600 rounded-sm transition-all duration-300 active:scale-95 text-white bg-primary hover:bg-opacity-80  shadow-lg max-sm:p-2"
                   onClick={() => setIsOpen(true)}
                 >
                   <PlusSquare className="text-20 max-sm:text-xs h-12 w-12" />
-                  <span className="max-sm:text-xs">Add Car</span>
+                  <span className="max-sm:text-xs ">Add Car</span>
                 </Button>
               )}
             </div>
@@ -91,7 +91,7 @@ export function CarSection() {
                   Click below to add your first car
                 </h1>
                 <Button
-                  className="bg-blue-600 text-white dark:text-black hover:bg-opacity-80  shadow-lg"
+                  className="bg-blue-600 text-white active:scale-95 dark:text-black hover:bg-opacity-80  shadow-lg"
                   onClick={() => setIsOpen(true)}
                 >
                   <Plus className="text-20 h-60 w-60 stroke-[4px]" />

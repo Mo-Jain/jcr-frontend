@@ -392,7 +392,7 @@ export function AddCarDialog({ isOpen, setIsOpen }: AddCarDialogProps) {
               <Button
                 onClick={handleSubmit}
                 disabled={isLoading}
-                className={`bg-blue-600 dark:text-white hover:bg-opacity-80 w-full ${isLoading && "cursor-not-allowed opacity-50"}`}
+                className={`bg-blue-600 active:scale-95 dark:text-white hover:bg-opacity-80 w-full ${isLoading && "cursor-not-allowed opacity-50"}`}
               >
                 {isLoading ? (
                   <>
@@ -415,7 +415,7 @@ export function AddCarDialog({ isOpen, setIsOpen }: AddCarDialogProps) {
                   e.preventDefault()
                   setIsOpen(false)
                 }}
-                className="border border-input w-full sm:hidden w-full"
+                className="border active:scale-95 border-input w-full sm:hidden w-full"
               >
                 Cancel
               </Button>}

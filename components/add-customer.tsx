@@ -407,7 +407,7 @@ export function AddCustomer({
                 <Button
                   disabled={isLoading}
                   onClick={handleSubmit}
-                  className={`w-full ${isLoading && "cursor-not-allowed opacity-50"}`}
+                  className={`w-full ${isLoading && "cursor-not-allowed active:scale-95 opacity-50"}`}
                 >
                   <span className="text-white">Create</span>
                 </Button>

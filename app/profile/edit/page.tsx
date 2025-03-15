@@ -383,7 +383,7 @@ export default function ProfilePage() {
       <div className="max-w-3xl mx-auto">
         <Button
           onClick={() => router.push("/profile")}
-          className=" mt-2 flex ml-4 bg-transparent w-fit rounded-md cursor-pointer shadow-none justify-start text-black border dark:border-card border-gray-200 hover:bg-gray-200 dark:hover:bg-card "
+          className=" mt-2 flex ml-4 bg-transparent active:scale-95 w-fit rounded-md cursor-pointer shadow-none justify-start text-black border dark:border-card border-gray-200 hover:bg-gray-200 dark:hover:bg-card "
         >
           <BackArrow className="h-6 w-6 stroke-0 fill-gray-800 dark:fill-blue-300" />
         </Button>

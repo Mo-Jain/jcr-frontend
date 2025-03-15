@@ -313,7 +313,7 @@ export function EventSummaryPopup({
                     setAction("Update");
                     setIsActionDialogOpen(true);
                   }}
-                  className="w-full"
+                  className="w-full active:scale-95"
                 >
                   Save Changes
                 </Button>
@@ -336,7 +336,7 @@ export function EventSummaryPopup({
           </DialogHeader>
           <DialogFooter>
             <Button
-              className="max-sm:w-full bg-primary hover:bg-opacity-10 shadow-lg"
+              className="max-sm:w-full active:scale-95 bg-primary hover:bg-opacity-10 shadow-lg"
               onClick={() => {
                 handleAction();
                 setIsActionDialogOpen(false);

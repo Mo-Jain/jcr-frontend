@@ -91,7 +91,7 @@ export default function UsersPage() {
           <div className="w-full flex gap-1 h-fit max-h-[60px] sm:gap-6  items-start">
             <Button
               onClick={() => router.push("/profile")}
-              className=" mt-2 flex p-3 bg-transparent shadow-none justify-start text-black border dark:border-card border-gray-200 hover:bg-gray-200 dark:hover:bg-card "
+              className=" mt-2 flex p-3 bg-transparent active:scale-95 shadow-none justify-start text-black border dark:border-card border-gray-200 hover:bg-gray-200 dark:hover:bg-card "
             >
               <BackArrow className="h-7 w-7 stroke-0 fill-gray-800 dark:fill-blue-300" />
             </Button>
@@ -106,7 +106,7 @@ export default function UsersPage() {
           </div>
           <Button
             onClick={() => setIsAddUserOpen(true)}
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 active:scale-95"
           >
             <UserPlus className="h-4 w-4" />
             Add

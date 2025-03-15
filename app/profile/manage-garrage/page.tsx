@@ -22,7 +22,7 @@ const Page = () => {
       <div className="w-full flex gap-6 h-fit items-start">
         <Button
           onClick={() => router.push("/profile")}
-          className=" sm:mt-2 flex bg-transparent shadow-none justify-start text-black border dark:border-card border-gray-200 hover:bg-gray-200 dark:hover:bg-card "
+          className=" sm:mt-2 flex bg-transparent active:scale-95 shadow-none justify-start text-black border dark:border-card border-gray-200 hover:bg-gray-200 dark:hover:bg-card "
         >
           <BackArrow className="h-7 w-7 stroke-0 fill-gray-800 dark:fill-blue-300" />
         </Button>

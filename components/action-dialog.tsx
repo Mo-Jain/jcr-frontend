@@ -34,7 +34,7 @@ const ActionDialog = ({
         </DialogHeader>
         <DialogFooter>
           <Button
-            className="max-sm:w-full bg-primary hover:bg-opacity-10 shadow-lg"
+            className="max-sm:w-full active:scale-95 bg-primary hover:bg-opacity-10 shadow-lg"
             onClick={() => {
               handleAction();
               setIsDialogOpen(false);

@@ -102,7 +102,7 @@ export default function HeaderLeft({
       <div className="hidden items-center lg:flex">
         <Button
           variant="ghost"
-          className="rounded-full p-2"
+          className="rounded-full active:scale-95 p-2"
           onClick={() => setSideBarOpen(!isSideBarOpen)}
         >
           <Menu className="size-6" />
@@ -114,7 +114,7 @@ export default function HeaderLeft({
       {/* Today Button */}
       <Button
         variant="outline"
-        className="text-xs select-none bg-transparent border-border sm:text-sm px-4 rounded-lg py-1"
+        className="text-xs active:scale-95 select-none bg-transparent border-border sm:text-sm px-4 rounded-lg py-1"
         onClick={handleTodayClick}
       >
         Today

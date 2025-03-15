@@ -31,7 +31,7 @@ export function CarCard({ name, imageUrl, plateNumber,ongoingBooking,upcomingBoo
             )}
             ></span>}
           </div>
-          <div className="relative border border-black/20 dark:border-white/10 rounded-lg z-0 flex-shrink-0 h-24 sm:h-48">
+          <div className="relative border border-black/10 dark:border-white/15 bg-black/5 dark:bg-white/10 rounded-lg z-0 flex-shrink-0 h-24 sm:h-48">
             <Image
               src={imageUrl || "/placeholder.svg"}
               alt={name}

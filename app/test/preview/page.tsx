@@ -111,7 +111,7 @@ function App() {
       <div className="absolute top-4 right-4 z-10">
         <Dialog.Root open={open} onOpenChange={setOpen}>
           <Dialog.Trigger asChild>
-            <button className="bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 transition-colors">
+            <button className="bg-blue-600  text-white p-2 rounded-full hover:bg-blue-700 transition-colors">
               <Share2 className="w-5 h-5" />
             </button>
           </Dialog.Trigger>

@@ -32,13 +32,13 @@ const Home = () => {
           </p>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
-          <Button asChild className="w-full">
+          <Button asChild className="w-full active:scale-95">
             <Link href="/bookings">
               <BackArrow className=" h-7 w-4 stroke-0 fill-black" />
               Back to Bookings
             </Link>
           </Button>
-          <Button asChild variant="outline" className="w-full">
+          <Button asChild variant="outline" className="w-full active:scale-95">
             <Link href="/">Go to HomePage</Link>
           </Button>
         </CardFooter>

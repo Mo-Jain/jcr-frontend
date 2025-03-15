@@ -279,7 +279,7 @@ export function Adduser({
             <div className="my-4">
                 {isLoading ?
                 <Button
-                    className={`w-full text-white`}>
+                    className={`w-full text-white active:scale-95`}>
                     <span>Please wait</span>
                     <div className="flex items-end py-1 h-full">
                         <span className="sr-only">Loading...</span>
@@ -291,7 +291,7 @@ export function Adduser({
                 :
                 <Button
                     onClick={handleSubmit}
-                    className={`w-full`}
+                    className={`w-full active:scale-95`}
                     >
                     <span className="text-white">Add User</span>
                 </Button>

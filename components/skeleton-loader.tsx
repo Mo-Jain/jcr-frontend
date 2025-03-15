@@ -1,4 +1,5 @@
 'use client';
+import { usePathname } from "next/navigation";
 import React, { useEffect } from "react"
 import { useMediaQuery } from "react-responsive";
 
@@ -12,6 +13,7 @@ const SkeletonPreLoader = () => {
       document.documentElement.classList.remove("no-scroll");
     };
   }, []);
+
   return (
     <div style={{ zIndex: 99 }}
     className="flex fixed top-[81px] sm:top-[58px] left-0 overflow-hidden scrollbar-hide flex-col z-0 bg-blue-200 dark:bg-black items-center w-full p-2">
@@ -69,33 +71,33 @@ const SkeletonPreLoader = () => {
             <div
                 className="grid z-0 grid-cols-2 mt-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 "
               >
-                <div className="w-full relative h-[350px] max-sm:h-[200px] rounded-sm p-3 bg-white/50 dark:bg-white/15">
-                    <div className="border relative overflow-hidden skeleton border-black/10  dark:border-white/10 rounded-lg flex-shrink-0 h-24 sm:h-44"/>
-                    <div className="flex flex-col items-center justify-center gap-2 h-1/2">
+                 <div className="w-full  rounded-lg p-2 bg-white/50 dark:bg-white/10 h-fit">
+                    <div className="border relative overflow-hidden skeleton border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 rounded-lg flex-shrink-0 h-24 sm:h-44"/>
+                    <div className="flex flex-col items-center justify-center gap-2 p-2 sm:p-4 h-fit">
                       <div className="w-[140px] h-[30px] max-sm:w-[110px] max-sm:h-[17px] bg-black/5 dark:bg-white/5 rounded-full animate-pulse"/>
                       <div className="w-[160px] h-[30px] max-sm:w-[95px] max-sm:h-[19px] bg-black/5 dark:bg-white/5 rounded-full animate-pulse"/>
                     </div>
                 </div>
 
-                <div className="w-full h-[350px] max-sm:h-[200px] rounded-sm p-3 bg-white/50 dark:bg-white/15">
-                    <div className="border relative overflow-hidden skeleton border-black/10 dark:border-white/10 rounded-lg flex-shrink-0 h-24 sm:h-44"/>
-                    <div className="flex flex-col items-center justify-center gap-2 h-1/2">
+                <div className="w-full  rounded-lg p-2 bg-white/50 dark:bg-white/10 h-fit">
+                    <div className="border relative overflow-hidden skeleton border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 rounded-lg flex-shrink-0 h-24 sm:h-44"/>
+                    <div className="flex flex-col items-center justify-center gap-2 p-2 sm:p-4 h-fit">
                       <div className="w-[140px] h-[30px] max-sm:w-[110px] max-sm:h-[17px] bg-black/5 dark:bg-white/5 rounded-full animate-pulse"/>
                       <div className="w-[160px] h-[30px] max-sm:w-[95px] max-sm:h-[19px] bg-black/5 dark:bg-white/5 rounded-full animate-pulse"/>
                     </div>
                 </div>
 
-                <div className="w-full h-[350px] max-sm:h-[200px] rounded-sm p-3 bg-white/50 dark:bg-white/15">
-                    <div className="border relative overflow-hidden skeleton border-black/10 dark:border-white/10 rounded-lg flex-shrink-0 h-24 sm:h-44"/>
-                    <div className="flex flex-col items-center justify-center gap-2 h-1/2">
+                <div className="w-full  rounded-lg p-2 bg-white/50 dark:bg-white/10 h-fit">
+                    <div className="border relative overflow-hidden skeleton border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 rounded-lg flex-shrink-0 h-24 sm:h-44"/>
+                    <div className="flex flex-col items-center justify-center gap-2 p-2 sm:p-4 h-fit">
                       <div className="w-[140px] h-[30px] max-sm:w-[110px] max-sm:h-[17px] bg-black/5 dark:bg-white/5 rounded-full animate-pulse"/>
                       <div className="w-[160px] h-[30px] max-sm:w-[95px] max-sm:h-[19px] bg-black/5 dark:bg-white/5 rounded-full animate-pulse"/>
                     </div>
                 </div>
 
-                <div className="w-full h-[350px] max-sm:h-[200px] rounded-sm p-3 bg-white/50 dark:bg-white/15">
-                    <div className="border relative overflow-hidden skeleton border-black/10 dark:border-white/10 rounded-lg flex-shrink-0 h-24 sm:h-44"/>
-                    <div className="flex flex-col items-center justify-center gap-2 h-1/2">
+                <div className="w-full  rounded-lg p-2 bg-white/50 dark:bg-white/10 h-fit">
+                    <div className="border relative overflow-hidden skeleton border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 rounded-lg flex-shrink-0 h-24 sm:h-44"/>
+                    <div className="flex flex-col items-center justify-center gap-2 p-2 sm:p-4 h-fit">
                       <div className="w-[140px] h-[30px] max-sm:w-[110px] max-sm:h-[17px] bg-black/5 dark:bg-white/5 rounded-full animate-pulse"/>
                       <div className="w-[160px] h-[30px] max-sm:w-[95px] max-sm:h-[19px] bg-black/5 dark:bg-white/5 rounded-full animate-pulse"/>
                     </div>

@@ -246,7 +246,7 @@ export default function Bookings() {
       >
         <div
           className={cn(
-            "bg-primary px-[15px]  overflow-hidden text-white dark:text-black shadow-lg  rounded-md w-12 h-12 flex items-center",
+            "bg-primary px-[15px] active:scale-95 overflow-hidden text-white dark:text-black shadow-lg  rounded-md w-12 h-12 flex items-center",
             cars && cars.length > 0 ? "cursor-pointer" : "cursor-not-allowed",
           )}
         >
@@ -294,7 +294,7 @@ export default function Bookings() {
           <div className="flex gap-2 mb-6 overflow-x-auto pb-2 scrollbar-hide">
             <Button
               variant={selectedStatus === "All" ? "default" : "outline"}
-              className={`rounded-sm ${selectedStatus === "All" ? "bg-blue-400 hover:bg-blue-500 text-white dark:text-black" : "hover:bg-blue-100 bg-transparent border-border dark:text-white dark:hover:bg-zinc-700 text-black"}`}
+              className={`rounded-sm ${selectedStatus === "All" ? "bg-blue-400 active:scale-95 hover:bg-blue-500 text-white dark:text-black" : "hover:bg-blue-100 bg-transparent border-border dark:text-white dark:hover:bg-zinc-700 text-black"}`}
               onClick={() => setSelectedStatus("All")}
             >
               All{getBookingLength("All")}
@@ -303,7 +303,7 @@ export default function Bookings() {
               variant={selectedStatus === "Upcoming" ? "default" : "outline"}
               className={
                 selectedStatus === "Upcoming"
-                  ? "bg-blue-400 hover:bg-blue-500 text-white dark:text-black rounded-sm"
+                  ? "bg-blue-400 hover:bg-blue-500 active:scale-95 text-white dark:text-black rounded-sm"
                   : "hover:bg-blue-100 rounded-sm bg-transparent border-border dark:text-white dark:hover:bg-zinc-700 text-black"
               }
               onClick={() => setSelectedStatus("Upcoming")}
@@ -314,7 +314,7 @@ export default function Bookings() {
               variant={selectedStatus === "Ongoing" ? "default" : "outline"}
               className={
                 selectedStatus === "Ongoing"
-                  ? "bg-blue-400 hover:bg-blue-500 text-white dark:text-black rounded-sm"
+                  ? "bg-blue-400 hover:bg-blue-500 active:scale-95 text-white dark:text-black rounded-sm"
                   : "hover:bg-blue-100 rounded-sm bg-transparent border-border dark:text-white dark:hover:bg-zinc-700 text-black"
               }
               onClick={() => setSelectedStatus("Ongoing")}
@@ -325,7 +325,7 @@ export default function Bookings() {
               variant={selectedStatus === "Completed" ? "default" : "outline"}
               className={
                 selectedStatus === "Completed"
-                  ? "bg-blue-400 hover:bg-blue-500 text-white dark:text-black rounded-sm"
+                  ? "bg-blue-400 hover:bg-blue-500 active:scale-95 text-white dark:text-black rounded-sm"
                   : "hover:bg-blue-100 rounded-sm bg-transparent border-border dark:text-white dark:hover:bg-zinc-700 text-black"
               }
               onClick={() => setSelectedStatus("Completed")}
@@ -335,7 +335,7 @@ export default function Bookings() {
           </div>
           {bookings.length > 0 && (
             <Button
-              className="max-sm:hidden bg-primary text-white hover:bg-opacity-10 dark:text-black shadow-lg"
+              className="max-sm:hidden bg-primary active:scale-95 text-white hover:bg-opacity-10 dark:text-black shadow-lg"
               onClick={handleAddBooking}
             >
               <PlusSquare className="h-12 w-12" />
@@ -363,7 +363,7 @@ export default function Bookings() {
             <Button
               variant="outline"
               onClick={handleDelete}
-              className="flex items-center gap-2"
+              className="flex active:scale-95 items-center gap-2"
             >
               {isDeleting ? (
                 <>

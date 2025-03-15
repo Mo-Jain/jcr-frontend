@@ -123,7 +123,7 @@ const Initiate = () => {
 
   if(pathname.includes("/test")) return null;
 
-  if(isInitiateComplete && isServerLoading) {
+  if(isInitiateComplete && isServerLoading && pathname==="/") {
     return <SkeletonPreLoader/>
   } 
   else if (isLoading && !isInitiateComplete){

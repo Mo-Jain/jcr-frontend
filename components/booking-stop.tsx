@@ -176,10 +176,10 @@ const BookingStop = ({
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsOpen(false)}>
+            <Button variant="outline" className="active:scale-95" onClick={() => setIsOpen(false)}>
               Cancel
             </Button>
-            <Button onClick={handleBookingStop} className="max-sm:my-2">
+            <Button onClick={handleBookingStop} className="max-sm:my-2 active:scale-95">
               End
             </Button>
           </DialogFooter>
