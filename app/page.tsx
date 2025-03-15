@@ -28,7 +28,7 @@ const smoothScrollTo = (targetY: number, duration: number = 600) => {
 export default function Home() {
   const isSmallScreen = useMediaQuery({ maxWidth: 640 });
   const fadeStart = 0;  // Start fading from the top
-  const fadeEnd = isSmallScreen ? 130 : 200; // Fully invisible at 300px scroll
+  const fadeEnd = isSmallScreen ? 150 : 200; // Fully invisible at 300px scroll
   const snapThreshold = (fadeEnd - fadeStart) / 2; // Halfway point
 
   const [opacity, setOpacity] = useState(1);
