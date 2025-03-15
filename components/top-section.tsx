@@ -16,7 +16,7 @@ export const TopSection = () => {
               className="sm:text-4xl text-2xl font-bold [text-shadow:_0_8px_8px_rgb(103_103_110_/_0.8)] text-gray-900 dark:text-gray-200 mb-4"
               style={{ fontFamily: "var(--font-alma), sans-serif" }}
             >
-              SEAMLESS CAR BOOKINGS
+              SEAMLESS CAR BOOKINGS TRACKING
             </h1>
             <p 
             style={{ fontFamily: "var(--font-alma), sans-serif" }}
