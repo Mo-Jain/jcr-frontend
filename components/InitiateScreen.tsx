@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import Logo1 from "@/public/logo1.svg";
+import Logo1 from "@/public/logo.svg";
 import { useServerStore } from "@/lib/store";
 
 const InitiateScreen = () => {
