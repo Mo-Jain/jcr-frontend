@@ -102,6 +102,21 @@ const SkeletonPreLoader = () => {
                       <div className="w-[160px] h-[30px] max-sm:w-[95px] max-sm:h-[19px] bg-black/5 dark:bg-white/5 rounded-full animate-pulse"/>
                     </div>
                 </div>
+                <div className="w-full  rounded-lg p-2 bg-white/50 dark:bg-white/10 h-fit">
+                    <div className="border relative overflow-hidden skeleton border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 rounded-lg flex-shrink-0 h-24 sm:h-44"/>
+                    <div className="flex flex-col items-center justify-center gap-2 p-2 sm:p-4 h-fit">
+                      <div className="w-[140px] h-[30px] max-sm:w-[110px] max-sm:h-[17px] bg-black/5 dark:bg-white/5 rounded-full animate-pulse"/>
+                      <div className="w-[160px] h-[30px] max-sm:w-[95px] max-sm:h-[19px] bg-black/5 dark:bg-white/5 rounded-full animate-pulse"/>
+                    </div>
+                </div>
+                <div className="w-full  rounded-lg p-2 bg-white/50 dark:bg-white/10 h-fit">
+                    <div className="border relative overflow-hidden skeleton border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 rounded-lg flex-shrink-0 h-24 sm:h-44"/>
+                    <div className="flex flex-col items-center justify-center gap-2 p-2 sm:p-4 h-fit">
+                      <div className="w-[140px] h-[30px] max-sm:w-[110px] max-sm:h-[17px] bg-black/5 dark:bg-white/5 rounded-full animate-pulse"/>
+                      <div className="w-[160px] h-[30px] max-sm:w-[95px] max-sm:h-[19px] bg-black/5 dark:bg-white/5 rounded-full animate-pulse"/>
+                    </div>
+                </div>
+                
             </div>
         </div>
     </div>
