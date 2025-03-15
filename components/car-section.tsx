@@ -40,11 +40,11 @@ export function CarSection() {
                 
               {cars.length > 0 && (
                 <Button
-                  className="bg-blue-600 rounded-sm text-white bg-primary hover:bg-opacity-80  shadow-lg"
+                  className="bg-blue-600 rounded-sm text-white bg-primary hover:bg-opacity-80  shadow-lg max-sm:p-2"
                   onClick={() => setIsOpen(true)}
                 >
-                  <PlusSquare className="text-20 h-12 w-12" />
-                  <span className="">Add Car</span>
+                  <PlusSquare className="text-20 max-sm:text-xs h-12 w-12" />
+                  <span className="max-sm:text-xs">Add Car</span>
                 </Button>
               )}
             </div>

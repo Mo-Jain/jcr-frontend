@@ -15,8 +15,8 @@ import SplashScreen from "./SplashScreen";
 import InitiateScreen from "./InitiateScreen";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
-import { useRouter } from "next/navigation";
-import ServerLoading from "./server-loading";
+import { usePathname, useRouter } from "next/navigation";
+import SkeletonPreLoader from "./skeleton-loader";
 
 const Initiate = () => {
   const { setName, setImageUrl,setUserId } = useUserStore();
@@ -26,9 +26,11 @@ const Initiate = () => {
   const { setWrappedEvents } = useWrappedEvent();
   const router = useRouter();
   const { isServerLoading, setIsServerLoading,isInitiateComplete } = useServerStore();
+  const pathname = usePathname();
 
   useEffect(() => {
     const fetchData = async () => {
+      if( pathname.includes("/test")) return;
       try {
         setIsLoading(true);
         setIsServerLoading(true);
@@ -116,10 +118,13 @@ const Initiate = () => {
       }
     };
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router,setCars,setName,setImageUrl,setEvents,setWrappedEvents,setIsServerLoading,setUserId]);
 
+  if(pathname.includes("/test")) return null;
+
   if(isInitiateComplete && isServerLoading) {
-    return <ServerLoading />
+    return <SkeletonPreLoader/>
   } 
   else if (isLoading && !isInitiateComplete){
     return <SplashScreen />

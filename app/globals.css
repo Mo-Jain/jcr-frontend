@@ -28,6 +28,7 @@
     --animate-up-left: upLeft 2s ease-in-out infinite;
     --animate-down-right: downRight 2s ease-in-out infinite;
     --animate-down-left: downLeft 2s ease-in-out infinite;
+    --pulse: pulse 2s ease-in-out infinite;
 
     transition:
       background-color 0.1s ease-in-out,
@@ -48,6 +49,12 @@
     }
     100%{
       transform: translate(0,0);
+    }
+  }
+
+  @keyframes pulse {
+    50% {
+      opacity: 0.5;
     }
   }
   @keyframes downRight{
@@ -137,6 +144,71 @@
   }
   .animate-down-left {
     animation: var(--animate-down-left);
+  }
+  .pulse {
+    animation: var(--pulse);
+  }
+
+  $shine-width: 200px;
+  $box-width: 400px;
+
+  .box {
+    
+    &:empty {
+     
+      
+      &:before {
+        content:'';
+        transform: skewX(-45deg);
+        background-image: linear-gradient(90deg, rgba(255, 255, 255, 0.15) 0px, rgba(255,255,255,.3) $shine-width/2, rgba(255,255,255,.15) $shine-width);
+        position: absolute;
+        background-repeat: repeat-x;
+        left: -($box-width/2 + $shine-width); 
+        width: $shine-width;
+        height: 100%;
+        animation: shine 1s infinite;
+      }
+    }
+  }
+
+  .skeleton {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .dark .skeleton {
+  }
+
+  .skeleton::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -10%;
+    width: 10px;
+    height: 100%;
+    background-image: linear-gradient(90deg, rgba(0,0,0,0) 0px, rgba(0,0,0,0.05) 50%, rgba(0,0,0,0) 100%);
+    animation: shine 1s ease-in-out infinite;
+    transform: skewX(-45deg);
+  }
+
+  .dark .skeleton::before {
+    background-image: linear-gradient(90deg, rgba(255,255,255,0) 0px, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0) 100%);
+  }
+
+  @keyframes shine {
+    0% {
+      left: -30%;
+    }
+    100% {
+      left: 120%;
+    }
+  }
+
+  html.no-scroll, body.no-scroll {
+    overflow: hidden;
+    height: 100vh;
+    position: fixed;
+    width: 100%;
   }
   
 
