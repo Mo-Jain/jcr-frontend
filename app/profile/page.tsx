@@ -118,7 +118,7 @@ export default function Profile() {
                     <div className="flex items-center">
                     <Users className="w-7 h-7 stroke-0 fill-gray-600 stroke-gray-600 dark:fill-white dark:stroke-white " />
                       <span className="mx-2 max-sm:text-sm dark:text-white select-none">
-                        Manage Users
+                        Manage Admins
                       </span>
                     </div>
                     <div className="border-t-2 border-r-2 rotate-45 sm:mr-4 mr-2 w-2 h-2 border-gray-600 dark:border-gray-400"></div>

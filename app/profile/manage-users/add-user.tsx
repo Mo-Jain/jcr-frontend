@@ -17,14 +17,14 @@ import { BASE_URL } from "@/lib/config";
 import { toast } from "@/hooks/use-toast";
 import {  uploadToDriveWTParent } from "@/app/actions/upload";
 import { Label } from "@/components/ui/label";
-import { User } from "./page";
+import { Admin } from "./page";
 import Image from "next/image";
 
 
 interface AddUserProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setUsers: React.Dispatch<React.SetStateAction<User[]>>;
+  setUsers: React.Dispatch<React.SetStateAction<Admin[]>>;
 }
 
 export function Adduser({

@@ -99,7 +99,7 @@ export function CarSection() {
               </div>
             )}
           </section>
-          <section className="py-6 my-1 bg-white bg-opacity-30 dark:bg-opacity-10 backdrop-blur-lg px-2 sm:px-4">
+          <section className="py-6 my-1 bg-white bg-opacity-30 dark:bg-opacity-10 backdrop-blur-xl px-2 sm:px-4">
             <h1
               style={{ fontFamily: "var(--font-equinox), sans-serif" }}
               className="sm:text-3xl border-b border-border pb-5 mb-3 text-xl font-black font-myfont"

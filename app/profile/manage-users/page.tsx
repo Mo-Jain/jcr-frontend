@@ -23,7 +23,7 @@ import { useUserStore } from "@/lib/store";
 import Loader from "@/components/loader";
 
 
-export interface User {
+export interface Admin {
   id: number;
   name: string;
   username: string;
@@ -35,9 +35,9 @@ export interface User {
 
 
 export default function UsersPage() {
-  const [users, setUsers] = useState<User[]>([]);
+  const [admins, setAdmins] = useState<Admin[]>([]);
   const [search, setSearch] = useState("");
-  const [selectedUser, setSelectedUser] = useState<User>();
+  const [selectedUser, setSelectedUser] = useState<Admin>();
   const [isViewUserOpen,setIsViewUserOpen] = useState(false);
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -48,12 +48,12 @@ export default function UsersPage() {
     async function fetchData() {
       setIsLoading(true);
       try {
-        const res = await axios.get(`${BASE_URL}/api/v1/users/all`, {
+        const res = await axios.get(`${BASE_URL}/api/v1/admins/all`, {
           headers: {
             authorization: `Bearer ` + localStorage.getItem("token"),
           },
         });
-        setUsers(res.data.users);
+        setAdmins(res.data.admins);
       } catch (error) {
         console.log(error);
       }
@@ -65,10 +65,10 @@ export default function UsersPage() {
 
   if(userId!=1) router.push('/');
   
-  const filteredUsers = users.filter(
-    (users) =>
-      users.name.toLowerCase().includes(search.toLowerCase()) ||
-      users.username.toLowerCase().includes(search.toLowerCase()),
+  const filteredAdmins = admins.filter(
+    (admins) =>
+      admins.name.toLowerCase().includes(search.toLowerCase()) ||
+      admins.username.toLowerCase().includes(search.toLowerCase()),
   );
 
   return (
@@ -78,12 +78,12 @@ export default function UsersPage() {
         isOpen={isViewUserOpen}
         setIsOpen={setIsViewUserOpen}
         user={selectedUser}
-        setUsers={setUsers}
+        setUsers={setAdmins}
       />}
       <Adduser
         isOpen={isAddUserOpen}
         setIsOpen={setIsAddUserOpen}
-        setUsers={setUsers}
+        setUsers={setAdmins}
       />
 
       <div className="max-w-5xl mx-auto space-y-6">
@@ -112,7 +112,7 @@ export default function UsersPage() {
             Add
           </Button>
         </div>
-        {users.length > 0 ? (
+        {admins.length > 0 ? (
           <Card className="border-border bg-muted">
             <CardContent className="p-6">
               <div className="relative mb-6">
@@ -135,24 +135,24 @@ export default function UsersPage() {
                     </TableRow>
                   </TableHeader>
                   <TableBody className="border-border">
-                    {filteredUsers.map((user, index) => (
+                    {filteredAdmins.map((admin, index) => (
                       <TableRow
                         key={index}
                         onClick={() => {
                           setSelectedUser(undefined); // Reset first
-                          setTimeout(() => setSelectedUser(user), 0);
+                          setTimeout(() => setSelectedUser(admin), 0);
                           setIsViewUserOpen(true);
                         }}
                         className="border-border cursor-pointer "
                       >
                         <TableCell>
-                            {user.name}
+                            {admin.name}
                         </TableCell>
                         <TableCell className="font-medium border-border">
-                          {user.username}
+                          {admin.username}
                         </TableCell>
                         <TableCell className="border-border">
-                          {user.password}
+                          {admin.password}
                         </TableCell>
                         
                       </TableRow>
@@ -168,7 +168,7 @@ export default function UsersPage() {
               <div className="w-full h-full py-28 gap-2 flex flex-col justify-center items-center">
                 <Users className={`sm:h-16 h-12 sm:w-16 w-12 text-gray-400 `} />
                 <p className="text-center text-lg sm:text-2xl text-gray-400 font-bold">
-                  No users added yet
+                  No admins added yet
                 </p>
               </div>
             ) : (

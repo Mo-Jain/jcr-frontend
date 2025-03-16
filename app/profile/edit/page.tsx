@@ -39,7 +39,7 @@ export default function ProfilePage() {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [newName, setNewName] = useState(user?.name);
-  const [users, setUsers] = useState<string[]>();
+  const [usernames, setUsernames] = useState<string[]>();
   const [error,setError] = useState<string>("");
 
   // This would typically come from your authentication system
@@ -47,12 +47,12 @@ export default function ProfilePage() {
     const fetchData = async () => {
       try {
         
-        const res1 = await axios.get(`${BASE_URL}/api/v1/users`, {
+        const res1 = await axios.get(`${BASE_URL}/api/v1/admins`, {
           headers: {
             "Content-type": "application/json",
           },
         });
-        setUsers(res1.data.users);
+        setUsernames(res1.data.usernames);
         const res = await axios.get(`${BASE_URL}/api/v1/me`, {
           headers: {
             "Content-type": "application/json",
@@ -243,7 +243,7 @@ export default function ProfilePage() {
     // Here you would typically update the username in your backend
     try {
       const newUsername = username.trim();
-      if(users && users.includes(newUsername)){
+      if(usernames && usernames.includes(newUsername)){
         setError(`Username ${newUsername} is already taken`);
         return;
       }

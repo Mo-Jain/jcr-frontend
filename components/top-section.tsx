@@ -7,7 +7,7 @@ export const TopSection = () => {
   const router = useRouter();
   return (
     <div>
-      <section className="dark:bg-black/50 max-h-[300px] my-0 relative overflow-hidden py-12 sm:py-20">
+      <section className="dark:bg-black/20  my-0 relative overflow-hidden py-12 sm:py-16">
         {/* Background Components */}
           
         <div className="container mx-auto px-4 h-fit ">
