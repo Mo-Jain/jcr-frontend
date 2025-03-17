@@ -24,7 +24,7 @@ const ThemeBg = () => {
       <div className="w-48 h-48 relative scale-[5]">
         <div className="relative w-full h-full">
           <Moonlight_small className="w-1/3 h-1/3 scale-0 dark:scale-[1] transition-all duration-1000 ease-in-out absolute top-[34%] left-[34%] opacity-100" />
-          <Image src={Moon} alt="moon" className="w-[10%] h-[10%] absolute top-[45%] left-[45%] opacity-80" />
+          <Image src={Moon} alt="moon" className="w-[8%] h-[8%] sm:w-[8%] sm:h-[8%] absolute top-[46%] left-[46%] opacity-80" />
         </div>
       </div>
     </div>
