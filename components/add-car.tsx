@@ -9,7 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Upload, X } from "lucide-react";
+import { Fuel, Upload, X } from "lucide-react";
 import CarFrontIcon from "@/public/car-front.svg";
 import Color from "@/public/color.svg";
 import Price from "@/public/price-tag.svg";
@@ -23,6 +23,7 @@ import { toast } from "@/hooks/use-toast";
 import CarNumberPlateInput from "./car-number-input";
 import { createFolder } from "@/app/actions/folder";
 import { uploadToDrive } from "@/app/actions/upload";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 
 interface AddCarDialogProps {
   isOpen: boolean;
@@ -45,8 +46,8 @@ export function AddCarDialog({ isOpen, setIsOpen }: AddCarDialogProps) {
   const { cars, setCars } = useCarStore();
   const [errors, setErrors] = useState<FormErrors>({});
   const [isLoading, setIsLoading] = useState(false);
-  const [seats, setSeats] = useState<string>("4");
-
+  const [seats, setSeats] = useState<string>("5");
+  const [fuel,setFuel] = useState<string>("petrol");
   const validateForm = () => {
     const newErrors: FormErrors = {};
     if (price === "") newErrors.price = "Price can't be empty";
@@ -56,6 +57,8 @@ export function AddCarDialog({ isOpen, setIsOpen }: AddCarDialogProps) {
     if (!color) newErrors.color = "This field is mandatory";
     if (!carNumber) newErrors.carNumber = "This field is mandatory";
     if (!imageFile) newErrors.imageFile = "No Image selected";
+    if (!seats) newErrors.seats = "No.of seats can't be empty"; 
+    if (!fuel) newErrors.fuel = "Fuel can't be empty";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -113,6 +116,7 @@ export function AddCarDialog({ isOpen, setIsOpen }: AddCarDialogProps) {
         imageUrl: resImage.url ? resImage.url : "",
         carFolderId: resImage.folderId,
         seats : parseInt(seats),
+        fuel
       };
       const res = await axios.post(`${BASE_URL}/api/v1/car`, body, {
         headers: {
@@ -325,60 +329,15 @@ export function AddCarDialog({ isOpen, setIsOpen }: AddCarDialogProps) {
               </div>
             </div>
 
-            <div className="flex items-center gap-0 w-full">
+            <div className="flex items-center gap-2 w-full">
               <div className="space-y-4">
-                <div className="flex items-center gap-4 sm:gap-6">
-                  <Price className="w-7 h-7 stroke-[6px] dark:stroke-white dark:fill-white  stroke-black fill-black" />
-                  <Label htmlFor="price" className="w-1/3 max-sm:text-xs">
-                    24 hr price
-                  </Label>
-                  <Input
-                    type="text"
-                    id="price"
-                    placeholder="0"
-                    className="w-1/3 border-black max-sm:text-xs dark:border-zinc-700 placeholder:text-zinc-700 dark:placeholder:text-gray-400  focus:border-blue-400 focus-visible:ring-blue-400 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                    value={price}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      if (/^\d*$/.test(value)) {
-                        setPrice(value);
-                        setErrors((prev) => ({ ...prev, price: "" }));
-                      }
-                    }}
-                  />
-                  {errors.price && (
-                    <p className="text-red-500 text-sm mt-1">{errors.price}</p>
-                  )}
-                </div>
-
-                <div className="flex items-center gap-4 sm:gap-6">
-                  <Speedometer className="w-7 h-7 dark:stroke-white dark:fill-white  stroke-black fill-black" />
-                  <Label htmlFor="totalAmount" className="w-1/3 max-sm:text-xs">
-                    Car Mileage
-                  </Label>
-                  <Input
-                    type="number"
-                    id="mileage"
-                    placeholder="0"
-                    value={mileage}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      setMileage(value);
-                      setErrors((prev) => ({ ...prev, mileage: "" }));
-                    }}
-                    className="w-1/3 max-sm:text-xs placeholder:text-zinc-700 dark:placeholder:text-gray-400  border-black dark:border-zinc-700 focus:border-blue-400 focus-visible:ring-blue-400 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none "
-                  />
-                  {errors.mileage && (
-                    <p className="text-red-500 text-sm mt-1">
-                      {errors.mileage}
-                    </p>
-                  )}
-                </div>
-                <div className="flex items-center gap-4 sm:gap-6">
-                  <Seats className="w-7 h-7 dark:stroke-white dark:fill-white  stroke-black fill-black" />
-                  <Label htmlFor="totalAmount" className="w-1/3 max-sm:text-xs">
-                    No.of seats
-                  </Label>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1">
+                    <Seats className="w-7 h-7 dark:stroke-white dark:fill-white mr-4  stroke-black fill-black" />
+                    <Label htmlFor="totalAmount" className=" max-sm:text-xs">
+                      No.of seats
+                    </Label>
+                  </div>
                   <Input
                     type="number"
                     id="mileage"
@@ -390,13 +349,56 @@ export function AddCarDialog({ isOpen, setIsOpen }: AddCarDialogProps) {
                     }}
                     className="w-1/3 max-sm:text-xs placeholder:text-zinc-700 dark:placeholder:text-gray-400  border-black dark:border-zinc-700 focus:border-blue-400 focus-visible:ring-blue-400 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none "
                   />
-                  {errors.mileage && (
+                  {errors.seats && (
                     <p className="text-red-500 text-sm mt-1">
-                      {errors.mileage}
+                      {errors.seats}
+                    </p>
+                  )}
+                </div>
+                <div className="flex items-center justify-between">
+                  <Fuel className="w-7 h-7 text-black dark:text-white mr-4" />
+                  <Label htmlFor="totalAmount" className="w-1/3 max-sm:text-xs">
+                    Fuel
+                  </Label>
+                  <Select
+                    value={fuel} // Ensures placeholder shows when carId is 0 or undefined
+                    onValueChange={(value) => {
+                      setFuel(value)
+                      setErrors((prev) => ({ ...prev, car: "" }));
+                    }}
+                  >
+                    <SelectTrigger
+                      id="car"
+                      className="w-1/2 text-xs sm:text-sm border-black dark:border-zinc-700 focus:border-blue-400 focus-visible:ring-blue-400 max-sm:max-w-[190px] focus-visible:ring-blue-400 focus:outline-none"
+                    >
+                      <SelectValue placeholder="Select fuel" />
+                    </SelectTrigger>
+                    <SelectContent
+                      className="bg-background border-border"
+                      aria-modal={false}
+                    >
+                      <SelectItem
+                        className="focus:bg-blue-300 dark:focus:bg-blue-900 cursor-pointer"
+                        value={"petrol"}
+                      >
+                        Petrol
+                      </SelectItem>
+                      <SelectItem
+                        className="focus:bg-blue-300 dark:focus:bg-blue-900 cursor-pointer"
+                        value={"diesel"}
+                      >
+                        Diesel
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {errors.fuel && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.fuel}
                     </p>
                   )}
                 </div>
               </div>
+              
               <div className="w-[140px] h-[100px] border border-black dark:border-zinc-700 relative">
                 {selectedImage && (
                   <>
@@ -418,6 +420,48 @@ export function AddCarDialog({ isOpen, setIsOpen }: AddCarDialogProps) {
                 )}
               </div>
             </div>
+            <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-4 sm:gap-6">
+                  <Price className="w-7 h-7 stroke-[6px] dark:stroke-white dark:fill-white  stroke-black fill-black" />
+                  <Input
+                    type="text"
+                    id="price"
+                    placeholder="Enter 24 hr price"
+                    className="w-full border-black max-sm:text-xs dark:border-zinc-700 placeholder:text-zinc-700 dark:placeholder:text-gray-400  focus:border-blue-400 focus-visible:ring-blue-400 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    value={price}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (/^\d*$/.test(value)) {
+                        setPrice(value);
+                        setErrors((prev) => ({ ...prev, price: "" }));
+                      }
+                    }}
+                  />
+                  {errors.price && (
+                    <p className="text-red-500 text-sm mt-1">{errors.price}</p>
+                  )}
+                </div>
+
+                <div className="flex items-center gap-4 sm:gap-6">
+                  <Input
+                    type="number"
+                    id="mileage"
+                    placeholder="Enter mileage"
+                    value={mileage}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setMileage(value);
+                      setErrors((prev) => ({ ...prev, mileage: "" }));
+                    }}
+                    className="w-full max-sm:text-xs placeholder:text-zinc-700 dark:placeholder:text-gray-400  border-black dark:border-zinc-700 focus:border-blue-400 focus-visible:ring-blue-400 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none "
+                  />
+                  {errors.mileage && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.mileage}
+                    </p>
+                  )}
+                </div>
+              </div>
             <div className="flex gap-1 items-center">
               <Button
                 onClick={handleSubmit}

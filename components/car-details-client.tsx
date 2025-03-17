@@ -24,6 +24,8 @@ import { useCarStore, useUserStore } from "@/lib/store";
 import { toast } from "@/hooks/use-toast";
 import { uploadToDrive } from "@/app/actions/upload";
 import CarIcon from "@/public/car-icon.svg";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+
 
 interface Car {
   id: number;
@@ -37,6 +39,7 @@ interface Car {
   totalEarnings: number;
   carFolderId: string;
   seats: number;
+  fuel: string;
   bookings: {
     id: number;
     start: string;
@@ -75,6 +78,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
   const [isAdmin,setIsAdmin] = useState(false);
   const [seats, setSeats] = useState<string>(car?.seats.toString() || "");
   const {userId} = useUserStore();
+  const [fuel,setFuel] = useState<string>(car?.fuel || "");
 
   useEffect(() => {
     if (car) {
@@ -83,6 +87,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
       setMileage(car.mileage || 0);
       setImageUrl(car.imageUrl || "");
       setSeats(car.seats.toString());
+      setFuel(car.fuel);
     }
   }, [car]);
 
@@ -186,6 +191,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
         price: price,
         mileage: mileage,
         seats: parseInt(seats),
+        fuel
       };
 
       // Only include imageUrl if a new image was uploaded
@@ -557,6 +563,46 @@ export function CarDetailsClient({ carId }: { carId: number }) {
                     </div>
                     <p className="text-sm text-blue-500 mb-1">Plate Number</p>
                     <span className="font-medium">{car.plateNumber}</span>
+                    <div>
+                      <p className="text-sm text-blue-500 mb-1">Fuel</p>
+                      {!isEditable || !fuel || !isAdmin && userId !== 1 ? 
+                        <>
+                        {fuel &&
+                        <span className="font-medium">{fuel[0].toUpperCase() + fuel.slice(1)}</span>} 
+                        </>
+                      :
+                      <Select
+                        value={fuel} // Ensures placeholder shows when carId is 0 or undefined
+                        onValueChange={(value) => {
+                          setFuel(value)
+                        }}
+                      >
+                        <SelectTrigger
+                          id="car"
+                          className="w-1/2 text-xs sm:text-sm border-black dark:border-zinc-700 focus:border-blue-400 focus-visible:ring-blue-400 max-sm:max-w-[190px] focus-visible:ring-blue-400 focus:outline-none"
+                        >
+                          <SelectValue placeholder="Select fuel" />
+                        </SelectTrigger>
+                        <SelectContent
+                          className="bg-background border-border"
+                          aria-modal={false}
+                        >
+                          <SelectItem
+                            className="focus:bg-blue-300 dark:focus:bg-blue-900 cursor-pointer"
+                            value={"petrol"}
+                          >
+                            Petrol
+                          </SelectItem>
+                          <SelectItem
+                            className="focus:bg-blue-300 dark:focus:bg-blue-900 cursor-pointer"
+                            value={"diesel"}
+                          >
+                            Diesel
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                      }
+                    </div>
                   </div>
                 </div>
               </section>
