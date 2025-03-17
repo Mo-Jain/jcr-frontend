@@ -2,18 +2,14 @@
 import { Suspense } from "react";
 import { CarDetailsClient } from "@/components/car-details-client";
 import LoadingScreen from "@/components/loading-screen";
-import CarNotFound from "@/components/car-not-found";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 export default function Page() {
   const Car = useParams();
+  const router = useRouter();
 
   if (!Car) {
-    return (
-      <div>
-        <CarNotFound />
-      </div>
-    );
+    router.push("/car-not-found");
   }
 
   return (
