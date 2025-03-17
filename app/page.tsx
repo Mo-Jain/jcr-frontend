@@ -44,6 +44,7 @@ export default function Home() {
       setOpacity(newOpacity);
 
       // Clear any previous timeout to prevent unnecessary snapping
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       if (timeout) clearTimeout(timeout);
       timeout = setTimeout(() => {
         if (scrollY > fadeStart + snapThreshold && scrollY < fadeEnd) {

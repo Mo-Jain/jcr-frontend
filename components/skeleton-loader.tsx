@@ -1,5 +1,4 @@
 'use client';
-import { usePathname } from "next/navigation";
 import React, { useEffect } from "react"
 import { useMediaQuery } from "react-responsive";
 

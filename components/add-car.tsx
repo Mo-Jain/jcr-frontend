@@ -13,7 +13,6 @@ import { Fuel, Upload, X } from "lucide-react";
 import CarFrontIcon from "@/public/car-front.svg";
 import Color from "@/public/color.svg";
 import Price from "@/public/price-tag.svg";
-import Speedometer from "@/public/performance.svg";
 import Seats from "@/public/seats.svg";
 import { BASE_URL } from "@/lib/config";
 import axios from "axios";
