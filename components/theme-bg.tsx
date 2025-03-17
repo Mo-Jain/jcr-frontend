@@ -16,7 +16,7 @@ const ThemeBg = () => {
   if (!mounted) return null;
 
   return (
-    <div className="fixed inset-10 left-0 z-0 pointer-events-none opacity-80">
+    <div className="fixed inset-10 left-0 -z-10 pointer-events-none opacity-80">
     <div className="-mt-7 -ml-20 max-sm:-ml-24 dark:mt-48  transition-mt dark:opacity-0 duration-500">
       <SunImage />
     </div>
