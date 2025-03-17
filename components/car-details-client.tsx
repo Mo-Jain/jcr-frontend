@@ -20,7 +20,7 @@ import axios from "axios";
 import { BASE_URL } from "@/lib/config";
 import LoadingScreen from "./loading-screen";
 import Booking from "@/public/online-booking.svg";
-import { useCarStore } from "@/lib/store";
+import { useCarStore, useUserStore } from "@/lib/store";
 import { toast } from "@/hooks/use-toast";
 import { uploadToDrive } from "@/app/actions/upload";
 import CarIcon from "@/public/car-icon.svg";
@@ -36,6 +36,7 @@ interface Car {
   price: number;
   totalEarnings: number;
   carFolderId: string;
+  seats: number;
   bookings: {
     id: number;
     start: string;
@@ -72,6 +73,8 @@ export function CarDetailsClient({ carId }: { carId: number }) {
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isAdmin,setIsAdmin] = useState(false);
+  const [seats, setSeats] = useState<string>(car?.seats.toString() || "");
+  const {userId} = useUserStore();
 
   useEffect(() => {
     if (car) {
@@ -79,9 +82,10 @@ export function CarDetailsClient({ carId }: { carId: number }) {
       setPrice(car.price || 0);
       setMileage(car.mileage || 0);
       setImageUrl(car.imageUrl || "");
+      setSeats(car.seats.toString());
     }
-     
   }, [car]);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -166,7 +170,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
   };
 
   const handleUpdate = async () => {
-    if (!isAdmin) return;
+    if (!isAdmin && userId !== 1) return;
     setIsLoading(true);
     let imageUrl: string | undefined = undefined;
 
@@ -181,6 +185,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
         color: color,
         price: price,
         mileage: mileage,
+        seats: parseInt(seats),
       };
 
       // Only include imageUrl if a new image was uploaded
@@ -406,7 +411,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
           <p className="text-xs text-center">Car ID: {car?.id}</p>
         </div>
         
-        {isAdmin ? (
+        {(isAdmin || userId === 1 )? (
         <div
           className="mr-4 cursor-pointer hover:bg-gray-100 dark:hover:bg-muted p-2 rounded-sm"
           onClick={() => {
@@ -451,7 +456,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
               )}
             </div>
             <div className="flex justify-center w-full">
-              {isAdmin &&
+              { (userId === 1 || isAdmin) &&
               <>
                 {!isEditable ? (
                   <Button
@@ -509,6 +514,20 @@ export function CarDetailsClient({ carId }: { carId: number }) {
                     <span className="font-medium">{car.brand}</span>
                     <p className="text-sm text-blue-500 mb-1">Model</p>
                     <span className="font-medium">{car.model}</span>
+                    <div>
+                    <p className="text-sm text-blue-500 mb-1">Seats</p>
+                    {!isEditable ?
+                      <span className="font-medium">{seats}</span>
+                    :
+                    <Input
+                          type="number"
+                          id="seats"
+                          value={seats}
+                          onChange={(e) => setSeats(e.target.value)}
+                          className="w-[80px] border-0 p-0 px-1 m-0 bg-gray-200 dark:bg-zinc-800 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400 "
+                        />
+                    }
+                    </div>
                   </div>
                   <div className="space-y-3">
                     <div>
@@ -551,7 +570,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
                   <div className="space-y-3">
                     <div>
                       <p className="text-sm text-blue-500 mb-1">24hr Price</p>
-                      {!isEditable || !price || !isAdmin  ? (
+                      {!isEditable || !price || !isAdmin && userId !== 1 ? (
                         <span className="font-medium flex items-center text-sm">
                           <IndianRupee className="w-4 h-4" /> {car.price}
                         </span>
@@ -561,7 +580,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
                           id="name"
                           value={price}
                           onChange={(e) => setPrice(Number(e.target.value))}
-                          className="w-[120px] sm:w-[170px] border-0 p-0 px-1 bg-gray-200 dark:bg-gray-800 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400 "
+                          className="w-[120px] sm:w-[170px] border-0 p-0 px-1 bg-gray-200 dark:bg-zinc-800 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400 "
                         />
                       )}
                     </div>
@@ -578,7 +597,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
                     )}
                     <div>
                       <p className="text-sm text-blue-500 mb-1">Mileage</p>
-                      {!isEditable || !mileage || !isAdmin ? (
+                      {!isEditable || !mileage || !isAdmin && userId !== 1  ? (
                         <span className="font-medium">{car.mileage} km/ltr</span>
                       ) : (
                         <Input
@@ -586,7 +605,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
                           id="name"
                           value={mileage}
                           onChange={(e) => setMileage(Number(e.target.value))}
-                          className="w-[120px] sm:w-[170px] border-0 p-0 px-1 bg-gray-200 dark:bg-gray-800 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400 "
+                          className="w-[120px] sm:w-[170px] border-0 p-0 px-1 bg-gray-200 dark:bg-zinc-800 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400 "
                         />
                       )}
                     </div>

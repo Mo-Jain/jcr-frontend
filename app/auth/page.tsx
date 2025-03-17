@@ -23,7 +23,7 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const { name,setName } = useUserStore();
+  const { name,setName,setUserId } = useUserStore();
   const router = useRouter();
   const {setCars} = useCarStore();
   const [isLoading, setIsLoading] = useState(false);
@@ -52,6 +52,7 @@ export default function LoginPage() {
         },
       );
       localStorage.setItem("token", res.data.token);
+      setUserId(res.data.id);
       const res1 = await axios.get(`${BASE_URL}/api/v1/car/all`, {
         headers: {
           authorization: `Bearer ` + localStorage.getItem("token"),

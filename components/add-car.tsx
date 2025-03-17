@@ -14,6 +14,7 @@ import CarFrontIcon from "@/public/car-front.svg";
 import Color from "@/public/color.svg";
 import Price from "@/public/price-tag.svg";
 import Speedometer from "@/public/performance.svg";
+import Seats from "@/public/seats.svg";
 import { BASE_URL } from "@/lib/config";
 import axios from "axios";
 import { useCarStore } from "@/lib/store";
@@ -33,8 +34,8 @@ interface FormErrors {
 }
 
 export function AddCarDialog({ isOpen, setIsOpen }: AddCarDialogProps) {
-  const [price, setPrice] = useState<number>(0);
-  const [mileage, setMileage] = useState<number>(0);
+  const [price, setPrice] = useState<string>("");
+  const [mileage, setMileage] = useState<string>("");
   const [carBrand, setCarBrand] = useState<string>("");
   const [carModel, setCarModel] = useState<string>("");
   const [color, setColor] = useState<string>("#0000FF");
@@ -44,11 +45,12 @@ export function AddCarDialog({ isOpen, setIsOpen }: AddCarDialogProps) {
   const { cars, setCars } = useCarStore();
   const [errors, setErrors] = useState<FormErrors>({});
   const [isLoading, setIsLoading] = useState(false);
+  const [seats, setSeats] = useState<string>("4");
 
   const validateForm = () => {
     const newErrors: FormErrors = {};
-    if (price === 0) newErrors.price = "Price can't be zero";
-    if (mileage === 0) newErrors.mileage = "Mileage can't be zero";
+    if (price === "") newErrors.price = "Price can't be empty";
+    if (mileage === "") newErrors.mileage = "Mileage can't be empty";
     if (!carBrand) newErrors.carBrand = "This field is mandatory";
     if (!carModel) newErrors.carModel = "This field is mandatory";
     if (!color) newErrors.color = "This field is mandatory";
@@ -106,10 +108,11 @@ export function AddCarDialog({ isOpen, setIsOpen }: AddCarDialogProps) {
         model: carModel,
         plateNumber: carNumber,
         color: color,
-        price: price,
-        mileage: mileage,
+        price: parseInt(price),
+        mileage: parseInt(mileage),
         imageUrl: resImage.url ? resImage.url : "",
         carFolderId: resImage.folderId,
+        seats : parseInt(seats),
       };
       const res = await axios.post(`${BASE_URL}/api/v1/car`, body, {
         headers: {
@@ -124,7 +127,7 @@ export function AddCarDialog({ isOpen, setIsOpen }: AddCarDialogProps) {
         plateNumber: carNumber,
         imageUrl: selectedImage ? selectedImage : "",
         colorOfBooking: color,
-        price,
+        price: parseInt(price),
         upcomingBooking: 0,
         ongoingBooking: 0,
       };
@@ -133,8 +136,8 @@ export function AddCarDialog({ isOpen, setIsOpen }: AddCarDialogProps) {
       setCarModel("");
       setColor("#0000FF");
       setCarNumber("");
-      setPrice(0);
-      setMileage(0);
+      setPrice("");
+      setMileage("");
       setSelectedImage(null);
       setImageFile(null);
       setIsLoading(false);
@@ -330,14 +333,17 @@ export function AddCarDialog({ isOpen, setIsOpen }: AddCarDialogProps) {
                     24 hr price
                   </Label>
                   <Input
-                    type="number"
+                    type="text"
                     id="price"
                     placeholder="0"
                     className="w-1/3 border-black max-sm:text-xs dark:border-zinc-700 placeholder:text-zinc-700 dark:placeholder:text-gray-400  focus:border-blue-400 focus-visible:ring-blue-400 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                    value={price || 0}
+                    value={price}
                     onChange={(e) => {
-                      setPrice(parseInt(e.target.value));
-                      setErrors((prev) => ({ ...prev, price: "" }));
+                      const value = e.target.value;
+                      if (/^\d*$/.test(value)) {
+                        setPrice(value);
+                        setErrors((prev) => ({ ...prev, price: "" }));
+                      }
                     }}
                   />
                   {errors.price && (
@@ -352,11 +358,35 @@ export function AddCarDialog({ isOpen, setIsOpen }: AddCarDialogProps) {
                   </Label>
                   <Input
                     type="number"
-                    id="totalAmount"
-                    value={mileage || 0}
+                    id="mileage"
+                    placeholder="0"
+                    value={mileage}
                     onChange={(e) => {
-                      setMileage(parseInt(e.target.value));
+                      const value = e.target.value;
+                      setMileage(value);
                       setErrors((prev) => ({ ...prev, mileage: "" }));
+                    }}
+                    className="w-1/3 max-sm:text-xs placeholder:text-zinc-700 dark:placeholder:text-gray-400  border-black dark:border-zinc-700 focus:border-blue-400 focus-visible:ring-blue-400 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none "
+                  />
+                  {errors.mileage && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.mileage}
+                    </p>
+                  )}
+                </div>
+                <div className="flex items-center gap-4 sm:gap-6">
+                  <Seats className="w-7 h-7 dark:stroke-white dark:fill-white  stroke-black fill-black" />
+                  <Label htmlFor="totalAmount" className="w-1/3 max-sm:text-xs">
+                    No.of seats
+                  </Label>
+                  <Input
+                    type="number"
+                    id="mileage"
+                    value={seats}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setSeats(value);
+                      setErrors((prev) => ({ ...prev, seats: "" }));
                     }}
                     className="w-1/3 max-sm:text-xs placeholder:text-zinc-700 dark:placeholder:text-gray-400  border-black dark:border-zinc-700 focus:border-blue-400 focus-visible:ring-blue-400 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none "
                   />

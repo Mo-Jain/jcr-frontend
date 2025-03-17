@@ -83,7 +83,7 @@ export function AddBookingDialog({
   const [startTime, setStartTime] = useState<string>("00:00");
   const [endTime, setEndTime] = useState<string>("00:00");
   const [carId, setCarId] = useState<number>(cars[0] ? cars[0].id : 0);
-  const [price, setPrice] = useState<number>(0);
+  const [price, setPrice] = useState<string>("");
   const [totalAmount, setTotalAmount] = useState<number>(0);
   const [name, setName] = useState<string>("");
   const [contact, setContact] = useState<string>("");
@@ -93,7 +93,7 @@ export function AddBookingDialog({
   const [customers, setCustomers] = useState<Customer[]>();
 
   useEffect(() => {
-    const cost = calculateCost(startDate, endDate, startTime, endTime, price);
+    const cost = calculateCost(startDate, endDate, startTime, endTime, parseInt(price));
     setTotalAmount(cost);
   }, [price, startDate, endDate, startTime, endTime]);
 
@@ -101,7 +101,7 @@ export function AddBookingDialog({
     if (carId === 0) return;
     const currCar = cars.find((car) => car.id === carId);
     if (currCar) {
-      setPrice(currCar.price);
+      setPrice(currCar.price.toString());
     }
   }, [carId, cars]);
 
@@ -122,7 +122,7 @@ export function AddBookingDialog({
 
   const validateForm = () => {
     const newErrors: FormErrors = {};
-    if (price === 0) newErrors.price = "Price can't be zero";
+    if (price === "") newErrors.price = "Price can't be empty";
     if (totalAmount === 0) newErrors.totalAmount = "Total Amount can't be zero";
     if (!startDate) newErrors.startDate = "This field is mandatory";
     if (!endDate) newErrors.endDate = "This field is mandatory";
@@ -202,7 +202,7 @@ export function AddBookingDialog({
           carId,
           customerName: name,
           customerContact: contact,
-          dailyRentalPrice: price,
+          dailyRentalPrice: parseInt(price),
           totalAmount: totalAmount,
           customerId: customerId,
         },
@@ -436,7 +436,7 @@ export function AddBookingDialog({
                     value={contact}
                     type="number"
                     id="contact"
-                    max={9999999999}
+                    maxLength={9999999999}
                     onChange={(e) => {
                       if (e.target.value.length <= 10) {
                         setContact(e.target.value);
@@ -463,13 +463,17 @@ export function AddBookingDialog({
                 24 hr price
               </Label>
               <Input
-                type="number"
+                type="text"
                 id="price"
                 className="w-2/3 border-input max-sm:text-xs  focus:border-blue-400 focus-visible:ring-blue-400 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                value={price || 0}
+                value={price}
+                placeholder="0"
                 onChange={(e) => {
-                  setPrice(Number(e.target.value));
-                  setErrors((prev) => ({ ...prev, car: "" }));
+                  const value = e.target.value;
+                  if (/^\d*$/.test(value)) {
+                    setPrice(value);
+                    setErrors((prev) => ({ ...prev, car: "" }));
+                  }
                 }}
               />
               {errors.price && (
