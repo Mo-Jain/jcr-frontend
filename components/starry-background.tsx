@@ -26,22 +26,22 @@ const StarryBackground: React.FC = () => {
           <div 
           className="absolute inset-0 -z-[99999] overflow-hidden pointer-events-none">
             {stars.map((star) => (
-              <div
-                key={star}
-                className={`absolute -z-[99999] rounded-full transition-opacity duration-1000 ${
-                  isDarkMode ? "opacity-100" : "opacity-0"
-                }`}
-                style={{
-                  width: `${Math.random() * 2 + 1}px`,
-                  height: `${Math.random() * 2 + 1}px`,
-                  top: `${Math.random() * 100}%`,
-                  left: `${Math.random() * 100}%`,
-                  backgroundColor: "white",
-                  boxShadow: "0 0 3px rgba(255, 255, 255, 0.5)",
-                  animation: `twinkle ${Math.random() * 5 + 5}s infinite`,
-                }}
-              />
-            ))}
+           <div
+             key={star}
+             className={`absolute -z-50 rounded-full transition-opacity twinkle duration-1000 ${
+               isDarkMode ? "opacity-100" : "opacity-0"
+             }`}
+             style={{
+               width: `${Math.random() * 2 + 1}px`,
+               height: `${Math.random() * 2 + 1}px`,
+               top: `${Math.random() * 100}%`,
+               left: `${Math.random() * 100}%`,
+               backgroundColor: "white",
+               boxShadow: "0 0 3px rgba(255, 255, 255, 0.5)",
+               animationDelay: `${Math.random() * 5 + 5}s`,
+             }}
+           />
+         ))}
         </div>
         {/* <Image src={Stars} alt="stars"  className="absolute inset-0 object-cover opacity-0 dark:opacity-100 transition-opacity duration-1000 ease-in-out z-20 w-full h-full" /> */}
       </div>

@@ -196,7 +196,7 @@
   }
 
   .twinkle {
-    animation: twinkle 3s infinite alternate ease-in-out;
+    animation: twinkle 4s infinite alternate ease-in-out;
   }
 
   html.no-scroll, body.no-scroll {
