@@ -50,7 +50,9 @@ export function CarCard({ name, imageUrl, plateNumber,ongoingBooking,upcomingBoo
                   <div className="flex justify-center sm:-mt-3 items-center gap-1 p-1 sm:p-1 border-[3.5px] w-fit scale-[0.40] sm:scale-[0.50] lg:scale-[0.60]  border-gray-400 rounded-sm max-sm:scaled-container ">
                     <div className="flex flex-col items-center justify-between">
                       <Ashoka className="h-2 w-2 stroke-blue-300 stroke-[7px] fill-blue-300" />
-                      <span className="h-full text-[0.001px] text-blue-300">
+                      <span 
+                      style={{fontFamily: "sans-serif"}}
+                      className="h-full text-[0.001px] text-blue-300">
                         IND
                       </span>
                     </div>

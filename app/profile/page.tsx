@@ -72,10 +72,10 @@ export default function Profile() {
         </div>
         <div>
           {name !== "" && (
-            <Card className="overflow-hidden bg-muted dark:border-border hover:shadow-md transition-shadow my-2">
+            <Card className="overflow-hidden bg-muted dark:border-border hover:shadow-md transition-shadow my-2 mt-4">
               <CardContent className="p-1 text-gray-600 dark:text-gray-400">
                 <div
-                  className="flex items-center border-border border-b justify-between p-2 cursor-pointer rounded-md dark:hover:bg-zinc-700 hover:bg-gray-200 text-gray-600 dark:text-white"
+                  className="flex items-center border-border border-b justify-between p-2 py-4 cursor-pointer rounded-md dark:hover:bg-zinc-700 hover:bg-gray-200 text-gray-600 dark:text-white"
                   onClick={() => router.push("/profile/manage-garrage")}
                 >
                   <div className="flex items-center">
@@ -85,7 +85,7 @@ export default function Profile() {
                   <div className="border-t-2 border-r-2 rotate-45 sm:mr-4 mr-2 w-2 h-2 border-gray-600 dark:border-gray-400"></div>
                 </div>
                 <div
-                  className="flex items-center border-border border-b justify-between p-2 cursor-pointer rounded-md dark:hover:bg-zinc-700 hover:bg-gray-200"
+                  className="flex items-center border-border border-b justify-between p-2 py-4 cursor-pointer rounded-md dark:hover:bg-zinc-700 hover:bg-gray-200"
                   onClick={() => router.push("/profile/edit")}
                 >
                   <div className="flex items-center">
@@ -97,7 +97,7 @@ export default function Profile() {
                   <div className="border-t-2 border-r-2 rotate-45 sm:mr-4 mr-2 w-2 h-2 border-gray-600 dark:border-gray-400"></div>
                 </div>
                 <div
-                  className={cn("flex items-center justify-between p-2 cursor-pointer rounded-md dark:hover:bg-zinc-700 hover:bg-gray-200",
+                  className={cn("flex items-center justify-between p-2 py-4 cursor-pointer rounded-md dark:hover:bg-zinc-700 hover:bg-gray-200",
                     userId == 1 ? "border-b border-border" : ""
                   )}
                   onClick={() => router.push("/profile/manage-customer")}
@@ -112,7 +112,7 @@ export default function Profile() {
                 </div>
                 {userId == 1 &&
                   <div
-                    className="flex items-center justify-between p-2 cursor-pointer rounded-md dark:hover:bg-zinc-700 hover:bg-gray-200"
+                    className="flex items-center justify-between p-2 py-4 cursor-pointer rounded-md dark:hover:bg-zinc-700 hover:bg-gray-200"
                     onClick={() => router.push("/profile/manage-users")}
                   >
                     <div className="flex items-center">

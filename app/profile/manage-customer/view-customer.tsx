@@ -467,8 +467,11 @@ export function CustomerPopup({
                       <span className="text-black dark:text-white">
                         Uploading Documents
                       </span>
-                      <div className="flex items-end px-1 pb-2 h-full">
-                        <Loader/>
+                      <div className="flex items-end py-1 h-full">
+                        <span className="sr-only">Loading...</span>
+                        <div className="h-1 w-1 bg-white mx-[2px] border-border rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                        <div className="h-1 w-1 bg-white mx-[2px] border-border rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                        <div className="h-1 w-1 bg-white mx-[2px] border-border rounded-full animate-bounce"></div>
                       </div>
                     </div>
                   </div>

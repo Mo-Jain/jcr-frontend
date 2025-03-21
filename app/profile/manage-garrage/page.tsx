@@ -40,10 +40,10 @@ const Page = () => {
           key={cars.length}
           className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3"
         >
-          {cars.map((car) => (
+          {cars.map((car,index) => (
             <Link
               href={`/car/${car.id}`}
-              key={car.id}
+              key={index}
               className="transform transition-all duration-300 hover:scale-105"
             >
               <div className="w-full z-0 relative z-0">
