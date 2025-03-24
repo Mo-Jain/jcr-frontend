@@ -47,6 +47,35 @@ const alma = localFont({
   weight: "100 900",
 });
 
+const borisna = localFont({
+  src: "./fonts/Borisna.ttf",
+  variable: "--font-borisna",
+  weight: "100 900",
+});
+
+const leoscar = localFont({
+  src: "./fonts/Leoscar.ttf",
+  variable: "--font-leoscar",
+  weight: "100 900",
+});
+const pier = localFont({
+  src: "./fonts/Pier.otf",
+  variable: "--font-pier",
+  weight: "100 900",
+});
+
+const bigjohnbold = localFont({
+  src: "./fonts/BigJohnBold.otf",
+  variable: "--font-bigjohnbold",
+  weight: "100 900",
+});
+
+const bigjohn = localFont({
+  src: "./fonts/BigJohn.otf",
+  variable: "--font-bigjohn",
+  weight: "100 900",
+});
+
 export default function RootLayout({
   children,
 }: {
@@ -55,7 +84,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.className} ${teratur.variable} ${alcova.variable} ${xova.variable} ${equinox.variable} ${alma.variable} antialiased`}
+        className={`${inter.className} ${teratur.variable} ${alcova.variable} ${xova.variable} ${equinox.variable} ${alma.variable} ${borisna.variable} ${leoscar.variable} ${pier.variable} ${bigjohnbold.variable} ${bigjohn.variable} antialiased`}
       >
         <Providers>
           <StarryBackground />

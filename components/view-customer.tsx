@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Edit2, Trash2,  Upload } from "lucide-react";
+import { Check, Clock, Edit2, Trash2,  Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Calendar from "@/public/date-and-time.svg";
 import {
@@ -21,11 +21,11 @@ import { BASE_URL } from "@/lib/config";
 import { toast } from "@/hooks/use-toast";
 import { Textarea } from "@/components/ui/textarea";
 import { RenderFileList } from "./render-file-list";
-import { Customer, Document } from "./page";
+import { Customer, Document } from "../app/profile/manage-customer/page";
 import { uploadToDrive } from "@/app/actions/upload";
 import { Label } from "@/components/ui/label";
 import { DatePicker } from "@/components/ui/datepicker";
-import Loader from "@/components/loader";
+import UploadDialog from "./upload-dialog";
 
 
 interface CustomerPopupInterface {
@@ -52,13 +52,15 @@ export function CustomerPopup({
   const [contact, setContact] = useState<string>(customer.contact);
   const [isEditing, setIsEditing] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
-  const [errors, setErrors] = useState<string>("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isDocumentsDeleting, setIsDocumentsDeleting] = useState(false);
   const [progress, setProgress] = useState(0);
   const [joiningDate, setJoiningDate] = useState<Date>(new Date(customer.joiningDate));
+  const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
+  const [aadharFiles, setAadharFiles] = useState<File[]>([])
+  const [licenseFiles, setLicenseFiles] = useState<File[]>([])
+  const [otherFiles, setOtherFiles] = useState<File[]>([])
 
   function handleAction() {
     if (action === "Delete") {
@@ -148,20 +150,49 @@ export function CustomerPopup({
       let overallProgress = 0;
 
       setProgress(overallProgress);
-      const totalSize = Object.values(uploadedFiles).reduce(
+      const totalSize = Object.values([...aadharFiles,...licenseFiles,...otherFiles]).reduce(
         (acc, file) => acc + file.size,
         0,
       );
 
-      if (uploadedFiles.length > 0) {
+      if (aadharFiles.length > 0) {
         let cnt = 0;
-        for (const file of uploadedFiles) {
+        for (const file of aadharFiles) {
           const res = await uploadToDrive(file, customer.folderId);
           if (res.error) {
             throw new Error("Failed to upload documents");
             return;
           }
-          resDoc.push({ ...res, id: cnt });
+          resDoc.push({ ...res, id: cnt,docType:"aadhar" });
+          cnt++;
+          overallProgress += Math.round((file.size / totalSize) * 100) * 0.98;
+          setProgress(overallProgress);
+        }
+      }
+
+      if (licenseFiles.length > 0) {
+        let cnt = 0;
+        for (const file of licenseFiles) {
+          const res = await uploadToDrive(file, customer.folderId);
+          if (res.error) {
+            throw new Error("Failed to upload documents");
+            return;
+          }
+          resDoc.push({ ...res, id: cnt,docType:"license" });
+          cnt++;
+          overallProgress += Math.round((file.size / totalSize) * 100) * 0.98;
+          setProgress(overallProgress);
+        }
+      }
+      if (otherFiles.length > 0) {
+        let cnt = 0;
+        for (const file of otherFiles) {
+          const res = await uploadToDrive(file, customer.folderId);
+          if (res.error) {
+            throw new Error("Failed to upload documents");
+            return;
+          }
+          resDoc.push({ ...res, id: cnt,docType:"others" });
           cnt++;
           overallProgress += Math.round((file.size / totalSize) * 100) * 0.98;
           setProgress(overallProgress);
@@ -170,13 +201,13 @@ export function CustomerPopup({
 
       const updatedDocuments =
         resDoc &&
-        resDoc &&
         resDoc.map((file) => {
           return {
             id: file.id || 0,
             name: file.name || "",
             url: file.url || "",
             type: file.type || "",
+            docType:file.docType || ""
           };
         });
 
@@ -216,6 +247,7 @@ export function CustomerPopup({
         folderId: customer.folderId,
         joiningDate: joiningDate.toLocaleDateString("en-US"),
         documents: res.data.documents,
+        kycStatus:customer.kycStatus
       };
       setCustomers((prev) =>
         prev.map((cust) => {
@@ -226,8 +258,10 @@ export function CustomerPopup({
         }),
       );
       setDocuments(res.data.documents);
-      setUploadedFiles([]);
       setProgress(100);
+      setAadharFiles([]);
+      setLicenseFiles([]);
+      setOtherFiles([]);
       setIsEditing(false);
       toast({
         description: `Customer Successfully updated`,
@@ -248,23 +282,6 @@ export function CustomerPopup({
     }
   };
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files) {
-      if (
-        files.length +
-          uploadedFiles.length +
-          (documents ? documents.length : 0) >
-        5
-      ) {
-        setUploadedFiles([]);
-        setErrors("You can upload upto 5 documents or images");
-        return;
-      }
-      setUploadedFiles([...uploadedFiles, ...Array.from(files)]);
-    }
-  };
-
   const heading = action.split(" ")[0];
   const upperHeading = heading.charAt(0).toUpperCase() + heading.slice(1);
 
@@ -273,26 +290,45 @@ export function CustomerPopup({
   return (
     <>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="sm:max-w-[425px] z-20 border-border max-sm:min-h-[70%] flex flex-col p-0 items-center overflow-auto">
-          <DialogHeader className="flex flex-row justify-between items-center w-full px-6 py-0">
+        <DialogContent className="sm:max-w-[425px] z-20 border-border max-sm:min-h-[70%] flex flex-col p-0 px-3 sm:px-6 items-center overflow-auto gap-0">
+          <DialogHeader className="flex flex-row justify-between items-center w-full mb-2">
             <DialogTitle>
-              <div className="flex justify-start w-full whitespace-nowrap mt-2">
+              <div className="flex justify-start items-center gap-2 w-full whitespace-nowrap mt-2">
                 Customer Id: {customer.id}
+                {customer.kycStatus === "verified" &&
+                  <div className="flex items-center gap-1 text-sm bg-green-500 text-white rounded-full px-2 py-1">
+                    <Check className="w-4 h-5"/>
+                    <span className="whitespace-nowrap text-xs">{customer.kycStatus}</span>
+                  </div>
+                }
+                {customer.kycStatus === "under review" &&
+                  <div className="flex items-center gap-1 text-sm bg-blue-500 text-white rounded-full px-2 py-1">
+                    <Clock className="w-4 h-5"/>
+                    <span className="whitespace-nowrap text-xs">{customer.kycStatus}</span>
+                  </div>
+                }
+                {customer.kycStatus === "pending" &&
+                  <div className="flex items-center gap-1 text-sm bg-red-500 text-white rounded-full px-2 py-1">
+                    <Clock className="w-4 h-5"/>
+                    <span className="whitespace-nowrap text-xs">{customer.kycStatus}</span>
+                  </div>
+                }
               </div>
             </DialogTitle>
-            <div className="flex justify-end w-full items-center w-full mr-4 mb-2">
-              <div className="flex space-x-2">
-                <Button variant="ghost" size="icon" onClick={handleEdit}>
+            <div className="flex justify-end w-full items-center w-full mr-6 sm:mr-4 ">
+              <div className="flex">
+                <Button variant="ghost" className="p-0 gap-0 mt-[2px]" size="icon" onClick={handleEdit}>
                   <Edit2 className="h-4 w-4" />
                 </Button>
                 {isDeleting ? (
-                  <div className="flex items-center justify-center">
+                  <div className="flex items-center justify-center mt-[2px]">
                     <Loader2 className="h-4 w-4 animate-spin text-gray-500" />
                   </div>
                 ) : (
                   <Button
                     variant="ghost"
                     size="icon"
+                    className="p-0 gap-0 mt-[2px]"
                     onClick={() => {
                       setAction("Delete");
                       setIsDialogOpen(true);
@@ -305,13 +341,12 @@ export function CustomerPopup({
             </div>
           </DialogHeader>
 
-          <div className="px-6 pb-2 h-full w-full max-sm:mt-6">
-            <div className=" space-y-4 w-[90%]">
+          <div className=" pb-2 h-full w-full">
+            <div className=" space-y-2 w-full">
               <div className="flex items-center space-x-2">
                 <UserIcon className="h-6 w-6 mt-1 mr-3 stroke-[12px] fill-black dark:fill-white stroke-black dark:stroke-white" />
                 <div className="flex justify-between items-center gap-1 w-full">
                   <div>
-                    <Label htmlFor="name" className={`text-sm ${isEditing && "ml-2"}`}>Name</Label>
                     <div>
                     {isEditing ? (
                       <Input
@@ -327,7 +362,6 @@ export function CustomerPopup({
                   </div>
                   <div>
                     <div>
-                      <Label htmlFor="contact" className={`text-sm ${isEditing && "ml-2"}`}>Contact</Label>
                       {isEditing ? (
                         <Input
                           name="contact"
@@ -380,9 +414,9 @@ export function CustomerPopup({
                 )}
               </div>
               <div>
-                <div className="flex w-full gap-2 justify-between">
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-1">
+                <div className="flex flex-col w-full gap-1 justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-1 text-sm">
                       <span>Documents</span>
 
                       {isDocumentsDeleting ? (
@@ -405,56 +439,96 @@ export function CustomerPopup({
                         </>
                       )}
                     </div>
-                    {isEditing && (
-                      <div
-                        onClick={() => {
-                          document.getElementById("documents")?.click();
-                        }}
-                        className="flex items-center justify-center  bg-gray-300 text-sm hover:bg-gray-400 dark:bg-muted dark:hover:bg-gray-900 w-fit cursor-pointer text-secondary-foreground px-2 py-1 rounded-sm hover:bg-gray-200 transition-colors"
-                      >
-                        <Upload className="mr-2  h-4 w-4" />
-                        <span>Choose file</span>
-                      </div>
-                    )}
-                    {uploadedFiles.length +
-                      (documents ? documents.length : 0) <=
-                      5 && (
-                      <Input
-                        id="documents"
-                        type="file"
-                        accept="image/*"
-                        multiple
-                        onChange={(e) => {
-                          setErrors("");
-                          handleFileUpload(e);
-                        }}
-                        className={"hidden"}
-                      />
-                    )}
-                    <p className="text-red-500 text-sm mt-1">{errors}</p>
                   </div>
-                  <div className="flex justify-center w-[210px] h-[175px] max-sm:min-w-[150px] min-h-[175px] max-sm:min-h-[165px] w-fit h-fit border border-border px-[2px]">
-                    <RenderFileList
-                      documents={documents}
-                      setDocuments={setDocuments}
-                      uploadedFiles={uploadedFiles}
-                      setUploadedFiles={setUploadedFiles}
-                      isEditable={isEditing}
-                    />
-                    {documents &&
-                      documents.length === 0 &&
-                      uploadedFiles.length === 0 && (
-                        <span className="text-center text-sm text-gray-400 dark:text-gray-500">
-                          Upload upto 5 documents or images
-                        </span>
+                  <div className="flex item-center gap-1 w-full">
+                    <div>
+                      <div className="flex flex-col rounded-sm justify-start min-w-[165px] sm:min-w-[180px] h-[90px] min-h-[90px] w-fit h-fit border border-border px-[2px]">
+                        <p className="text-xs">Aadhar Card :</p>
+                        <div className="h-[74px] overflow-y-scroll overflow-x-hidden scrollbar-hide">
+                          {(documents &&
+                            documents.filter((doc:Document) => doc.docType === "aadhar").length === 0) &&
+                            aadharFiles.length === 0 ? (
+                              <span className="text-center text-xs text-gray-400 min-w-[185px] dark:text-gray-500">
+                                Upload upto 2 documents
+                              </span>
+                            )
+                            :
+                              <RenderFileList
+                                documents={documents?.filter((doc:Document) => doc.docType === "aadhar")}
+                                setDocuments={setDocuments}
+                                uploadedFiles={aadharFiles}
+                                setUploadedFiles={setAadharFiles}
+                                isEditable={isEditing}
+                              />
+                            }
+                          </div>
+                      </div>
+                      <div className="flex flex-col rounded-sm justify-start min-w-[165px] sm:min-w-[180px] h-[90px] min-h-[90px] w-fit h-fit border border-border px-[2px]">
+                        <p className="text-xs">Driving License :</p>
+                        <div className="h-[74px] overflow-scroll scrollbar-hide">
+                          {(documents &&
+                            documents.filter((doc:Document) => doc.docType === "license").length === 0 &&
+                            licenseFiles.length === 0) ? (
+                              <span className="text-center text-xs text-gray-400 min-w-[185px] dark:text-gray-500">
+                                Upload upto 2 documents
+                              </span>
+                            )
+                            :
+                              <RenderFileList
+                                documents={documents?.filter((doc:Document) => doc.docType === "license")}
+                                setDocuments={setDocuments}
+                                uploadedFiles={licenseFiles}
+                                setUploadedFiles={setLicenseFiles}
+                                isEditable={isEditing}
+                              />
+                            }
+                          </div>
+                          
+                      </div>
+                    </div>
+                    <div className="h-full flex flex-col gap-1">
+                      {(documents && 
+                      documents.filter((doc:Document) => doc.docType === "others").length + otherFiles.length > 0
+                      ) &&
+                       (
+                        <div className="flex flex-col justify-start rounded-sm h-full min-w-[165px] sm:min-w-[180px] h-[90px] min-h-[90px] w-fit h-fit border border-border px-[2px]">
+                          <p className="text-xs">Others :</p>
+                          <div className="h-full max-h-full overflow-scroll scrollbar-hide">
+                            <RenderFileList
+                              documents={documents?.filter((doc:Document) => doc.docType === "others")}
+                              setDocuments={setDocuments}
+                              uploadedFiles={otherFiles}
+                              setUploadedFiles={setOtherFiles}
+                              isEditable={isEditing}
+                            />
+                          </div>
+                        </div>
                       )}
+                      {isEditing && (
+                        <div
+                          onClick={() => {
+                            setIsUploadDialogOpen(true);
+                          }}
+                          className="flex items-center w-full justify-center bg-gray-300 text-sm hover:bg-gray-400 dark:bg-muted dark:hover:bg-gray-900 w-fit cursor-pointer text-secondary-foreground px-2 py-1 rounded-sm hover:bg-gray-200 transition-colors"
+                        >
+                          <Upload className="mr-2  h-4 w-4" />
+                          <span className="text-xs whitespace-nowrap">Upload</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
+            {!isEditing &&  customer.kycStatus==="under review" &&
+              <div className="w-full flex justify-center items-center mt-2 gap-4">
+                <Button className="py-0 w-full px-1 text-xs text-white"
+                >Verify KYC</Button>
+              </div>
+            }
 
             {isEditing && (
-              <div className="mt-4">
+              <div className="mt-2">
                 {isLoading ? (
                   <div className="w-full border-2 border-border rounded-lg relative">
                     <div
@@ -492,6 +566,17 @@ export function CustomerPopup({
           </div>
         </DialogContent>
       </Dialog>
+      <UploadDialog 
+        isUploadDialogOpen={isUploadDialogOpen} 
+        setIsUploadDialogOpen={setIsUploadDialogOpen}
+        aadharFiles={aadharFiles}
+        setAadharFiles={setAadharFiles}
+        licenseFiles={licenseFiles}
+        setLicenseFiles={setLicenseFiles}
+        otherFiles={otherFiles}
+        setOtherFiles={setOtherFiles}
+      />
+      
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="sm:max-w-[425px] bg-muted border-border">
           <DialogHeader>

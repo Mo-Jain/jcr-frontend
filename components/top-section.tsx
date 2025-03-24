@@ -1,10 +1,38 @@
 "use client";
 import { useUserStore } from "@/lib/store";
 import { useRouter } from "next/navigation";
+import DownArrow from "@/public/down-arrow.svg";
+import { useMediaQuery } from "react-responsive";
+
+const smoothScrollTo = (targetY: number, duration: number = 600) => {
+  const startY = window.scrollY;
+  const difference = targetY - startY;
+  const startTime = performance.now();
+
+  const step = (currentTime: number) => {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1); // Keep progress between 0 and 1
+    window.scrollTo(0, startY + difference * progress);
+
+    if (progress < 1) {
+      requestAnimationFrame(step);
+    }
+  };
+
+  requestAnimationFrame(step);
+};
 
 export const TopSection = () => {
   const { name } = useUserStore();
   const router = useRouter();
+  const isSmallScreen = useMediaQuery({ maxWidth: 640 });
+
+  const handleDownArrow = () => {
+    const scrollY = window.scrollY;
+    const end = isSmallScreen ? 110 : 200;
+    const duration = 200 * (200 - scrollY) / end;
+    smoothScrollTo(end,duration);
+  }
   return (
     <div>
       <section className="dark:bg-black/20  my-0 relative overflow-hidden py-12 sm:py-16">
@@ -18,30 +46,37 @@ export const TopSection = () => {
             >
               SEAMLESS CAR BOOKINGS TRACKING
             </h1>
-            <p 
-            style={{ fontFamily: "var(--font-alma), sans-serif" }}
-            className="sm:text-lg text-xs mb-6 text-gray-500 dark:text-gray-400">
-              Manage your car rentals with ease using our intuitive booking
-              scheduler.
-            </p>
+            
             {name ? (
-              <div className="flex justify-center items-center bg-transparent">
+              <div className="flex justify-center mt-8 items-center bg-transparent">
                 <div
-                  onClick={() => router.push("/bookings")}
-                  className="bg-white/20 select-none text-foreground hover:bg-white/40 dark:hover:bg-white/30 max-w-[220px] bg-opacity-20 backdrop-blur-md cursor-pointer shadow-xl max-sm:text-sm text-foreground px-2 sm:px-6 py-2 sm:py-3 rounded-sm font-semibold transition duration-300"
+                  onClick={handleDownArrow}
+                  className=" p-2 cursor-pointer rounded-full bg-blue-400 bg-opacity-40"
                 >
-                    Start Booking Now
+                  <div
+                  className="p-3 flex items-center  rounded-full bg-blue-400 hover:bg-blue-500 active:scale-95 text-white">
+                    <DownArrow className="h-6 w-6 fill-white" />
+                  </div>
+
                 </div>
               </div>
             ) : (
-              <div className="flex justify-center items-center bg-transparent">
-                <div
-                  onClick={() => router.push("/auth")}
-                  className="bg-white/20 hover:bg-white/40 dark:hover:bg-white/30 max-w-[220px] bg-opacity-20 backdrop-blur-md cursor-pointer shadow-xl max-sm:text-sm text-foreground px-3 sm:px-6 py-3 rounded-sm font-semibold transition duration-300"
-                >
-                  Get Started
+              <>
+                <p 
+                  style={{ fontFamily: "var(--font-alma), sans-serif" }}
+                  className="sm:text-lg text-xs mb-6 text-gray-500 dark:text-gray-400">
+                    Manage your car rentals with ease using our intuitive booking
+                    scheduler.
+                </p>
+                <div className="flex justify-center items-center bg-transparent">
+                  <div
+                    onClick={() => router.push("/auth")}
+                    className="bg-white/20 hover:bg-white/40 dark:hover:bg-white/30 max-w-[220px] bg-opacity-20 backdrop-blur-md cursor-pointer shadow-xl max-sm:text-sm text-foreground px-3 sm:px-6 py-3 rounded-sm font-semibold transition duration-300"
+                  >
+                    Get Started
+                  </div>
                 </div>
-              </div>
+              </>
             )}
           </div>
         </div>

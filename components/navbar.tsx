@@ -81,7 +81,9 @@ export function NavBar() {
             </div>
           </div>
         ) : (
-          <div className="w-18 space-x-2  flex text-right ">
+          <div 
+          style={{ fontFamily: "var(--font-xova), sans-serif" }}
+          className="w-18 space-x-2  flex text-right ">
             <div className="flex items-center text-zinc-700 dark:text-gray-200 max-sm:hidden space-x-2 justify-around">
               <div
                 className={`px-2 hover:text-blue-700 ${selectedTab == "home" ? "text-blue-700 border-b-blue-700" : ""} border-transparent transition-all border duration-300 border-y-4 p-1 cursor-pointer font-bold`}

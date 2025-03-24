@@ -380,7 +380,7 @@ export default function BookingStartClient({
         </span>
         <span className="text-sm">{bookingId}</span>
       </div>
-      <form className="space-y-6 max-sm:mb-12">
+      <div className="space-y-6 max-sm:mb-12">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-4">
             <div className="flex justify-between space-x-2 items-center">
@@ -828,7 +828,7 @@ export default function BookingStartClient({
             </Button>
           )}
         </div>
-      </form>
+      </div>
     </div>
   );
 }

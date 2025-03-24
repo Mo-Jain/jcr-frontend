@@ -299,7 +299,7 @@ export default function ExcelUploader() {
       />
       <Button
         onClick={() => fileInputRef.current?.click()}
-        className="flex active:scale-95 rounded-sm  items-center gap-2"
+        className="flex active:scale-95 rounded-sm  items-center gap-2 text-white"
       >
         <ImportIcon className="h-4 w-4" />
         Import

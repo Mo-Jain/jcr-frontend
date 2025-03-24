@@ -63,6 +63,7 @@ function getReturnTime(startDate: string, startTime: string,status:string) {
 
 function getTimeUntilBooking(startTime: string, status: string) {
   if (status === "Completed") return "Booking has ended";
+  if (status === "Cancelled") return "Booking has been cancelled";
   if (status === "Ongoing") return "Booking has started";
   const now = new Date();
   const start = new Date(startTime);
@@ -109,12 +110,13 @@ export default function Bookings() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const res1 = await axios.get(`${BASE_URL}/api/v1/booking/all`, {
+        const res = await axios.get(`${BASE_URL}/api/v1/booking/all`, {
           headers: {
             authorization: `Bearer ` + localStorage.getItem("token"),
           },
         });
-        setBookings(res1.data.bookings);
+        
+        setBookings(res.data.bookings);
         setIsLoading(false);
       } catch (error) {
         console.log(error);
@@ -132,7 +134,6 @@ export default function Bookings() {
     }
   }, [selectedBookings]);
 
-
   const getBookingLength = (status: string) => {
     let length = 0;
     const newBookings = bookings.filter(
@@ -146,6 +147,8 @@ export default function Bookings() {
       length = newBookings.filter(booking => booking.status === "Ongoing").length;
     }else if (status === "Completed"){
       length = newBookings.filter(booking => booking.status === "Completed").length;
+    }else if (status === "Cancelled"){
+      length = newBookings.filter(booking => booking.status === "Cancelled").length;
     }
     return length > 0 ? ` (${length})` : "";
   }
@@ -294,7 +297,7 @@ export default function Bookings() {
           <div className="flex gap-2 mb-6 overflow-x-auto pb-2 scrollbar-hide">
             <Button
               variant={selectedStatus === "All" ? "default" : "outline"}
-              className={`rounded-sm ${selectedStatus === "All" ? "bg-blue-400 active:scale-95 hover:bg-blue-500 text-white dark:text-black" : "hover:bg-blue-100 bg-transparent border-border dark:text-white dark:hover:bg-zinc-700 text-black"}`}
+              className={`rounded-sm ${selectedStatus === "All" ? "bg-blue-400 active:scale-95 hover:bg-blue-500 text-white" : "hover:bg-blue-100 bg-transparent border-border dark:text-white dark:hover:bg-zinc-700 text-black"}`}
               onClick={() => setSelectedStatus("All")}
             >
               All{getBookingLength("All")}
@@ -303,7 +306,7 @@ export default function Bookings() {
               variant={selectedStatus === "Upcoming" ? "default" : "outline"}
               className={
                 selectedStatus === "Upcoming"
-                  ? "bg-blue-400 hover:bg-blue-500 active:scale-95 text-white dark:text-black rounded-sm"
+                  ? "bg-blue-400 hover:bg-blue-500 active:scale-95 text-white rounded-sm"
                   : "hover:bg-blue-100 rounded-sm bg-transparent border-border dark:text-white dark:hover:bg-zinc-700 text-black"
               }
               onClick={() => setSelectedStatus("Upcoming")}
@@ -314,7 +317,7 @@ export default function Bookings() {
               variant={selectedStatus === "Ongoing" ? "default" : "outline"}
               className={
                 selectedStatus === "Ongoing"
-                  ? "bg-blue-400 hover:bg-blue-500 active:scale-95 text-white dark:text-black rounded-sm"
+                  ? "bg-blue-400 hover:bg-blue-500 active:scale-95 text-white rounded-sm"
                   : "hover:bg-blue-100 rounded-sm bg-transparent border-border dark:text-white dark:hover:bg-zinc-700 text-black"
               }
               onClick={() => setSelectedStatus("Ongoing")}
@@ -325,17 +328,29 @@ export default function Bookings() {
               variant={selectedStatus === "Completed" ? "default" : "outline"}
               className={
                 selectedStatus === "Completed"
-                  ? "bg-blue-400 hover:bg-blue-500 active:scale-95 text-white dark:text-black rounded-sm"
+                  ? "bg-blue-400 hover:bg-blue-500 active:scale-95 text-white rounded-sm"
                   : "hover:bg-blue-100 rounded-sm bg-transparent border-border dark:text-white dark:hover:bg-zinc-700 text-black"
               }
               onClick={() => setSelectedStatus("Completed")}
             >
               Completed{getBookingLength("Completed")}
             </Button>
+            <Button
+              variant={selectedStatus === "Completed" ? "default" : "outline"}
+              className={
+                selectedStatus === "Cancelled"
+                  ? "bg-blue-400 hover:bg-blue-500 active:scale-95 text-white rounded-sm"
+                  : "hover:bg-blue-100 rounded-sm bg-transparent border-border dark:text-white dark:hover:bg-zinc-700 text-black"
+              }
+              onClick={() => setSelectedStatus("Cancelled")}
+            >
+              Cancelled{getBookingLength("Cancelled")}
+            </Button>
           </div>
           {bookings.length > 0 && (
             <Button
-              className="max-sm:hidden bg-primary active:scale-95 text-white hover:bg-opacity-10 dark:text-black shadow-lg"
+            style={{ fontFamily: "var(--font-pier), sans-serif" }}
+              className="max-sm:hidden bg-primary active:scale-95 text-white hover:bg-opacity-10 shadow-lg"
               onClick={handleAddBooking}
             >
               <PlusSquare className="h-12 w-12" />
@@ -484,8 +499,9 @@ const BookingCard = ({
       }
     } else if (status === "Completed") {
       headerText = "Booking ended at";
+    } else if (status === "Cancelled") {
+      headerText = "Booking cancelled by customer";
     }
-
     return headerText;
   }
 

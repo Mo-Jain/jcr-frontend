@@ -14,6 +14,7 @@ import UserIcon from "@/public/user.svg";
 import TakeAction from "./take-action";
 import MonthEarnings from "./month-earnings";
 import Customers from "./customers";
+import KYCVerification from "./kyc-verification";
 
 export function CarSection() {
   const [isOpen, setIsOpen] = useState(false);
@@ -33,13 +34,14 @@ export function CarSection() {
             <div className="flex justify-between items-center sm:px-4 px-2">
                 <h1
                   style={{ fontFamily: "var(--font-equinox), sans-serif" }}
-                  className="sm:text-3xl text-xl font-black font-myfont"
+                  className="sm:text-3xl text-xl font-bold"
                 >
                   {name.split(" ")[0]}&apos;s GARRAGE
                 </h1>
                 
               {cars.length > 0 && (
                 <Button
+                style={{ fontFamily: "var(--font-pier), sans-serif" }}
                   className="bg-blue-600 rounded-sm transition-all duration-300 active:scale-95 text-white bg-primary hover:bg-opacity-80  shadow-lg max-sm:p-2"
                   onClick={() => setIsOpen(true)}
                 >
@@ -80,6 +82,7 @@ export function CarSection() {
                       color={car.colorOfBooking}
                       ongoingBooking={car.ongoingBooking}
                       upcomingBooking={car.upcomingBooking}
+                      photos={car.photos}
                     />
                   </Link>
                 ))}
@@ -108,10 +111,9 @@ export function CarSection() {
             </h1>
             <div className="grid z-0 sm:grid-cols-2 lg:grid-cols-3 gap-3 lg:grid-cols-[minmax(400px,_1fr)_minmax(400px,_1fr)_1fr]">
               <TakeAction />
+              <KYCVerification/>
+              <MonthEarnings />
               <Customers/>
-              <div className="">
-                <MonthEarnings />
-              </div>
             </div>
           </section>
         </div>

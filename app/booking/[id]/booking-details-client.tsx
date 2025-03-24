@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import { DatePicker } from "@/components/ui/datepicker";
 import AddTime from "@/components/add-time";
 import ArrowRight from "@/public/right_arrow.svg";
+import Cancel from "@/public/cancel.svg";
 import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
@@ -135,6 +136,9 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
     } else if (action === "delete the car photos of") {
       handleCarImageDelete();
     }
+    else if( action === "Cancel"){
+      handleCancel();
+    }
     return;
   }
 
@@ -157,6 +161,36 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
       selfie: [],
     });
     return;
+  }
+
+  const handleCancel = async () => {
+    try {
+      await axios.put(`${BASE_URL}/api/v1/booking/${booking.id}/cancel`,
+        { },
+        {
+          headers: {
+            "Content-type": "application/json",
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+      setBookingStatus("Cancelled");
+      toast({
+        description: `Booking Successfully cancelled`,
+        className:
+          "text-black bg-white border-0 rounded-md shadow-mg shadow-black/5 font-normal",
+        duration: 2000,
+      });
+    }
+    catch (error) {
+      console.error(error);
+      toast({
+        description: `Booking failed to cancel`,
+        className:
+          "text-black bg-white border-0 rounded-md shadow-mg shadow-black/5 font-normal",
+        variant: "destructive",
+        duration: 2000,
+      });
+    }
   }
 
   const handleDelete = async () => {
@@ -480,6 +514,14 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
     } else if (status === "Completed") {
       headerText = "Booking ended at";
     }
+    else if (status === "Cancelled") {
+      if(booking.cancelledBy === "guest"){
+        headerText = "Booking was cancelled by customer";
+      }
+      else if(booking.cancelledBy === "host"){
+        headerText = "Booking was cancelled by you";
+      }
+    }
 
     return headerText;
   }
@@ -611,6 +653,17 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
               >
                 <ExportIcon className="mr-2 h-4 w-4 stroke-1 stroke-black dark:stroke-white dark:fill-white" />
                 <ExportButton booking={booking}/> 
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onClick={() => {
+                  setAction("Cancel");
+                  setIsDialogOpen(true);
+                  setIsDropdownOpen(false);
+                }}
+              >
+                <Cancel className="mr-2 h-4 w-4 stroke-1 stroke-black dark:stroke-white dark:fill-white" />
+                <span>Cancel</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -1096,8 +1149,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
             <Button
               className="px-4 py-4 max-sm:w-full active:scale-95 bg-blue-600 dark:text-black text-blue-100  shadow-lg"
               onClick={() => {
-                setAction("Start");
-                setIsDialogOpen(true);
+                router.push(`/booking/start/form/${booking.id}`);
               }}
             >
               <span className="">Start Booking</span>

@@ -3,10 +3,10 @@ import { BsFilePdfFill } from "react-icons/bs";
 import axios from "axios";
 import { BASE_URL } from "@/lib/config";
 import { toast } from "@/hooks/use-toast";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { Document } from "./page";
+import { Document } from "../app/profile/manage-customer/page";
 
 const getFileIcon = (type: string) =>
   type.startsWith("image/") ? (
@@ -27,32 +27,30 @@ const FileItem = ({
   url: string;
   type: string;
   isEditable?: boolean;
-  onDelete?: () => void;
+  onDelete?: (setIsDeleting:React.Dispatch<React.SetStateAction<boolean>>) => void;
   newFile?: boolean;
 }) => {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     e.preventDefault();
-    setIsDeleting(true);
-    onDelete?.();
+    onDelete?.(setIsDeleting);
   };
 
-  useEffect(() => {
-    console.log("isDeleting", isDeleting);
-  }, [isDeleting]);
 
   return (
     <Link
       href={url}
       target="_blank"
       className={cn(
-        "flex w-fit max-w-[200px] max-h-[40px] my-1 items-center gap-2 bg-gray-200 dark:bg-muted p-1 rounded-md",
+        "flex w-fit max-w-[200px] max-h-[40px] my-1 items-center gap-1 bg-gray-200 dark:bg-muted p-1 rounded-md",
         newFile && `bg-green-300 dark:bg-green-800`,
       )}
     >
       <span className="min-w-4">{getFileIcon(type)}</span>
-      <span className="whitespace-nowrap overflow-hidden max-sm:max-w-[100px] text-ellipsis text-xs sm:text-sm">
+      <span className={cn("whitespace-nowrap overflow-hidden w-[110px] sm:w-[130px] text-ellipsis text-xs",
+        !isEditable && "w-[130px] sm:w-[145px]"
+      )}>
         {name}
       </span>
       {!isDeleting ? (
@@ -89,11 +87,13 @@ export const RenderFileList = ({
   setUploadedFiles: React.Dispatch<React.SetStateAction<File[]>>;
   isEditable?: boolean;
 }) => {
-  const handleRemoveFile = (index: number) => {
+  const handleRemoveFile = (index: number,setIsDeleting:React.Dispatch<React.SetStateAction<boolean>>) => {
     setUploadedFiles((prev) => prev.filter((_, i) => i !== index));
+    setIsDeleting(false);
   };
 
-  const handleDeleteDocument = async (id: number) => {
+  const handleDeleteDocument = async (id: number,setIsDeleting:React.Dispatch<React.SetStateAction<boolean>>) => {
+    setIsDeleting(true);
     if (!documents) return;
     try {
       await axios.delete(`${BASE_URL}/api/v1/customer/document/${id}`, {
@@ -117,7 +117,9 @@ export const RenderFileList = ({
         variant: "destructive",
         duration: 2000,
       });
+      setIsDeleting(false);
     }
+    setIsDeleting(false);
   };
 
   return (
@@ -129,7 +131,7 @@ export const RenderFileList = ({
           url={document.url}
           type={document.type}
           isEditable={isEditable}
-          onDelete={() => handleDeleteDocument(document.id)}
+          onDelete={(setIsDeleting) => handleDeleteDocument(document.id,setIsDeleting)}
         />
       ))}
       {uploadedFiles.map((file, index) => (
@@ -139,7 +141,7 @@ export const RenderFileList = ({
           url={URL.createObjectURL(file)}
           type={file.type}
           isEditable={isEditable}
-          onDelete={() => handleRemoveFile(index)}
+          onDelete={(setIsDeleting) => handleRemoveFile(index,setIsDeleting)}
           newFile={true}
         />
       ))}

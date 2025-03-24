@@ -13,13 +13,17 @@ import {
 } from "@/components/ui/table";
 import { useEffect, useState } from "react";
 import { Search, UserPlus, Users } from "lucide-react";
-import { CustomerPopup } from "./view-customer";
+import { CustomerPopup } from "@/components/view-customer";
 import axios from "axios";
 import { BASE_URL } from "@/lib/config";
 import BackArrow from "@/public/back-arrow.svg";
 import { useRouter } from "next/navigation";
 import { AddCustomer } from "@/components/add-customer";
 import Loader from "@/components/loader";
+import { cn } from "@/lib/utils";
+import { toast } from "@/hooks/use-toast";
+import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select";
+import { SelectValue } from "@radix-ui/react-select";
 
 // Sample customer data - in a real app, this would come from an API or database
 
@@ -31,6 +35,7 @@ export interface Customer {
   folderId: string;
   joiningDate: string;
   documents?: Document[];
+  kycStatus:string;
 }
 
 export interface Document {
@@ -38,6 +43,7 @@ export interface Document {
   name: string;
   url: string;
   type: string;
+  docType:string;
 }
 
 export default function CustomersPage() {
@@ -48,6 +54,8 @@ export default function CustomersPage() {
   const [selectedCustomer, setSelectedCustomer] = useState<Customer>();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [status,setStatus] = useState("under review");
+  const [filteredCustomers, setFilteredCustomers] = useState<Customer[]>([]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -59,6 +67,7 @@ export default function CustomersPage() {
           },
         });
         setCustomers(res.data.customers);
+        setFilteredCustomers(res.data.customers.filter((customer:Customer) => customer.kycStatus === "under review"));
       } catch (error) {
         console.log(error);
       }
@@ -67,15 +76,63 @@ export default function CustomersPage() {
     setIsLoading(false);
   }, []);
 
-  useEffect(() => {
-    console.log("selected customer", selectedCustomer);
-  }, [selectedCustomer]);
+ 
 
-  const filteredCustomers = customers.filter(
-    (customer) =>
-      customer.name.toLowerCase().includes(search.toLowerCase()) ||
-      customer.contact.toLowerCase().includes(search.toLowerCase()),
-  );
+
+  const handleSearch = (e:React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+    setFilteredCustomers(customers.filter(
+      (customer) =>
+        (customer.name.toLowerCase().includes(e.target.value.toLowerCase()) ||
+        customer.contact.toLowerCase().includes(e.target.value.toLowerCase())) &&
+        customer.kycStatus === status
+    ));
+  }
+
+  const handleStatusChange = (value:string) => {
+    setStatus(value);
+    if(value === "all"){
+      setFilteredCustomers(customers);
+      return;
+    }
+    setFilteredCustomers(customers.filter((customer) => customer.kycStatus === value));
+  }
+
+  const handleKycStatus = async(e:React.MouseEvent<HTMLDivElement, MouseEvent>,id:number,status:string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if(status === "under review"){
+      try{
+        await axios.put(`${BASE_URL}/api/v1/customer/verify-kyc/${id}`,{},
+          {
+            headers: {
+              "Content-type": "application/json",
+              authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        toast({
+          description:"Successfully verified",
+          duration:2000
+        })
+        setCustomers(customers.map((customer) => {
+          if(customer.id === id){
+            customer.kycStatus = "verified";
+          }
+          return customer;
+        }));
+      }
+      catch(err){
+        console.error(err);
+        toast({
+          description:"Failed to verify",
+          variant:"destructive",
+          duration:2000
+        })
+      }
+
+    }
+  }
 
   return (
     <div className="min-h-screen bg-background sm:p-8 p-2">
@@ -121,14 +178,35 @@ export default function CustomersPage() {
         {customers.length > 0 ? (
           <Card className="border-border bg-muted">
             <CardContent className="p-6">
-              <div className="relative mb-6">
+              <div className="relative mb-6 flex item-center gap-2">
                 <Search className="absolute left-3 top-2 h-4 w-4 text-muted-foreground" />
                 <Input
                   placeholder="Search customers..."
                   value={search}
-                  onChange={(e) => setSearch(e.target.value)}
+                  onChange={handleSearch}
                   className="pl-9 max-sm:text-sm"
                 />
+                <Select
+                  value={status}
+                  onValueChange={handleStatusChange}
+                >
+                  <SelectTrigger
+                    value={status}
+                    className="w-1/3"
+                  >
+                    <SelectValue placeholder="Select a car" />
+                  </SelectTrigger>
+                  <SelectContent className="dark:border-zinc-700 bg-background">
+                    <SelectItem className="hover:black/20" value={"all"}>All
+                    </SelectItem>
+                    <SelectItem className="hover:black/20" value={"pending"}>Pending
+                    </SelectItem>
+                    <SelectItem className="hover:black/20" value={"under review"}>Verify KYC
+                    </SelectItem>
+                    <SelectItem className="hover:black/20" value={"verified"}>Verified
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               <div className="rounded-md border border-border">
@@ -137,6 +215,7 @@ export default function CustomersPage() {
                     <TableRow className="border-border">
                       <TableHead>Name</TableHead>
                       <TableHead>Contact</TableHead>
+                      <TableHead className="text-center">Status</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody className="border-border">
@@ -156,7 +235,18 @@ export default function CustomersPage() {
                         <TableCell className="border-border">
                           {customer.contact}
                         </TableCell>
-                        <TableCell></TableCell>
+                        <TableCell 
+                        onClick={(e) => e.preventDefault()}
+                        className="flex justify-center text-xs" >
+                          <div
+                          onClick={(e) => handleKycStatus(e,customer.id,customer.kycStatus)}
+                          className={cn("p-2 py-1 w-fit text-center cursor-pointer rounded-full bg-red-400 text-white",
+                            customer.kycStatus === "verified" && "bg-green-400",
+                            customer.kycStatus === "under review" && "bg-blue-400 cursor-pointer active:scale-[0.95]",
+                          )}>
+                          {customer.kycStatus === "under review" ? "Verify KYC" : customer.kycStatus}
+                          </div>
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>

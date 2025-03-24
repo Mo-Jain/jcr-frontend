@@ -27,6 +27,7 @@ export type Car = {
   price: number;
   ongoingBooking: number;
   upcomingBooking: number;
+  photos:string[];
 };
 
 interface CarStore {

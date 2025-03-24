@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Edit, IndianRupee, Loader, LogOut,  Trash2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Edit, IndianRupee, Loader, LogOut,  Trash2 } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
@@ -11,7 +11,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useEffect, useState } from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
+import { useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import BackArrow from "@/public/back-arrow.svg";
@@ -25,6 +34,7 @@ import { toast } from "@/hooks/use-toast";
 import { uploadToDrive } from "@/app/actions/upload";
 import CarIcon from "@/public/car-icon.svg";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import { cn } from "@/lib/utils";
 
 
 interface Car {
@@ -40,6 +50,7 @@ interface Car {
   carFolderId: string;
   seats: number;
   fuel: string;
+  photos:string[];
   bookings: {
     id: number;
     start: string;
@@ -57,6 +68,7 @@ interface Earnings {
   sixMonths: number;
 }
 
+
 export function CarDetailsClient({ carId }: { carId: number }) {
   const [car, setCar] = useState<Car | null>(null);
   const router = useRouter();
@@ -65,32 +77,36 @@ export function CarDetailsClient({ carId }: { carId: number }) {
   const [color, setColor] = useState(car ? car.colorOfBooking : "#0000FF");
   const [price, setPrice] = useState(car?.price || 0);
   const [mileage, setMileage] = useState(car?.mileage || 0);
-  const [imageUrl, setImageUrl] = useState(car?.imageUrl || "");
+  const [imageUrl, setImageUrl] = useState<string[]>(car?.photos || []);
   const { cars, setCars } = useCarStore();
   const [earnings, setEarnings] = useState<Earnings>();
   const [action, setAction] = useState<
     "Delete booking" | "Update car" | "Delete car"
   >("Update car");
   const [deleteBookingId, setDeleteBookingId] = useState<number>(0);
-  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imageFile, setImageFile] = useState<File[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isAdmin,setIsAdmin] = useState(false);
   const [seats, setSeats] = useState<string>(car?.seats.toString() || "");
   const {userId} = useUserStore();
   const [fuel,setFuel] = useState<string>(car?.fuel || "");
+  const [isPreviewOpen,setIsPreviewOpen] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [scrollValue,setScrollValue] = useState(0);
+  const [previewImage,setPreviewImage] = useState<string | null>(null);
 
   useEffect(() => {
     if (car) {
       setColor(car.colorOfBooking || "#0000FF");
       setPrice(car.price || 0);
       setMileage(car.mileage || 0);
-      setImageUrl(car.imageUrl || "");
+      setImageUrl(car.photos || []);
       setSeats(car.seats.toString());
       setFuel(car.fuel);
+      setPreviewImage(car.photos[0]);
     }
   }, [car]);
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -131,6 +147,23 @@ export function CarDetailsClient({ carId }: { carId: number }) {
       </div>
     );
   }
+
+  const handleScroll = (e:React.MouseEvent<HTMLDivElement, MouseEvent>,direction: "left" | "right") => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!scrollRef.current) return;
+      if(direction === "left"){
+        if(scrollValue !== 0) {
+          setPreviewImage(car.photos[scrollValue-1]);
+          setScrollValue(scrollValue - 1);
+        }
+      }else {
+        if(scrollValue !== car.photos.length-1) {
+          setPreviewImage(car.photos[scrollValue+1]);
+          setScrollValue(scrollValue + 1);
+        }
+      }
+  };
 
   function handleAction() {
     if (action === "Delete booking" && deleteBookingId !== 0) {
@@ -177,16 +210,19 @@ export function CarDetailsClient({ carId }: { carId: number }) {
   const handleUpdate = async () => {
     if (!isAdmin && userId !== 1) return;
     setIsLoading(true);
-    let imageUrl: string | undefined = undefined;
+    const newImageUrl: string[]= [];
 
     try {
       // Upload image only if imageFile is provided
       if (imageFile) {
-        const resImage = await uploadToDrive(imageFile, car.carFolderId);
-        imageUrl = resImage.url;
+        for(const image of imageFile) {
+          const resImage = await uploadToDrive(image, car.carFolderId);
+          if (!resImage.url) throw new Error("Failed to upload image");
+          newImageUrl.push(resImage.url);
+        }
       }
       // Prepare data for update
-      const updateData: Record<string, string | number> = {
+      const updateData: Record<string, string | number | string[]> = {
         color: color,
         price: price,
         mileage: mileage,
@@ -195,10 +231,18 @@ export function CarDetailsClient({ carId }: { carId: number }) {
       };
 
       // Only include imageUrl if a new image was uploaded
-      if (imageUrl) {
-        updateData.imageUrl = imageUrl;
+      if (newImageUrl) {
+        await axios.post(`${BASE_URL}/api/v1/car/upload/photos/${car.id}`, {
+          urls: newImageUrl
+        }, {
+          headers: {
+            "Content-type": "application/json",
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        setImageUrl(newImageUrl);
       } else {
-        setImageUrl(car.imageUrl || "");
+        setImageUrl(car?.photos || []);
       }
 
       await axios.put(`${BASE_URL}/api/v1/car/${car.id}`, updateData, {
@@ -216,7 +260,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
               ...car,
               colorOfBooking: color,
               price,
-              ...(imageUrl && { imageUrl }),
+              ...(imageUrl[0] && { imageUrl: imageUrl[0] }),
             };
             return newCar;
           } else {
@@ -250,29 +294,43 @@ export function CarDetailsClient({ carId }: { carId: number }) {
     setColor(car.colorOfBooking || "#0000FF");
     setPrice(car.price || 0);
     setMileage(car.mileage || 0);
-    setImageUrl(car.imageUrl || "");
+    setImageUrl(car?.photos || []);
   };
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    console.log("file", file);
-    if (file) {
-      if (!file.type.startsWith("image/")) {
-        return;
-      }
-      const maxSize = 10 * 1024 * 1024; // 5MB
-      if (file.size > maxSize) {
+    const files = event.target.files;
+    const newFiles = [];
+    const newUrls= [];
+    if(files?.length && files.length > 10) {
         toast({
-          description: `File size should not exceed 5MB`,
+          description: `You can only upload upto 10 photos`,
           className:
             "text-black bg-white border-0 rounded-md shadow-mg shadow-black/5 font-normal",
           variant: "destructive",
           duration: 2000,
         });
-        return;
+    }
+    if (files) {
+      for(const file of files) {
+        if (!file.type.startsWith("image/")) {
+          return;
+        }
+        const maxSize = 10 * 1024 * 1024; // 5MB
+        if (file.size > maxSize) {
+          toast({
+            description: `File size should not exceed 5MB`,
+            className:
+              "text-black bg-white border-0 rounded-md shadow-mg shadow-black/5 font-normal",
+            variant: "destructive",
+            duration: 2000,
+          });
+          return;
+        }
+        newFiles.push(file);
+        newUrls.push(URL.createObjectURL(file));
       }
-      setImageFile(file);
-      setImageUrl(URL.createObjectURL(file));
+      setImageFile(newFiles);
+      setImageUrl(newUrls);
     }
   };
 
@@ -436,14 +494,49 @@ export function CarDetailsClient({ carId }: { carId: number }) {
         <div className="flex flex-col sm:flex-row gap-2 sm:border-b border-border h-full">
           <div className=" flex flex-col sm:border-r border-border px-1 justify-center sm:py-4 items-center w-full min-h-full">
             <div className="relative w-full max-sm:px-2  my-2 h-fit">
-              <div className="h-[240px] sm:h-[275px] ">
+              <div 
+              onClick={() => {
+                setIsPreviewOpen(true);
+              }}
+              className="h-[240px] sm:h-[275px] cursor-pointer sm:mx-2 grid grid-cols-3 p-1 gap-1 border-2 border-black/20 dark:border-white/30 rounded-md">
                 <Image
-                  src={imageUrl || "/placeholder.svg"}
+                  src={imageUrl[0] || "/placeholder.svg"}
                   alt={`${car.brand} ${car.model}`}
                   width={2000}
                   height={1000}
-                  className=" rounded-md mx-auto max-w-full max-h-full max-sm:min-h-[230px] object-cover"
+                  className={cn("col-span-2 rounded-md h-full max-w-full max-h-full max-sm:min-h-[230px] object-cover",
+                    imageUrl.length < 2 && "col-span-3"
+                  )}
                 />
+                {imageUrl.length >= 2 && 
+                <div className="w-full h-full flex flex-col gap-1">
+                  {imageUrl[1] &&
+                  <div className="w-full h-full">
+                      <Image
+                        src={imageUrl[1] || "/placeholder.svg"}
+                        alt={`${car.brand} ${car.model}`}
+                        width={2000}
+                        height={1000}
+                        className="h-full w-full object-cover"
+                      />
+                  </div>
+                      }
+                  {imageUrl[2] &&
+                  <div className="w-full relative h-full ">
+                      <Image
+                        src={imageUrl[2] || "/placeholder.svg"}
+                        alt={`${car.brand} ${car.model}`}
+                        width={2000}
+                        height={1000}
+                        className="h-full w-full object-cover"
+                      />
+                      <div className="w-full absolute text-white inset-0 h-full bg-black/10 hover:bg-black/20 flex items-center justify-center">
+                        <span>+{imageUrl.length - 2} more</span>
+                      </div>
+                  </div>
+                      }
+                </div>
+                }
               </div>
               {isEditable && (
                 <button
@@ -455,6 +548,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
                     id="carImage"
                     type="file"
                     accept="image/*"
+                    multiple
                     onChange={handleFileUpload}
                     className="hidden"
                   />
@@ -812,6 +906,56 @@ export function CarDetailsClient({ carId }: { carId: number }) {
             )}
           </section>
         </div>
+
+        <AlertDialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
+      <AlertDialogContent className="max-w-3xl border-border max-sm:py-2 max-sm:px-0 z-[999]">
+        <AlertDialogHeader>
+          <AlertDialogTitle>Photos Preview</AlertDialogTitle>
+          <AlertDialogDescription></AlertDialogDescription>
+        </AlertDialogHeader>
+        <div 
+        ref= {scrollRef}
+        className="relative flex justify-center">
+          {imageUrl && previewImage && (
+          <>
+            <Image
+                src={previewImage || "/placeholder.svg"}
+                alt={`${car.brand} ${car.model}`}
+                width={2000}
+                height={1000}
+                className=" max-h-[85vh] sm:max-h-[60vh] w-full object-cover sm:w-[70%]"
+              />
+              <div className="absolute bottom-0 left-0 w-full h-fit flex items-center justify-center">
+                <div className="flex justify-center items-end h-fit gap-1">
+                  {imageUrl.map((image,index) => (
+                    <div key={index+image} 
+                    onClick={() => {
+                      setPreviewImage(image);
+                      setScrollValue(index)
+                    }}
+                    className={`${scrollValue===index ? "w-4 h-4 bg-white" : "w-3 h-3 bg-blue-400"} cursor-pointer border-2 border-blue-400 rounded-full transition-all duration-300 ease-in-out`}/>
+                  ))}
+                </div>
+              </div>
+              <div 
+                onClick={(e) => handleScroll(e,"left")} 
+                className="absolute border border-transparent active:scale-[0.95] top-0 opacity-60 hover:opacity-100 -left-3 flex items-center justify-center h-full rounded-sm">
+                    <ChevronLeft
+                    className="w-12 h-12 p-0 text-blue-400"/>
+                </div>
+              <div 
+                onClick={(e) => handleScroll(e,"right")} 
+                className="absolute border border-transparent active:scale-[0.95] top-0 opacity-60 hover:opacity-100 -right-3 flex items-center justify-center h-full rounded-sm">
+                    <ChevronRight className="w-12 h-12 p-0 text-blue-400 "/>
+              </div>
+          </>
+          )}
+        </div>
+        <AlertDialogFooter className="flex flex-row justify-center w-full">
+          <AlertDialogAction className="select-none max-sm:w-1/2">Close</AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+      </AlertDialog>
      
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="sm:max-w-[425px] bg-muted border-border ">

@@ -133,6 +133,7 @@ export function AddCarDialog({ isOpen, setIsOpen }: AddCarDialogProps) {
         price: parseInt(price),
         upcomingBooking: 0,
         ongoingBooking: 0,
+        photos:selectedImage ? [selectedImage] : [],
       };
       setCars([...cars, car]);
       setCarBrand("");

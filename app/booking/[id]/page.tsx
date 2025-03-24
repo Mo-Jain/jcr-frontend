@@ -48,6 +48,7 @@ export interface Booking {
   carImages?: CarImage[];
   customerId: number;
   folderId: string;
+  cancelledBy? : "guest" | "host";
   bookingFolderId: string;
 }
 
