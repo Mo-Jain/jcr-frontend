@@ -9,11 +9,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Fuel, Upload, X } from "lucide-react";
+import {  Upload, X } from "lucide-react";
 import CarFrontIcon from "@/public/car-front.svg";
 import Color from "@/public/color.svg";
 import Price from "@/public/price-tag.svg";
-import Seats from "@/public/seats.svg";
+import Seats from "@/public/fuel-seat.svg";
+import Gear from "@/public/gear.svg";
 import { BASE_URL } from "@/lib/config";
 import axios from "axios";
 import { useCarStore } from "@/lib/store";
@@ -23,6 +24,8 @@ import CarNumberPlateInput from "./car-number-input";
 import { createFolder } from "@/app/actions/folder";
 import { uploadToDrive } from "@/app/actions/upload";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import { useMediaQuery } from "react-responsive";
+import { cn } from "@/lib/utils";
 
 interface AddCarDialogProps {
   isOpen: boolean;
@@ -47,6 +50,10 @@ export function AddCarDialog({ isOpen, setIsOpen }: AddCarDialogProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [seats, setSeats] = useState<string>("5");
   const [fuel,setFuel] = useState<string>("petrol");
+  const [gear,setGear] = useState<string>("manual");
+  const isSmallScreen = useMediaQuery({ query: "(max-width: 400px)" });
+
+
   const validateForm = () => {
     const newErrors: FormErrors = {};
     if (price === "") newErrors.price = "Price can't be empty";
@@ -115,7 +122,8 @@ export function AddCarDialog({ isOpen, setIsOpen }: AddCarDialogProps) {
         imageUrl: resImage.url ? resImage.url : "",
         carFolderId: resImage.folderId,
         seats : parseInt(seats),
-        fuel
+        fuel,
+        gear
       };
       const res = await axios.post(`${BASE_URL}/api/v1/car`, body, {
         headers: {
@@ -203,7 +211,7 @@ export function AddCarDialog({ isOpen, setIsOpen }: AddCarDialogProps) {
   return (
     <>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="h-auto overflow-y-auto dark:border-gray-800 ">
+        <DialogContent className="h-auto overflow-y-auto dark:border-gray-800 max-sm:px-2 ">
           <form  className="space-y-4">
             <DialogHeader>
               <DialogTitle>
@@ -329,49 +337,97 @@ export function AddCarDialog({ isOpen, setIsOpen }: AddCarDialogProps) {
               </div>
             </div>
 
-            <div className="flex items-center gap-2 w-full">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
+            <div className="flex items-center  gap-1 sm:gap-2 w-full">
+              <div className={cn("space-y-4 w-full",
+                isSmallScreen && "w-fit"
+              )}>
+                <div>
+                <div className={cn("flex items-center gap-1 justify-between w-full",
+                  isSmallScreen && "w-fit"
+                )}>
                   <div className="flex items-center gap-1">
-                    <Seats className="w-7 h-7 dark:stroke-white dark:fill-white mr-4  stroke-black fill-black" />
-                    <Label htmlFor="totalAmount" className=" max-sm:text-xs">
-                      No.of seats
+                    <Seats className="w-7 h-7 dark:stroke-white dark:fill-white mr-4 flex-shrink-0  stroke-black fill-black" />
+                    <Label htmlFor="totalAmount" className={cn("max-sm:text-xs ",
+                      isSmallScreen ? "max-w-8 whitespace-wrap" : "whitespace-nowrap"
+                    )}>
+                      Seats & Fuel
                     </Label>
                   </div>
-                  <Input
-                    type="number"
-                    id="mileage"
-                    value={seats}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      setSeats(value);
-                      setErrors((prev) => ({ ...prev, seats: "" }));
-                    }}
-                    className="w-1/3 max-sm:text-xs placeholder:text-zinc-700 dark:placeholder:text-gray-400  border-black dark:border-zinc-700 focus:border-blue-400 focus-visible:ring-blue-400 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none "
-                  />
+                  <div className={cn("flex items-center gap-1 w-full",
+                    isSmallScreen && "w-fit"
+                  )}>
+                    <Input
+                      type="number"
+                      id="mileage"
+                      value={seats}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        setSeats(value);
+                        setErrors((prev) => ({ ...prev, seats: "" }));
+                      }}
+                      className={cn("w-full  max-w-[100px] max-sm:text-xs placeholder:text-zinc-700 dark:placeholder:text-gray-400  border-black dark:border-zinc-700 focus:border-blue-400 focus-visible:ring-blue-400 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ",
+                        isSmallScreen && "max-sm:w-8"
+                      )}
+                    />
+                    <Select
+                      value={fuel} // Ensures placeholder shows when carId is 0 or undefined
+                      onValueChange={(value) => {
+                        setFuel(value)
+                        setErrors((prev) => ({ ...prev, car: "" }));
+                      }}
+                    >
+                      <SelectTrigger
+                        id="car"
+                        className="max-sm:w-1/4 sm:w-full sm:min-w-[100px] text-xs sm:text-sm border-black dark:border-zinc-700 focus:border-blue-400 focus-visible:ring-blue-400 max-sm:max-w-[190px] focus-visible:ring-blue-400 focus:outline-none"
+                      >
+                        <SelectValue placeholder="Select fuel" />
+                      </SelectTrigger>
+                      <SelectContent
+                        className="bg-background border-border"
+                        aria-modal={false}
+                      >
+                        <SelectItem
+                          className="focus:bg-blue-300 dark:focus:bg-blue-900 cursor-pointer"
+                          value={"petrol"}
+                        >
+                          Petrol
+                        </SelectItem>
+                        <SelectItem
+                          className="focus:bg-blue-300 dark:focus:bg-blue-900 cursor-pointer"
+                          value={"diesel"}
+                        >
+                          Diesel
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
                   {errors.seats && (
                     <p className="text-red-500 text-sm mt-1">
                       {errors.seats}
                     </p>
                   )}
                 </div>
-                <div className="flex items-center justify-between">
-                  <Fuel className="w-7 h-7 text-black dark:text-white mr-4" />
-                  <Label htmlFor="totalAmount" className="w-1/3 max-sm:text-xs">
-                    Fuel
+                <div>
+                <div className={cn("flex items-center gap-1 w-full",
+                )}>
+                  <Gear className="w-7 h-7 dark:fill-white mr-4 fill-black flex-shrink-0" />
+                  <div className="w-full flex items-center justify-between gap-1">
+                  <Label htmlFor="totalAmount" className="max-sm:w-1/3 max-sm:text-xs whitespace-nowrap w-fit">
+                    Gears
                   </Label>
                   <Select
-                    value={fuel} // Ensures placeholder shows when carId is 0 or undefined
+                    value={gear} // Ensures placeholder shows when carId is 0 or undefined
                     onValueChange={(value) => {
-                      setFuel(value)
+                      setGear(value)
                       setErrors((prev) => ({ ...prev, car: "" }));
                     }}
                   >
                     <SelectTrigger
                       id="car"
-                      className="w-1/2 text-xs sm:text-sm border-black dark:border-zinc-700 focus:border-blue-400 focus-visible:ring-blue-400 max-sm:max-w-[190px] focus-visible:ring-blue-400 focus:outline-none"
+                      className="w-full max-w-[200px] text-xs sm:text-sm border-black dark:border-zinc-700 focus:border-blue-400 focus-visible:ring-blue-400 max-sm:max-w-[190px] focus-visible:ring-blue-400 focus:outline-none"
                     >
-                      <SelectValue placeholder="Select fuel" />
+                      <SelectValue placeholder="Select gear" />
                     </SelectTrigger>
                     <SelectContent
                       className="bg-background border-border"
@@ -379,18 +435,20 @@ export function AddCarDialog({ isOpen, setIsOpen }: AddCarDialogProps) {
                     >
                       <SelectItem
                         className="focus:bg-blue-300 dark:focus:bg-blue-900 cursor-pointer"
-                        value={"petrol"}
+                        value={"manual"}
                       >
-                        Petrol
+                        Manual
                       </SelectItem>
                       <SelectItem
                         className="focus:bg-blue-300 dark:focus:bg-blue-900 cursor-pointer"
-                        value={"diesel"}
+                        value={"auto"}
                       >
-                        Diesel
+                        Automatic
                       </SelectItem>
                     </SelectContent>
                   </Select>
+                  </div>
+                </div>
                   {errors.fuel && (
                     <p className="text-red-500 text-sm mt-1">
                       {errors.fuel}
@@ -399,7 +457,7 @@ export function AddCarDialog({ isOpen, setIsOpen }: AddCarDialogProps) {
                 </div>
               </div>
               
-              <div className="w-[140px] h-[100px] border border-black dark:border-zinc-700 relative">
+              <div className="min-w-[120px] w-[120px] h-[100px] flex-shrink-0 border border-black dark:border-zinc-700 relative">
                 {selectedImage && (
                   <>
                     <Image

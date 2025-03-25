@@ -50,6 +50,7 @@ interface Car {
   carFolderId: string;
   seats: number;
   fuel: string;
+  gear: string;
   photos:string[];
   bookings: {
     id: number;
@@ -95,6 +96,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [scrollValue,setScrollValue] = useState(0);
   const [previewImage,setPreviewImage] = useState<string | null>(null);
+  const [gear,setGear] = useState<string>(car?.gear || "");
 
   useEffect(() => {
     if (car) {
@@ -105,6 +107,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
       setSeats(car.seats.toString());
       setFuel(car.fuel);
       setPreviewImage(car.photos[0]);
+      setGear(car.gear);
     }
   }, [car]);
 
@@ -615,18 +618,58 @@ export function CarDetailsClient({ carId }: { carId: number }) {
                     <p className="text-sm text-blue-500 mb-1">Model</p>
                     <span className="font-medium">{car.model}</span>
                     <div>
-                    <p className="text-sm text-blue-500 mb-1">Seats</p>
-                    {!isEditable ?
-                      <span className="font-medium">{seats}</span>
-                    :
-                    <Input
-                          type="number"
-                          id="seats"
-                          value={seats}
-                          onChange={(e) => setSeats(e.target.value)}
-                          className="w-[80px] border-0 p-0 px-1 m-0 bg-gray-200 dark:bg-zinc-800 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400 "
-                        />
-                    }
+                      <p className="text-sm text-blue-500 mb-1">Seats</p>
+                      {!isEditable ?
+                        <span className="font-medium">{seats}</span>
+                      :
+                      <Input
+                            type="number"
+                            id="seats"
+                            value={seats}
+                            onChange={(e) => setSeats(e.target.value)}
+                            className="w-[80px] border-0 p-0 px-1 m-0 bg-gray-200 dark:bg-zinc-800 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400 "
+                          />
+                      }
+                    </div>
+                    <div>
+                      <p className="text-sm text-blue-500 mb-1">Fuel</p>
+                      {!isEditable || !isAdmin && userId !== 1 ? 
+                        <>
+                        {gear &&
+                        <span className="font-medium">{gear[0].toUpperCase() + gear.slice(1)}</span>} 
+                        </>
+                      :
+                      <Select
+                        value={gear} // Ensures placeholder shows when carId is 0 or undefined
+                        onValueChange={(value) => {
+                          setGear(value)
+                        }}
+                      >
+                        <SelectTrigger
+                          id="car"
+                          className="w-1/2 text-xs sm:text-sm border-black dark:border-zinc-700 focus:border-blue-400 focus-visible:ring-blue-400 max-sm:max-w-[190px] focus-visible:ring-blue-400 focus:outline-none"
+                        >
+                          <SelectValue placeholder="Select gear" />
+                        </SelectTrigger>
+                        <SelectContent
+                          className="bg-background border-border"
+                          aria-modal={false}
+                        >
+                          <SelectItem
+                            className="focus:bg-blue-300 dark:focus:bg-blue-900 cursor-pointer"
+                            value={"manual"}
+                          >
+                            Manual
+                          </SelectItem>
+                          <SelectItem
+                            className="focus:bg-blue-300 dark:focus:bg-blue-900 cursor-pointer"
+                            value={"auto"}
+                          >
+                            Automatic
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                      }
                     </div>
                   </div>
                   <div className="space-y-3">
@@ -868,7 +911,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
                               </div>
                             </div>
                           </div>
-                          {isAdmin && (
+                          {isAdmin ? 
                           <div
                             className="text-center ml-4"
                             onClick={() => {
@@ -879,7 +922,9 @@ export function CarDetailsClient({ carId }: { carId: number }) {
                           >
                             <Trash2 className="w-4 h-4 sm:h-6 sm:w-6 hover:text-red-500" />
                           </div>
-                          )}
+                          :
+                          <div className="w-4 h-4 sm:h-6 sm:w-6 "/>
+                          }
                         </div>
                         <div className="p-3 max-sm:p-2 flex bg-gray-200 dark:bg-muted items-center text-green-600 dark:text-green-400 gap-2">
                           <CarIcon className="w-8 h-3 stroke-green-600 dark:stroke-green-400 fill-green-600 dark:fill-green-400 stroke-[4px]" />
