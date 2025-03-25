@@ -10,6 +10,8 @@ import Customers from "@/public/customers.svg";
 import Users from "@/public/users.svg";
 import { useUserStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 
 export default function Profile() {
@@ -127,6 +129,10 @@ export default function Profile() {
               </CardContent>
             </Card>
           )}
+          <Link target="_blank" href="https://www.jaincarrental.in" className="flex w-full p-10 justify-center items-center text-blue-400">
+            <p>Go to users page</p>
+            <ArrowRight className="w-4 h-4 ml-2" />
+          </Link>
         </div>
       </main>
     </div>
