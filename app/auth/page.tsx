@@ -15,9 +15,10 @@ import {
 } from "@/components/ui/card";
 import axios from "axios";
 import { BASE_URL } from "@/lib/config";
-import { useCarStore, useUserStore } from "@/lib/store";
+import {  useUserStore } from "@/lib/store";
 import { useRouter } from "next/navigation";
 import { toast } from "@/hooks/use-toast";
+import Initiate from "@/components/initiate";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -25,8 +26,8 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const { name,setName,setUserId } = useUserStore();
   const router = useRouter();
-  const {setCars} = useCarStore();
   const [isLoading, setIsLoading] = useState(false);
+  const [shouldInitiate, setShouldInitiate] = useState(false);
 
   useEffect(()=>{
     if(name){
@@ -53,14 +54,8 @@ export default function LoginPage() {
       );
       localStorage.setItem("token", res.data.token);
       setUserId(res.data.id);
-      const res1 = await axios.get(`${BASE_URL}/api/v1/car/all`, {
-        headers: {
-          authorization: `Bearer ` + localStorage.getItem("token"),
-        },
-      });
-      setCars(res1.data.cars);
+      setShouldInitiate(true);
       router.push("/");
-      router.refresh();
       setName(res.data.name);
       toast({
         description: "Login Successful",
@@ -79,6 +74,8 @@ export default function LoginPage() {
     }
     setIsLoading(false);
   };
+
+  if(shouldInitiate) return <Initiate />
 
   return (
     <div className="min-h-screen bg-white/30 dark:bg-black/30 backdrop-blur-lg flex items-center justify-center p-4">

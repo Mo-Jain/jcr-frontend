@@ -632,7 +632,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
                       }
                     </div>
                     <div>
-                      <p className="text-sm text-blue-500 mb-1">Fuel</p>
+                      <p className="text-sm text-blue-500 mb-1">Transmission</p>
                       {!isEditable || !isAdmin && userId !== 1 ? 
                         <>
                         {gear &&
