@@ -492,8 +492,8 @@ export function CarDetailsClient({ carId }: { carId: number }) {
 
       <div>
         <div className="flex flex-col sm:flex-row gap-2 sm:border-b border-border h-full">
-          <div className=" flex flex-col sm:border-r border-border px-1 justify-center sm:py-4 items-center w-full min-h-full">
-            <div className="relative w-full max-sm:px-2  my-2 h-fit">
+          <div className=" flex flex-col sm:border-r border-border px-1 justify-center sm:py-4 items-center w-full h-full">
+            <div className="relative w-full max-sm:px-2  my-2 h-full">
               <div 
               onClick={() => {
                 setIsPreviewOpen(true);
@@ -504,31 +504,31 @@ export function CarDetailsClient({ carId }: { carId: number }) {
                   alt={`${car.brand} ${car.model}`}
                   width={2000}
                   height={1000}
-                  className={cn("col-span-2 rounded-md h-full max-w-full max-h-full max-sm:min-h-[230px] object-cover",
+                  className={cn("col-span-2 rounded-md h-[230px] sm:h-[265px] max-w-full max-h-full object-cover",
                     imageUrl.length < 2 && "col-span-3"
                   )}
                 />
                 {imageUrl.length >= 2 && 
-                <div className="w-full h-full flex flex-col gap-1">
+                <div className="w-full h-[225px] sm:h-[260px] flex flex-col gap-1 rounded-r-md">
                   {imageUrl[1] &&
-                  <div className="w-full h-full">
+                  <div className="w-full h-1/2 max-h-full rounded-r-md">
                       <Image
                         src={imageUrl[1] || "/placeholder.svg"}
                         alt={`${car.brand} ${car.model}`}
                         width={2000}
                         height={1000}
-                        className="h-full w-full object-cover"
+                        className="h-full max-h-full w-full object-cover rounded-r-md"
                       />
                   </div>
                       }
                   {imageUrl[2] &&
-                  <div className="w-full relative h-full ">
+                  <div className="w-full relative h-1/2 max-h-full rounded-r-md">
                       <Image
                         src={imageUrl[2] || "/placeholder.svg"}
                         alt={`${car.brand} ${car.model}`}
                         width={2000}
                         height={1000}
-                        className="h-full w-full object-cover"
+                        className="h-full w-full max-h-full object-cover rounded-r-md"
                       />
                       <div className="w-full absolute text-white inset-0 h-full bg-black/10 hover:bg-black/20 flex items-center justify-center">
                         <span>+{imageUrl.length - 2} more</span>

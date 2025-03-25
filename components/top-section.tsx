@@ -29,7 +29,7 @@ export const TopSection = () => {
 
   const handleDownArrow = () => {
     const scrollY = window.scrollY;
-    const end = isSmallScreen ? 110 : 200;
+    const end = isSmallScreen ? 110 : 130;
     const duration = 200 * (200 - scrollY) / end;
     smoothScrollTo(end,duration);
   }
@@ -41,7 +41,7 @@ export const TopSection = () => {
         <div className="container mx-auto px-4 h-fit ">
           <div className="max-w-3xl mx-auto text-center relative z-10">
             <h1
-              className="sm:text-4xl text-2xl font-bold [text-shadow:_0_8px_8px_rgb(103_103_110_/_0.8)] text-gray-900 dark:text-gray-200 mb-4"
+              className="sm:text-3xl text-2xl font-bold [text-shadow:_0_8px_8px_rgb(103_103_110_/_0.8)] text-gray-900 dark:text-gray-200 mb-4"
               style={{ fontFamily: "var(--font-alma), sans-serif" }}
             >
               SEAMLESS CAR BOOKINGS TRACKING
