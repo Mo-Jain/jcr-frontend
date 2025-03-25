@@ -378,7 +378,7 @@ export function AddCarDialog({ isOpen, setIsOpen }: AddCarDialogProps) {
                     >
                       <SelectTrigger
                         id="car"
-                        className="max-sm:w-1/4 sm:w-full sm:min-w-[100px] text-xs sm:text-sm border-black dark:border-zinc-700 focus:border-blue-400 focus-visible:ring-blue-400 max-sm:max-w-[190px] focus-visible:ring-blue-400 focus:outline-none"
+                        className=" sm:w-full sm:min-w-[100px] text-xs sm:text-sm border-black dark:border-zinc-700 focus:border-blue-400 focus-visible:ring-blue-400 max-sm:max-w-[190px] focus-visible:ring-blue-400 focus:outline-none"
                       >
                         <SelectValue placeholder="Select fuel" />
                       </SelectTrigger>

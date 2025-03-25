@@ -494,8 +494,8 @@ export function CarDetailsClient({ carId }: { carId: number }) {
       </div>
 
       <div>
-        <div className="flex flex-col sm:flex-row gap-2 sm:border-b border-border h-full">
-          <div className=" flex flex-col sm:border-r border-border px-1 justify-center sm:py-4 items-center w-full h-full">
+        <div className="flex flex-col sm:flex-row gap-2 sm:border-b border-border h-full items-center">
+          <div className=" flex flex-col  px-1 justify-center sm:py-4 items-center w-full h-full">
             <div className="relative w-full max-sm:px-2  my-2 h-full">
               <div 
               onClick={() => {
@@ -607,7 +607,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
               }
             </div>
           </div>
-          <div className="w-full h-full">
+          <div className="w-full h-full sm:border-l border-border">
             <div className="">
               <section className="px-2 py-2 pb-0 max-sm:border-t border-gray-200 dark:border-zinc-700">
                 <h2 className="text-lg font-semibold mb-4 ">Car Details</h2>
