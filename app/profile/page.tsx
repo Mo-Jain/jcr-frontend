@@ -27,8 +27,6 @@ export default function Profile() {
     router.push("/");
   };
 
-  console.log("BASE_URL",BASE_URL);
-  console.log("USER_URL",USER_URL);
 
   return (
     <div className="h-full min-h-[88vh] sm:min-h-[90vh] bg-background">
