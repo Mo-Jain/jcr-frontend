@@ -129,7 +129,7 @@ export default function Profile() {
               </CardContent>
             </Card>
           )}
-          <Link target="_blank" href="https://www.jaincarrental.in" className="flex w-full p-10 justify-center items-center text-blue-400">
+          <Link href="https://www.jaincarrental.in" className="flex w-full p-10 justify-center items-center text-blue-400">
             <p>Go to users page</p>
             <ArrowRight className="w-4 h-4 ml-2" />
           </Link>
