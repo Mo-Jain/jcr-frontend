@@ -12,12 +12,12 @@ import { useUserStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { BASE_URL, USER_URL } from "@/lib/config";
 
 
 export default function Profile() {
   const router = useRouter();
   const { name, imageUrl, userId,setName, setImageUrl,setUserId } = useUserStore();
-
 
   const handleLogout = () => {
     localStorage.setItem("token", "");
@@ -26,6 +26,9 @@ export default function Profile() {
     setUserId(-1);
     router.push("/");
   };
+
+  console.log("BASE_URL",BASE_URL);
+  console.log("USER_URL",USER_URL);
 
   return (
     <div className="h-full min-h-[88vh] sm:min-h-[90vh] bg-background">
@@ -129,7 +132,7 @@ export default function Profile() {
               </CardContent>
             </Card>
           )}
-          <Link href={process.env.USER_BASE_URL || ""} className="flex w-full p-10 justify-center items-center text-blue-400">
+          <Link href={USER_URL} className="flex w-full p-10 justify-center items-center text-blue-400">
             <p>Go to users page</p>
             <ArrowRight className="w-4 h-4 ml-2" />
           </Link>
