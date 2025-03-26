@@ -24,6 +24,7 @@ import CarFrontIcon from "@/public/car-front.svg";
 import UserIcon from "@/public/user.svg";
 import Calendar from "@/public/date-and-time.svg";
 import Rupee from "@/public/rupee-symbol.svg";
+import Advance from "@/public/advance.svg";
 import Booking from "@/public/online-booking.svg";
 import axios from "axios";
 import { BASE_URL } from "@/lib/config";
@@ -83,7 +84,7 @@ export function AddBookingDialog({
   const [startTime, setStartTime] = useState<string>("00:00");
   const [endTime, setEndTime] = useState<string>("00:00");
   const [carId, setCarId] = useState<number>(cars[0] ? cars[0].id : 0);
-  const [price, setPrice] = useState<string>("");
+  const [price, setPrice] = useState<number>(0);
   const [totalAmount, setTotalAmount] = useState<number>(0);
   const [name, setName] = useState<string>("");
   const [contact, setContact] = useState<string>("");
@@ -91,9 +92,10 @@ export function AddBookingDialog({
   const [isLoading, setIsLoading] = useState(false);
   const [customerId, setCustomerId] = useState<number>();
   const [customers, setCustomers] = useState<Customer[]>();
+  const [advance, setAdvance] = useState<number>(0);
 
   useEffect(() => {
-    const cost = calculateCost(startDate, endDate, startTime, endTime, parseInt(price));
+    const cost = calculateCost(startDate, endDate, startTime, endTime, price);
     setTotalAmount(cost);
   }, [price, startDate, endDate, startTime, endTime]);
 
@@ -101,7 +103,7 @@ export function AddBookingDialog({
     if (carId === 0) return;
     const currCar = cars.find((car) => car.id === carId);
     if (currCar) {
-      setPrice(currCar.price.toString());
+      setPrice(currCar.price);
     }
   }, [carId, cars]);
 
@@ -122,7 +124,7 @@ export function AddBookingDialog({
 
   const validateForm = () => {
     const newErrors: FormErrors = {};
-    if (price === "") newErrors.price = "Price can't be empty";
+    if (price === 0) newErrors.price = "Price can't be zero";
     if (totalAmount === 0) newErrors.totalAmount = "Total Amount can't be zero";
     if (!startDate) newErrors.startDate = "This field is mandatory";
     if (!endDate) newErrors.endDate = "This field is mandatory";
@@ -202,9 +204,10 @@ export function AddBookingDialog({
           carId,
           customerName: name,
           customerContact: contact,
-          dailyRentalPrice: parseInt(price),
+          dailyRentalPrice: price,
           totalAmount: totalAmount,
           customerId: customerId,
+          advance
         },
         {
           headers: {
@@ -292,7 +295,7 @@ export function AddBookingDialog({
               Add Booking
             </DialogTitle>
           </DialogHeader>
-          <form  className="space-y-4">
+          <form  className="space-y-3">
             <div className="flex items-center gap-4">
               <CarFrontIcon className="w-6 h-4 dark:stroke-blue-200 dark:fill-blue-200 stroke-[6px] stroke-black fill-black flex-shrink-0" />
               <Label htmlFor="car" className="w-1/3">
@@ -471,8 +474,8 @@ export function AddBookingDialog({
                 onChange={(e) => {
                   const value = e.target.value;
                   if (/^\d*$/.test(value)) {
-                    setPrice(value);
-                    setErrors((prev) => ({ ...prev, car: "" }));
+                    setPrice(Number(value));
+                    setErrors((prev) => ({ ...prev, price: "" }));
                   }
                 }}
               />
@@ -496,6 +499,31 @@ export function AddBookingDialog({
               {errors.totalAmount && (
                 <p className="text-red-500 text-sm mt-1">
                   {errors.totalAmount}
+                </p>
+              )}
+            </div>
+            <div className="flex items-center gap-4">
+              <Advance className="h-6 w-6 mr-[-2px] flex-shrink-0 stroke-[2px] stroke-black fill-black dark:stroke-white dark:fill-white" />
+              <Label htmlFor="advance" className="w-1/3">
+                Advance Payment
+              </Label>
+              <Input
+                type="text"
+                id="price"
+                className="w-2/3 border-input max-sm:text-xs  focus:border-blue-400 focus-visible:ring-blue-400 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                value={advance}
+                placeholder="0"
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (/^\d*$/.test(value)) {
+                    setAdvance(Number(value));
+                    setErrors((prev) => ({ ...prev, advance: "" }));
+                  }
+                }}
+              />
+              {errors.advance && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.advance}
                 </p>
               )}
             </div>

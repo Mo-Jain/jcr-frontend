@@ -27,6 +27,8 @@ export default function Profile() {
     router.push("/");
   };
 
+  console.log("USER_URL",USER_URL);
+  console.log("BASE_URL",BASE_URL);
 
   return (
     <div className="h-full min-h-[88vh] sm:min-h-[90vh] bg-background">
@@ -131,7 +133,7 @@ export default function Profile() {
             </Card>
           )}
           <Link href={USER_URL} className="flex w-full p-10 justify-center items-center text-blue-400">
-            <p>Go to users page</p>
+            <div>Go to users page</div>
             <ArrowRight className="w-4 h-4 ml-2" />
           </Link>
         </div>

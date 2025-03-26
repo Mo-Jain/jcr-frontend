@@ -908,12 +908,15 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
               {(totalAmount ? totalAmount : 0) -
                 (advancePayment ? advancePayment : 0)}
             </span>
-            {booking.advancePayment && (
               <div>
                 <p className="text-sm text-blue-500">Payment Done</p>
                 {!isEditable || !isAdmin ? (
                   <>
+                    {advancePayment ?
                     <span className="text-sm">{advancePayment}</span>
+                    :
+                    <span className="text-sm">NA</span>
+                    }
                   </>
                 ) : (
                   <>
@@ -921,9 +924,12 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
                       type="text"
                       id="number"
                       value={advancePayment}
-                      onChange={(e) =>
-                        setAdvancePayment(Number(e.target.value))
-                      }
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        if (/^\d*$/.test(value)) {
+                          setAdvancePayment(Number(e.target.value))
+                        }
+                      }}
                       className="w-[130px] sm:w-[170px]  sm:text-sm text-xs  border-0 p-0 my-0 px-1 bg-gray-200 dark:bg-muted dark:hover:bg-card rounded-sm hover:bg-gray-300 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400
                         [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
                         "
@@ -931,7 +937,6 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
                   </>
                 )}
               </div>
-            )}
           </div>
         </div>
       </div>
