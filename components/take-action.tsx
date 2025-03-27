@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useMemo, useState } from "react";
 import ArrowRight from "@/public/right_arrow.svg";
-import Booking from "@/public/online-booking.svg";
+import BookingIcon from "@/public/online-booking.svg";
 import axios from "axios";
 import { BASE_URL } from "@/lib/config";
 import { useRouter } from "next/navigation";
@@ -86,6 +86,9 @@ const TakeAction = () => {
           </div>
         ) : (
           <div className="w-full h-full flex flex-col justify-center items-center">
+            <BookingIcon
+              className={`sm:h-16 h-12 sm:w-16 w-12 stroke-[2px] fill-gray-400 stroke-gray-400`}
+            />
             <p className="text-center mb-4 text-lg sm:text-2xl text-gray-400 font-bold">
               All Bookings are in time
             </p>

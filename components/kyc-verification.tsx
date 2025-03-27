@@ -27,7 +27,6 @@ interface Customer {
 }
 
 const KYCVerification = () => {
-  const [flag, setFlag] = useState(false);
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [selectedCustomer, setSelectedCustomer] = useState<Customer>();
   const [isViewCustomerOpen, setIsViewCustomerOpen] = useState(false);
@@ -43,8 +42,8 @@ const KYCVerification = () => {
                 authorization: `Bearer ` + localStorage.getItem("token"),
             },
             });
-            setCustomers(res.data.customers);
-            if(res.data.customers.length !== 0) setFlag(true);
+            const newCustomers = res.data.customers.filter((customer:Customer) => customer.kycStatus === "under review");
+            setCustomers(newCustomers);
         } catch (error) {
             console.log(error);
             setIsLoading(false)
@@ -90,7 +89,6 @@ const KYCVerification = () => {
     }
   }
 
-
   return (
     <div className="w-full  relative p-1 rounded-md shadow-sm bg-white dark:bg-muted z-0 flex flex-col xs:bg-blue-500">
       <div className="px-4 py-3 border-b border-gray-300 dark:border-border">
@@ -105,9 +103,8 @@ const KYCVerification = () => {
             />
         )}
       <div className="  py-1 rounded-md h-[300px] scrollbar-hide overflow-y-scroll ">
-       {!isLoading ? 
         <>
-        {flag ? (
+        {customers.length > 0 ? (
           <div className="flex flex-col gap-1 cursor-pointer scrollbar-hide rounded-lg overflow-y-scroll">
             {customers.map((customer: Customer) => {
               if(customer.kycStatus !== "under review") return;
@@ -143,20 +140,12 @@ const KYCVerification = () => {
           </div>
         ) : (
           <div className="w-full h-full flex flex-col justify-center items-center">
-            <IndianRupee
-              className={`sm:h-16 h-12 sm:w-16 w-12 stroke-[2px] text-gray-400`}
-            />
             <p className="text-center text-lg sm:text-2xl text-gray-400 font-bold">
-              No earnings yet
+              No Verification to do
             </p>
           </div>
         )}
         </>
-        :
-        <div className="w-full h-full flex flex-col justify-center items-center">
-          <Loader/>
-        </div>
-        }
       </div>
     </div>
   );
