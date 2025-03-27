@@ -70,6 +70,7 @@ export function AddCarDialog({ isOpen, setIsOpen }: AddCarDialogProps) {
     return Object.keys(newErrors).length === 0;
   };
 
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!validateForm()) {

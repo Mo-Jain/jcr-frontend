@@ -87,6 +87,19 @@ type EventStore1 = {
   setEventsRow: (eventsRow: EventRow[]) => void;
 };
 
+interface SearchStore {
+  startDate: Date;
+  setStartDate: (value: Date) => void;
+  endDate: Date | null;
+  setEndDate: (value: Date | null) => void;
+  startTime: string;
+  setStartTime: (value: string) => void;
+  endTime: string;
+  setEndTime: (value: string) => void;
+  isSearching: boolean;
+  setIsSearching: (value: boolean) => void;
+}
+
 export const useEventRows = create<EventStore1>((set) => ({
   eventsRow: [],
   setEventsRow: (eventsRow) => set({ eventsRow }),
@@ -115,6 +128,36 @@ export const useWrappedEvent = create<WrappedEventStore>((set) => ({
   wrappedEvents: [],
   setWrappedEvents: (wrappedEvents) => set({ wrappedEvents }),
 }));
+
+export const useSearchStore = create<SearchStore>()(
+  devtools(
+    persist(
+      (set) => ({
+        startDate: new Date(),
+        setStartDate: (value: Date) => {
+          set({ startDate: value });
+        },
+        endDate: new Date(),
+        setEndDate: (value: Date | null) => {
+          set({ endDate: value });
+        },
+        startTime: "8:30 AM",
+        setStartTime: (value: string) => {
+          set({ startTime: value });
+        },
+        endTime: "8:30 AM",
+        setEndTime: (value: string) => {
+          set({ endTime: value });
+        },
+        isSearching: false,
+        setIsSearching: (value: boolean) => {
+          set({ isSearching: value });
+        },
+      }),
+      { name: "user_data", skipHydration: true },
+    ),
+  ),
+);
 
 export const useUserStore = create<UserStore>()(
   devtools(

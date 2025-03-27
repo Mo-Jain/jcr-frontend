@@ -40,9 +40,12 @@ export function NavBar() {
       setSelectedTab("profile");
     } else if (pathname.startsWith("/calendar")) {
       setSelectedTab("calendar");
+    } else if (pathname === "/cars") {
+      setSelectedTab("cars");
     } else if (pathname === "/") {
       setSelectedTab("home");
     }
+    
   }, [pathname]);
 
   const handleClick = () => {
@@ -66,7 +69,7 @@ export function NavBar() {
             <LogoText className="ml-[-10px] sm:ml-[-5px] dark:stroke-white w-10 sm:w-14 h-7" />
           </div>
           <div
-            className={`sm:w-full ${name ? "sm:ml-48" : ""} flex justify-center items-center`}
+            className={`sm:w-full ${name ? "lg:ml-64" : ""} flex justify-center max-lg:justify-end items-center`}
           >
             <ThemeToggle />
           </div>
@@ -83,7 +86,7 @@ export function NavBar() {
         ) : (
           <div 
           style={{ fontFamily: "var(--font-xova), sans-serif" }}
-          className="w-18 space-x-2  flex text-right ">
+          className="w-18 flex text-right ">
             <div className="flex items-center text-zinc-700 dark:text-gray-200 max-sm:hidden space-x-2 justify-around">
               <div
                 className={`px-2 hover:text-blue-700 ${selectedTab == "home" ? "text-blue-700 border-b-blue-700" : ""} border-transparent transition-all border duration-300 border-y-4 p-1 cursor-pointer font-bold`}
@@ -98,15 +101,21 @@ export function NavBar() {
                 Bookings
               </div>
               <div
+                className={`px-2 hover:text-blue-700 ${selectedTab == "cars" ? "text-blue-700 border-b-blue-700" : ""} border-transparent transition-all border duration-300 border-y-4 p-1 cursor-pointer font-bold`}
+                onClick={() => router.push("/cars")}
+              >
+                Cars
+              </div>
+              <div
                 className={`px-2 hover:text-blue-700 ${selectedTab == "calendar" ? "text-blue-700 border-b-blue-700" : ""} border-transparent transition-all border duration-300 border-y-4 p-1 cursor-pointer font-bold`}
                 onClick={() => router.push("/calendar")}
               >
-                {" "}
+               
                 Calendar
               </div>
             </div>
             <div
-              className={`flex flex-col items-center px-2 hover:text-blue-700 max-sm:hidden ${selectedTab == "profile" ? "text-blue-700 border-b-blue-700" : ""} border-transparent transition-all border duration-300 border-y-4 p-1 cursor-pointer font-bold`}
+              className={`flex flex-col items-center hover:text-blue-700 max-sm:hidden ${selectedTab == "profile" ? "text-blue-700 border-b-blue-700" : ""} border-transparent transition-all border duration-300 border-y-4 p-1 cursor-pointer font-bold m-0`}
               onClick={() => router.push("/profile")}
             >
               {imageUrl ? (

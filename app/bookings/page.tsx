@@ -9,7 +9,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { MoreVertical, Plus, PlusSquare, Trash2 } from "lucide-react";
+import { MoreVertical, Plus, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { AddBookingDialog } from "@/components/add-booking";
@@ -205,20 +205,6 @@ export default function Bookings() {
     console.log("selectedBookings",selectedBookings)
   },[selectedBookings])
 
-  const handleAddBooking = () => {
-    if (cars.length === 0) {
-      toast({
-        description: `Please add cars`,
-        className:
-          "text-black bg-white border-0 rounded-md shadow-mg shadow-black/5 font-normal",
-        variant: "destructive",
-        duration: 2000,
-      });
-      return;
-    }
-    setIsAddBookingOpen(true);
-  };
-
   useEffect(() => {
     const newfilteredBookings = bookings.filter(
       (booking) =>
@@ -241,21 +227,7 @@ export default function Bookings() {
           setBookings={setBookings}
         />
       }
-      {/* Add Booking button */}
-
-      <div
-        className="fixed z-[50] sm:hidden bottom-[70px] right-5 flex items-center justify-start whitespace-nowrap"
-        onClick={handleAddBooking}
-      >
-        <div
-          className={cn(
-            "bg-primary px-[15px] active:scale-95 overflow-hidden text-white dark:text-black shadow-lg  rounded-md w-12 h-12 flex items-center",
-            cars && cars.length > 0 ? "cursor-pointer" : "cursor-not-allowed",
-          )}
-        >
-          <Plus className="w-8 h-8 stroke-10" />
-        </div>
-      </div>
+      
 
       <main className="container mx-auto px-2 sm:px-4 py-8 pb-16 sm:pb-8">
         <div className="flex justify-between items-center mb-6">
@@ -347,16 +319,7 @@ export default function Bookings() {
               Cancelled{getBookingLength("Cancelled")}
             </Button>
           </div>
-          {bookings.length > 0 && (
-            <Button
-            style={{ fontFamily: "var(--font-pier), sans-serif" }}
-              className="max-sm:hidden bg-primary active:scale-95 text-white hover:bg-opacity-10 shadow-lg"
-              onClick={handleAddBooking}
-            >
-              <PlusSquare className="h-12 w-12" />
-              <span className="">Add Booking</span>
-            </Button>
-          )}
+          
         </div>
         <div className="border-t overflow-hidden border-border w-full ">
           <div

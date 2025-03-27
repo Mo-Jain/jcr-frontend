@@ -55,7 +55,7 @@ const CustomerName = ({
       {isFocused && name.length > 0 && (
         <div className="w-[150px] bg-muted ba p-0 absolute rounded-md scrollbar-hide top-10 left-0">
           {filteredCustomers.length > 0 && (
-            <div className="max-h-[300px] overflow-auto bg-background rounded-sm">
+            <div className="max-h-[300px] overflow-auto scrollbar-hide bg-background rounded-sm">
               {filteredCustomers.map((customer) => (
                 <div
                   key={customer.id}

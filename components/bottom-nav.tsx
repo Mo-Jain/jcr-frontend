@@ -8,6 +8,8 @@ import { useUserStore } from "@/lib/store";
 import HomeIcon from "@/public/home.svg";
 import BookingIcon from "@/public/online-booking.svg";
 import CalendarIcon from "@/public/calendar.svg";
+import CarIcon from "@/public/car-search.svg";
+
 
 type NavItem = {
   id: string;
@@ -25,6 +27,7 @@ type ProfileIconProps = {
 const NAV_ITEMS: NavItem[] = [
   { id: "home", href: "/", icon: HomeIcon },
   { id: "bookings", href: "/bookings", icon: BookingIcon },
+  { id: " cars", href: "/cars", icon: CarIcon },
   { id: "calendar", href: "/calendar", icon: CalendarIcon },
   { id: "profile", href: "/profile", icon: null },
 ];
@@ -78,7 +81,7 @@ export function BottomNav() {
                 ) : (
                   Icon && (
                     <Icon
-                      className={`h-8 w-8 ${getIconClasses(selectedTab === id)}`}
+                      className={`h-8 ${Icon === CarIcon ? "stroke-[12px] w-10" : "w-8"} ${getIconClasses(selectedTab === id)}`}
                     />
                   )
                 )}
@@ -121,7 +124,7 @@ function ProfileIcon({ selected, imageUrl, shortName }: ProfileIconProps) {
 }
 
 function getIconClasses(selected: boolean): string {
-  return selected ? " fill-primary " : "fill-gray-500 ";
+  return selected ? " fill-primary stroke-primary" : "fill-gray-500 stroke-gray-500";
 }
 
 function getTextClasses(selected: boolean): string {
