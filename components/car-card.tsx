@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Ashoka from "@/public/ashoke-chakra.svg";
 import { cn } from "@/lib/utils";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface CarCardProps {
@@ -52,7 +52,7 @@ export function CarCard({ name, plateNumber,ongoingBooking,upcomingBooking,photo
     <div className="w-full z-0 relative z-0">
       <div className="p-2 z-0 border border-border shadow-sm  bg-white dark:bg-muted rounded-md cursor-pointer">
         <div className="flex flex-col relative justify-between gap-1 sm:px-1 rounded-sm z-0">
-          {upcomingBooking && ongoingBooking &&
+          {upcomingBooking !== undefined && ongoingBooking !== undefined &&
           <div className="absolute -top-1 -right-1 flex items-center gap-1 z-10">
             {/* upcoming booking */}
             {upcomingBooking >0 &&
