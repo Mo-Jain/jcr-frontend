@@ -111,8 +111,6 @@ export function AddCarDialog({ isOpen, setIsOpen }: AddCarDialogProps) {
 
       const resImage = await uploadToDrive(imageFile, createdFolder.folderId);
 
-      console.log("response Image", resImage);
-
       const body = {
         brand: carBrand,
         model: carModel,

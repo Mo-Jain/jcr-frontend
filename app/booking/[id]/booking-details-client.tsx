@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Edit,  MoreVertical, Trash2, Upload } from "lucide-react";
+import { Edit,  MoreVertical, Share, Trash2, Upload } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -31,6 +31,7 @@ import { useEventStore } from "@/lib/store";
 import ExportIcon from "@/public/File export.svg"
 import ExportButton from "@/components/export-button";
 import Loader from "@/components/loader";
+import MailDialog from "@/components/mail-dialog";
 
 interface BookingDetailsClientProps {
   booking: Booking;
@@ -97,6 +98,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
   const [progress, setProgress] = useState(0);
   const [loadingMessage, setLoadingMessage] = useState("Please wait");
   const {events,setEvents} = useEventStore();
+  const [openMailDialog, setOpenMailDialog] = useState(false);
 
   const initialReading = useMemo(() => {
     if (booking.endodometerReading) return booking.endodometerReading;
@@ -135,8 +137,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
       handleDocumentDelete();
     } else if (action === "delete the car photos of") {
       handleCarImageDelete();
-    }
-    else if( action === "Cancel"){
+    }else if( action === "Cancel"){
       handleCancel();
     }
     return;
@@ -594,6 +595,8 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
     );
   };
 
+ 
+
   return (
     <div>
       {isDeleting && (
@@ -603,6 +606,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
           </div>
         </div>
       )}
+      <MailDialog open={openMailDialog} setOpen={setOpenMailDialog} booking={booking}/>
       <div className="flex items-center justify-between px-2 pb-2 border-b border-gray-300 dark:border-muted dark:text-white">
         <div
           className="mr-2 rounded-md font-bold  cursor-pointer dark:hover:bg-gray-800 hover:bg-gray-200"
@@ -665,6 +669,13 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
                 <Cancel className="mr-2 h-4 w-4 stroke-1 stroke-black dark:stroke-white dark:fill-white" />
                 <span>Cancel</span>
               </DropdownMenuItem>
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onClick={() => setOpenMailDialog(true)}
+              >
+                <Share className="mr-2 h-4 w-4 " />
+                <span>Share</span>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
           }
@@ -672,9 +683,18 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
         {/* Spacer for alignment */}
       </div>
 
-      <div className="px-1 sm:px-4 py-4 border-b-4 border-gray-200 dark:border-muted">
-        <div className="flex justify-between items-center">
+      <div className="px-1 sm:px-4 py-4 border-b-4 border-gray-200 dark:border-muted ">
+        <div className="flex justify-between items-center relative">
           <div>
+            {booking.otp && booking.otp !== "" &&
+              <div className="absolute top-1 left-1 flex gap-2 text-gray-500 items-center w-fit ">
+              <p className="font-semibold max-sm:text-sm">
+                OTP:
+              </p>
+              <p className="font-semibold max-sm:text-sm">
+                {booking.otp}
+              </p>
+            </div>}
             <p className="text-sm text-blue-500">
               {getHeader(
                 bookingStatus,

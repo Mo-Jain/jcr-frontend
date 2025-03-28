@@ -26,6 +26,7 @@ import { Booking, Document } from "./page";
 import { RenderFileList, RenderNewFileList } from "./render-file-list";
 import { uploadToDrive } from "@/app/actions/upload";
 import Link from "next/link";
+import MailDialog from "@/components/mail-dialog";
 
 interface FormErrors {
   [key: string]: string;
@@ -78,6 +79,8 @@ export default function BookingStartClient({
   );
   const [progress, setProgress] = useState(0);
   const [loadingMessage, setLoadingMessage] = useState("Please wait");
+  const [customerMail, setCustomerMail] = useState(booking.customerMail || "");
+  const [isMailDialogOpen, setIsMailDialogOpen] = useState(false)
 
   useEffect(() => {
     const cost = calculateCost(
@@ -103,6 +106,7 @@ export default function BookingStartClient({
     if (!securityDeposit) newErrors.securityDeposit = "This field is mandatory";
     if (!odometerReading) newErrors.odometerReading = "This field is mandatory";
     if (!address) newErrors.address = "This field is mandatory";
+    if (!customerMail) newErrors.mail = "This field is mandatory";
     if (!bookingAmountReceived)
       newErrors.bookingAmountReceived = "This field is mandatory";
     if (!dailyRentalPrice)
@@ -111,6 +115,7 @@ export default function BookingStartClient({
     if (!paymentMethod) newErrors.paymentMethod = "This field is mandatory";
     if (!termsAccepted)
       newErrors.terms = "You must accept the terms and conditions";
+    if(customerMail === "") newErrors.mail = "This field is mandatory";
  
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -294,7 +299,8 @@ export default function BookingStartClient({
         throw new Error("Failed to upload selfie photo");
         return;
       }
-
+      setProgress(98);
+      setLoadingMessage("Please wait");
       await axios.put(
         `${BASE_URL}/api/v1/booking/${bookingId}/start`,
         {
@@ -316,6 +322,7 @@ export default function BookingStartClient({
           documents: docFiles.length > 0 ? docFiles : undefined,
           selfieUrl: resSelfie ? resSelfie.url : undefined,
           carImages: photoFiles,
+          customerMail:customerMail,
         },
         {
           headers: {
@@ -331,8 +338,7 @@ export default function BookingStartClient({
         className:
           "text-black bg-white border-0 rounded-md shadow-mg shadow-black/5 font-normal",
       });
-      router.push("/bookings");
-      router.refresh();
+      setIsMailDialogOpen(true)
     } catch (error) {
       console.log(error);
       toast({
@@ -373,6 +379,12 @@ export default function BookingStartClient({
 
   return (
     <div className="max-w-4xl mx-auto p-6">
+      <MailDialog 
+        booking={booking} 
+        open={isMailDialogOpen} 
+        setOpen={setIsMailDialogOpen} 
+        handleSkip={() => router.push("/bookings")}
+        />
       <h1 className="text-2xl font-bold ">Booking Start Checklist</h1>
       <div className="mb-6">
         <span className="text-sm text-blue-600 dark:text-blue-400">
@@ -571,6 +583,23 @@ export default function BookingStartClient({
               />
               {errors.address && (
                 <p className="text-red-500 text-sm mt-1">{errors.address}</p>
+              )}
+            </div>
+            <div>
+              <Label className="max-sm:text-xs" htmlFor="mail">
+                Customer Mail <span className="text-red-500">*</span>
+              </Label>
+              <Input
+                id="mail"
+                value={customerMail}
+                onChange={(e) => {
+                  setCustomerMail(e.target.value);
+                  setErrors((prev) => ({ ...prev, mail: "" }));
+                }}
+                className={inputClassName("mail")}
+              />
+              {errors.mail && (
+                <p className="text-red-500 text-sm mt-1">{errors.mail}</p>
               )}
             </div>
           </div>

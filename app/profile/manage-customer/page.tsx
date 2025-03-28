@@ -34,6 +34,7 @@ export interface Customer {
   address?: string;
   folderId: string;
   joiningDate: string;
+  email?: string;
   documents?: Document[];
   kycStatus:string;
 }

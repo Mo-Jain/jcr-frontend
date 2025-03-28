@@ -39,6 +39,7 @@ export interface Booking {
   totalPrice?: number;
   advancePayment?: number;
   customerAddress?: string;
+  customerMail?: string;
   paymentMethod?: string;
   odometerReading?: string;
   endodometerReading?: string;
@@ -48,6 +49,7 @@ export interface Booking {
   carImages?: CarImage[];
   customerId: number;
   folderId: string;
+  otp?: string;
   cancelledBy? : "guest" | "host";
   bookingFolderId: string;
 }

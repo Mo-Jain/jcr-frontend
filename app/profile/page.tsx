@@ -12,7 +12,7 @@ import { useUserStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { BASE_URL, USER_URL } from "@/lib/config";
+import { USER_URL } from "@/lib/config";
 
 
 export default function Profile() {
@@ -26,9 +26,6 @@ export default function Profile() {
     setUserId(-1);
     router.push("/");
   };
-
-  console.log("USER_URL",USER_URL);
-  console.log("BASE_URL",BASE_URL);
 
   return (
     <div className="h-full min-h-[88vh] sm:min-h-[90vh] bg-background">

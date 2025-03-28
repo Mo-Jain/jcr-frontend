@@ -39,6 +39,7 @@ export interface Booking {
   totalPrice?: number;
   advancePayment?: number;
   customerAddress?: string;
+  customerMail?: string;
   paymentMethod?: string;
   drivingLicence?: string;
   aadharCard?: string;

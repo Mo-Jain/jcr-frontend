@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
 import UserIcon from "@/public/user.svg";
 import LocationIcon from "@/public/location.svg";
+import MailIcon from "@/public/mail.svg";
 import axios from "axios";
 import { BASE_URL } from "@/lib/config";
 import { toast } from "@/hooks/use-toast";
@@ -26,7 +27,6 @@ import { uploadToDrive } from "@/app/actions/upload";
 import { Label } from "@/components/ui/label";
 import { DatePicker } from "@/components/ui/datepicker";
 import UploadDialog from "./upload-dialog";
-
 
 interface CustomerPopupInterface {
   customer: Customer;
@@ -42,7 +42,7 @@ export function CustomerPopup({
   setCustomers,
 }: CustomerPopupInterface) {
   const [action, setAction] = useState<
-    "Delete" | "Update" | "delete the documents of"
+    "Delete" | "Update" 
   >("Delete");
   const [address, setAddress] = useState(customer.address);
   const [documents, setDocuments] = useState<Document[] | undefined>(
@@ -54,21 +54,19 @@ export function CustomerPopup({
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isDocumentsDeleting, setIsDocumentsDeleting] = useState(false);
   const [progress, setProgress] = useState(0);
   const [joiningDate, setJoiningDate] = useState<Date>(new Date(customer.joiningDate));
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
   const [aadharFiles, setAadharFiles] = useState<File[]>([])
   const [licenseFiles, setLicenseFiles] = useState<File[]>([])
   const [otherFiles, setOtherFiles] = useState<File[]>([])
+  const [mail, setMail] = useState<string>(customer.email || "");
 
   function handleAction() {
     if (action === "Delete") {
       handleDelete();
     } else if (action === "Update") {
       handleUpdate();
-    } else if (action === "delete the documents of") {
-      handleDocumentDelete();
     }
     return;
   }
@@ -110,37 +108,6 @@ export function CustomerPopup({
   const handleEdit = () => {
     setAction("Update");
     setIsEditing(!isEditing);
-  };
-
-  const handleDocumentDelete = async () => {
-    setIsDocumentsDeleting(true);
-    try {
-      if (!documents) return;
-      await axios.delete(
-        `${BASE_URL}/api/v1/customer/${customer.id}/documents/all`,
-        {
-          headers: {
-            authorization: `Bearer ` + localStorage.getItem("token"),
-          },
-        },
-      );
-      setDocuments([]);
-      toast({
-        description: `Document Successfully deleted`,
-        className:
-          "text-black bg-white border-0 rounded-md shadow-mg shadow-black/5 font-normal",
-      });
-    } catch (error) {
-      toast({
-        description: `Failed to delete document`,
-        className:
-          "text-black bg-white border-0 rounded-md shadow-mg shadow-black/5 font-normal",
-        variant: "destructive",
-        duration: 2000,
-      });
-      console.log(error);
-    }
-    setIsDocumentsDeleting(false);
   };
 
   const handleUpdate = async () => {
@@ -229,6 +196,7 @@ export function CustomerPopup({
           contact: contact,
           address: address,
           documents: updatedDocuments,
+          email:mail,
           joiningDate: joiningDate.toLocaleDateString("en-US"),
         },
         {
@@ -244,6 +212,7 @@ export function CustomerPopup({
         name,
         contact,
         address,
+        email:mail,
         folderId: customer.folderId,
         joiningDate: joiningDate.toLocaleDateString("en-US"),
         documents: res.data.documents,
@@ -413,33 +382,27 @@ export function CustomerPopup({
                   </p>
                 )}
               </div>
-              <div>
-                <div className="flex flex-col w-full gap-1 justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-1 text-sm">
-                      <span>Documents</span>
-
-                      {isDocumentsDeleting ? (
-                        <div className="flex items-center justify-center">
-                          <Loader2 className="h-4 w-4 animate-spin text-gray-500" />
-                        </div>
-                      ) : (
-                        <>
-                          {isEditing && (
-                            <Button
-                              className="cursor-pointer active:scale-95 bg-gray-200 p-3 dark:bg-muted dark:text-white text-black hover:bg-gray-300 dark:hover:bg-secondary hover:bg-opacity-30"
-                              onClick={() => {
-                                setAction("delete the documents of");
-                                setIsDialogOpen(true);
-                              }}
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          )}
-                        </>
-                      )}
+              <div className="flex items-center space-x-2">
+                <MailIcon className="h-6 w-6 mt-1 mr-3 fill-black dark:fill-white stroke-black dark:stroke-white" />
+                <div className="flex justify-between items-center gap-1 w-full">
+                  <div>
+                    <div>
+                    {isEditing ? (
+                      <Input
+                        name="mail"
+                        value={mail}
+                        onChange={(e) => setMail(e.target.value)}
+                        className="bg-muted text-sm"
+                      />
+                    ) : (
+                      <p className="text-sm font-semibold">{mail}</p>
+                    )}
                     </div>
                   </div>
+                </div>
+              </div>
+              <div>
+                <div className="flex flex-col w-full gap-1 justify-between">
                   <div className="flex item-center gap-1 w-full">
                     <div>
                       <div className="flex flex-col rounded-sm justify-start min-w-[165px] sm:min-w-[180px] h-[90px] min-h-[90px] w-fit h-fit border border-border px-[2px]">

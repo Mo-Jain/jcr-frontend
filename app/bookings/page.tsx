@@ -91,6 +91,7 @@ export interface Booking {
   endTime: string;
   status: string;
   isAdmin: boolean;
+  otp: string;
 }
 
 export default function Bookings() {
@@ -363,7 +364,7 @@ export default function Bookings() {
           </div>
         </div>
         {bookings.length > 0 ? (
-          <div ref={containerRef} className="space-y-4">
+          <div ref={containerRef} className="space-y-4 mt-2">
             {filteredBookings.map((booking, index) => (
               <BookingCard
                 key={index}
@@ -471,14 +472,22 @@ const BookingCard = ({
   return (
     <div
       style={{ marginTop: 0 }}
-      className="flex gap-2 overflow-hidden mt-0 items-center w-full"
+      className={cn("flex gap-2 overflow-hidden mt-0 items-center w-full",
+        booking.otp && booking.otp !== "" && "pt-5 sm:pt-6"
+      )}
     >
      {booking.isAdmin && <Checkbox
         checked={selectedBookings.includes(booking.id)}
         onClick={() => handleCheckboxChange(booking.id)}
         className={`h-5 w-5 max-sm:w-4 max-sm:h-4 ${selectedBookings.length > 0 ? "ml-0" : "-ml-6"} transition-all duration-300 p-0 sm:rounded-md accent-blue-300`}
       />}
-      <Card className="w-full overflow-hidden bg-white dark:bg-background hover:shadow-md border-border transition-shadow my-2">
+      <Card className="w-full relative bg-white dark:bg-background hover:shadow-md border-border transition-shadow mb-2">
+        {booking.otp && booking.otp !== "" &&
+          <div className="flex gap-2 items-start text-gray-600 dark:text-gray-300  absolute -top-[22px] sm:-top-6 left-2 bg-white dark:bg-card rounded-t-sm px-2 py-[2px]">
+          <p className="text-xs sm:text-sm">OTP</p>
+          <p className="text-xs sm:text-sm">{booking.otp}</p>
+        </div>
+        }
         <Link href={`/booking/${booking.id}`}>
           <CardContent className="p-0">
             {/* Rest of the card content remains the same */}
@@ -503,20 +512,7 @@ const BookingCard = ({
                 </p>}
               </div>
               <div className="flex items-center justify-between w-fit ">
-                <div className="flex items-center sm:pr-10">
-                  <div
-                    style={{ backgroundColor: booking.carColor }}
-                    className="sm:w-8 z-0 bg-green-200 flex-shrink-0 sm:h-8 w-6 h-6 rounded-md"
-                  />
-                  <div className="p-4 max-sm:p-1 w-fit">
-                    <p className="text-sm max-sm:text-xs whitespace-nowrap text-blue-500">
-                      BOOKING ID:
-                    </p>
-                    <p className=" text-[#5B4B49] max-sm:text-xs text-sm dark:text-gray-400">
-                      {booking.id}{" "}
-                    </p>
-                  </div>
-                </div>
+                
                 <div className="">
                   {booking.isAdmin &&
                   <DropdownMenu
@@ -561,6 +557,14 @@ const BookingCard = ({
             <hr className="border-t border-border" />
             <div className=" dark:bg-background border-b border-border flex flex-row-reverse items-start justify-between">
               <div className="flex-1 sm:p-4 py-2 px-2">
+                <div className="flex items-center sm:pr-10 gap-2">
+                    <p className="text-sm max-sm:text-xs whitespace-nowrap text-blue-500">
+                      BOOKING ID:
+                    </p>
+                    <p className=" text-[#5B4B49] max-sm:text-xs text-sm dark:text-gray-400">
+                      {booking.id}{" "}
+                    </p>
+                </div>
                 <div className="flex items-center sm:gap-12 gap-2">
                   <div>
                     <p className="text-xs sm:text-sm text-blue-500">FROM</p>

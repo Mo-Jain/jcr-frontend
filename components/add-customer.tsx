@@ -20,6 +20,7 @@ import { createFolder } from "@/app/actions/folder";
 import { uploadToDrive } from "@/app/actions/upload";
 import UserIcon from "@/public/user.svg";
 import LocationIcon from "@/public/location.svg";
+import MailIcon from "@/public/mail.svg";
 import { DatePicker } from "./ui/datepicker";
 import Calendar from "@/public/date-and-time.svg";
 import { Customer } from "@/app/profile/manage-customer/page";
@@ -60,6 +61,7 @@ export function AddCustomer({
   const [aadharFiles, setAadharFiles] = useState<File[]>([])
   const [licenseFiles, setLicenseFiles] = useState<File[]>([])
   const [otherFiles, setOtherFiles] = useState<File[]>([])
+  const [mail,setMail] = useState("");
 
   const validateForm = () => {
     const newErrors: FormErrors = {};
@@ -67,6 +69,7 @@ export function AddCustomer({
     if (!name) newErrors.name = "This field is mandatory";
     if (!contact) newErrors.contact = "This field is mandatory";
     if (!address) newErrors.address = "This field is mandatory";
+    if(!mail) newErrors.mail = "This field is mandatory";
     if (!(aadharFiles && licenseFiles && otherFiles)) newErrors.documents = "No Files uploaded";
 
     setErrors(newErrors);
@@ -85,7 +88,16 @@ export function AddCustomer({
       });
       return;
     }
-    if (!(aadharFiles && licenseFiles && otherFiles)) return;
+    if (!((aadharFiles.length > 0 || licenseFiles.length > 0) && otherFiles.length > 0)) {
+      toast({
+        description: `Please upload all documents`,
+        className:
+          "text-black bg-white border-0 rounded-md shadow-mg shadow-black/5 font-normal",
+        variant: "destructive",
+        duration: 2000,
+      });
+      return;
+    } 
 
     setIsLoading(true);
     try {
@@ -175,6 +187,7 @@ export function AddCustomer({
           name,
           contact,
           address,
+          email:mail,
           folderId: folder.folderId,
           joiningDate: joiningDate.toLocaleDateString("en-US"),
           documents: updatedDocuments,
@@ -192,6 +205,7 @@ export function AddCustomer({
         name,
         contact,
         address,
+        email:mail,
         folderId: folder.folderId || "",
         joiningDate: joiningDate.toLocaleDateString("en-US"),
         documents: res.data.documents,
@@ -201,6 +215,7 @@ export function AddCustomer({
       setName("");
       setContact("");
       setAddress("");
+      setMail("");
       setAadharFiles([]);
       setLicenseFiles([]);
       setOtherFiles([]);
@@ -317,7 +332,23 @@ export function AddCustomer({
                   <p className="text-red-500 text-sm mt-1">{errors.address}</p>
                 )}
               </div>
-
+              <div className="flex itemx-center gap-2">
+                <MailIcon className="w-6 h-6 mr-3 stroke-black fill-black dark:stroke-white dark:fill-white" />
+                <Input
+                  type="text"
+                  name="mail"
+                  value={mail}
+                  placeholder="Add Email"
+                  onChange={(e) => {
+                    setMail(e.target.value);
+                    setErrors((prev) => ({ ...prev, mail: "" }));
+                  }}
+                  className="bg-muted text-sm"
+                />
+                {errors.mail && (
+                  <p className="text-red-500 text-sm mt-1">{errors.mail}</p>
+                )}
+              </div>
               <div className="flex flex-col w-full gap-1 justify-between">
                   <div className="flex items-center gap-3">
                     <div className="flex items-center gap-1 text-sm">

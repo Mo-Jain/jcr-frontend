@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Ashoka from "@/public/ashoke-chakra.svg";
 import { cn } from "@/lib/utils";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface CarCardProps {

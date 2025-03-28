@@ -1,4 +1,3 @@
-import { Booking } from "@/app/booking/[id]/page";
 import { Document, Page, Text, View, StyleSheet, Image } from "@react-pdf/renderer";
 
 const styles = StyleSheet.create({
@@ -111,6 +110,28 @@ const styles = StyleSheet.create({
       color: "#666"
     }
   });
+
+ interface Booking {
+  id: string;
+  start: string;
+  end: string;
+  startTime: string;
+  endTime: string;
+  status: string;
+  customerName: string;
+  customerContact: string;
+  carId: number;
+  carName: string;
+  carPlateNumber: string;
+  dailyRentalPrice: number;
+  securityDeposit?: string;
+  totalPrice?: number;
+  advancePayment?: number;
+  customerAddress?: string;
+  paymentMethod?: string;
+  odometerReading?: string;
+  notes?: string;
+}
 
 const PDFDocument = ({ booking }: { booking: Booking }) => {
   const formatDateTime = (date: string) => {

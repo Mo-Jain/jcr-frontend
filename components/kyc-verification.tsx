@@ -1,11 +1,10 @@
 "use client";
 import { BASE_URL } from "@/lib/config";
 import axios from "axios";
-import { IndianRupee } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { CustomerPopup } from "./view-customer";
-import Loader from "./loader";
 import { toast } from "@/hooks/use-toast";
+import Loader from "./loader";
 
 interface Document {
     id: number;
@@ -103,6 +102,7 @@ const KYCVerification = () => {
             />
         )}
       <div className="  py-1 rounded-md h-[300px] scrollbar-hide overflow-y-scroll ">
+        {!isLoading ?
         <>
         {customers.length > 0 ? (
           <div className="flex flex-col gap-1 cursor-pointer scrollbar-hide rounded-lg overflow-y-scroll">
@@ -141,11 +141,16 @@ const KYCVerification = () => {
         ) : (
           <div className="w-full h-full flex flex-col justify-center items-center">
             <p className="text-center text-lg sm:text-2xl text-gray-400 font-bold">
-              No Verification to do
+              No verifications to do
             </p>
           </div>
         )}
         </>
+        :
+        <div className="w-full h-full flex flex-col justify-center items-center">
+          <Loader/>
+        </div>
+        }
       </div>
     </div>
   );
