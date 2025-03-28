@@ -230,11 +230,11 @@ export function CarDetailsClient({ carId }: { carId: number }) {
         price: price,
         mileage: mileage,
         seats: parseInt(seats),
-        fuel
+        fuel,
+        gear,
       };
 
-      // Only include imageUrl if a new image was uploaded
-      if (newImageUrl) {
+      if (newImageUrl.length > 0) {
         await axios.post(`${BASE_URL}/api/v1/car/upload/photos/${car.id}`, {
           urls: newImageUrl
         }, {

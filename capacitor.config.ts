@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'in.jaincarrental.admin',
-  appName: 'JCR',
+  appName: 'JCR Buisness',
   webDir: 'public',
   server: {
     url: 'https://admin.jaincarrental.in', // Change this to your live URL
