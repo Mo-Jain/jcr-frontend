@@ -43,16 +43,18 @@ import { toast } from "@/hooks/use-toast"
 
 export default function MailDialog({
   booking,
+  mail,
   open,
   setOpen,
   handleSkip
 }:{
   booking:Booking,
+  mail:string | undefined,
   open:boolean,
   setOpen:React.Dispatch<React.SetStateAction<boolean>>,
   handleSkip?:() => void
 }) {
-  const [recipient, setRecipient] = useState(booking.customerMail || "")
+  const [recipient, setRecipient] = useState(mail || "")
   const [isLoading, setIsLoading] = useState(false)
   const [success, setSuccess] = useState(false)
 

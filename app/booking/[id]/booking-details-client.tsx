@@ -606,7 +606,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
           </div>
         </div>
       )}
-      <MailDialog open={openMailDialog} setOpen={setOpenMailDialog} booking={booking}/>
+      <MailDialog mail={booking.customerMail} open={openMailDialog} setOpen={setOpenMailDialog} booking={booking}/>
       <div className="flex items-center justify-between px-2 pb-2 border-b border-gray-300 dark:border-muted dark:text-white">
         <div
           className="mr-2 rounded-md font-bold  cursor-pointer dark:hover:bg-gray-800 hover:bg-gray-200"

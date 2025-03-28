@@ -381,6 +381,7 @@ export default function BookingStartClient({
     <div className="max-w-4xl mx-auto p-6">
       <MailDialog 
         booking={booking} 
+        mail={customerMail}
         open={isMailDialogOpen} 
         setOpen={setIsMailDialogOpen} 
         handleSkip={() => router.push("/bookings")}
