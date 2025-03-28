@@ -63,7 +63,11 @@ export default function UsersPage() {
   }, []);
 
 
-  if(userId!=1) router.push('/');
+  useEffect(() => {
+    if (typeof window !== "undefined" && userId != 1) {
+      router.push("/");
+    }
+  }, [userId,router]);
   
   const filteredAdmins = admins.filter(
     (admins) =>
