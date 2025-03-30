@@ -36,7 +36,6 @@ const CustomerName = ({
     const newfilteredCustomers = customers.filter((customer) =>
       customer.name.toLowerCase().includes(name.toLowerCase()),
     );
-
     setFilteredCustomers(newfilteredCustomers);
   }, [customers, name, contact]);
 

@@ -390,6 +390,11 @@ const PDFDocument = ({ booking }: { booking: Booking }) => {
               This Agreement constitutes the entire understanding between the parties and supersedes all prior discussions, agreements, or understandings, whether written or oral. The Lessor hereby agrees to rent to the Lessee the following vehicle.
             </Text>
           </View>
+          <View style={styles.termsSection}>
+            <Text style={styles.termsParagraph}>
+              I accept all the terms and conditions stated above.
+            </Text>
+          </View>
         </View>
         <View style={styles.footer}>
           <Text>© {new Date().getFullYear()} Jain Car Rentals. All rights reserved.</Text>

@@ -422,11 +422,11 @@ export function AddBookingDialog({
                       setName(e.target.value);
                       setErrors((prev) => ({ ...prev, name: "" }));
                     }}
-                    setCustomerId={setCustomerId}
                     customerId={customerId}
-                    setName={setName}
-                    setContact={setContact}
                     customers={customers}
+                    setName={setName}
+                    setCustomerId={setCustomerId}
+                    setContact={setContact}
                   />
                   {errors.name && (
                     <p className="text-red-500 text-sm mt-1">{errors.name}</p>
