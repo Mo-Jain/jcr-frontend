@@ -37,19 +37,7 @@ export async function sendEmailWithAttachment(formData: FormData) {
       from: process.env.EMAIL_USER,
       to: recipientEmail,
       subject: "🚗 Your Ride Has Begun - Buckle Up for an Epic Journey! 🎉",
-      text: `Dear Client,
-      \n\n
-      Guess what? Your self-drive adventure has officially begun! 🚘✨ Your car is now in your hands—so whether you’re cruising through the city or heading for a road trip, make sure to treat it like a best friend (but, you know, one that doesn’t judge your music choices).
-      \n\n    
-      Attached, you’ll find your booking details and terms & conditions—aka the fine print that ensures smooth sailing (or should we say, smooth driving?).
-      \n\n  
-      If you need us, just honk… or better yet, call or reply to this email. We’ve got your back!
-      \n\n
-      Drive safe, have fun, and return with great stories!
-      \n\n
-      Best regards,
-      /n
-      Jain Car Rentals
+      text: `Hi,\n\nGuess what? Your self-drive adventure has officially begun! 🚘✨ Your car is now in your hands—so whether you’re cruising through the city or heading for a road trip, make sure to treat it like a best friend (but, you know, one that doesn’t judge your music choices).\n\nAttached, you’ll find your booking details and terms & conditions—aka the fine print that ensures smooth sailing (or should we say, smooth driving?).\n\nIf you need us, just honk… or better yet, call or reply to this email. We’ve got your back!\n\nDrive safe, have fun, and return with great stories!\n\nBest regards,\n\nJain Car Rentals
       `,
       attachments: [
         {

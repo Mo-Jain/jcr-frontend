@@ -68,9 +68,11 @@ export default function CustomersPage() {
           },
         });
         setCustomers(res.data.customers);
+        setIsLoading(false);
         setFilteredCustomers(res.data.customers.filter((customer:Customer) => customer.kycStatus === "under review"));
       } catch (error) {
         console.log(error);
+        setIsLoading(false);
       }
     }
     fetchData();
@@ -176,7 +178,6 @@ export default function CustomersPage() {
             Add
           </Button>
         </div>
-        {customers.length > 0 ? (
           <Card className="border-border bg-muted">
             <CardContent className="p-6">
               <div className="relative mb-6 flex item-center gap-2">
@@ -211,6 +212,7 @@ export default function CustomersPage() {
               </div>
 
               <div className="rounded-md border border-border">
+              {filteredCustomers.length > 0 ? (
                 <Table className="border-border">
                   <TableHeader>
                     <TableRow className="border-border">
@@ -252,25 +254,26 @@ export default function CustomersPage() {
                     ))}
                   </TableBody>
                 </Table>
+                  ) : (
+                    <div key={2}>
+                      {!isLoading ? (
+                        <div className="w-full h-full py-28 gap-2 flex flex-col justify-center items-center">
+                          <Users className={`sm:h-16 h-12 sm:w-16 w-12 text-gray-400 `} />
+                          <p className="text-center text-lg sm:text-2xl text-gray-400 font-bold">
+                            No Customers in this category
+                          </p>
+                        </div>
+                      ) : (
+                        <div className="w-full h-full py-28 gap-2 flex justify-center items-center">
+                          <Loader/>
+                        </div>
+                      )}
+                    </div>
+                  )}
               </div>
             </CardContent>
           </Card>
-        ) : (
-          <div key={2}>
-            {isLoading ? (
-              <div className="w-full h-full py-28 gap-2 flex flex-col justify-center items-center">
-                <Users className={`sm:h-16 h-12 sm:w-16 w-12 text-gray-400 `} />
-                <p className="text-center text-lg sm:text-2xl text-gray-400 font-bold">
-                  No Customers added yet
-                </p>
-              </div>
-            ) : (
-              <div className="w-full h-full py-28 gap-2 flex justify-center items-center">
-                <Loader/>
-              </div>
-            )}
-          </div>
-        )}
+        
       </div>
     </div>
   );

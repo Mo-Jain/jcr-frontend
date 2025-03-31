@@ -373,7 +373,7 @@ export default function BookingStartClient({
 
   const inputClassName = (fieldName: string) =>
     cn(
-      "w-full text-sm border-border focus-visible:border-blue-400 focus-visible:ring-blue-400",
+      "w-full text-sm border-border focus-visible:border-blue-400 focus-visible:ring-blue-400 overflow-hidden",
       errors[fieldName] && "border-red-500 focus:border-red-500",
     );
 
@@ -486,7 +486,7 @@ export default function BookingStartClient({
               </div>
             </div>
             <div className="flex justify-between space-x-2 items-center">
-              <div className="w-full">
+              <div className="w-1/2">
                 <Label className="max-sm:text-xs" htmlFor="selectedCar">
                   Selected Car <span className="text-red-500">*</span>
                 </Label>
@@ -520,7 +520,7 @@ export default function BookingStartClient({
                   </p>
                 )}
               </div>
-              <div className="w-full">
+              <div className="w-1/2">
                 <Label className="max-sm:text-xs" htmlFor="paymentMethod">
                   Payment Method <span className="text-red-500">*</span>
                 </Label>
