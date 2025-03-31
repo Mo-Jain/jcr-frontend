@@ -60,9 +60,9 @@ export default function MailDialog({
 
   useEffect(() => {
     if (open) {
-      setRecipient(booking.customerMail || "")
+      setRecipient(mail || "")
     }
-  }, [open,booking.customerMail])
+  }, [open,mail])
 
   const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault()
@@ -86,11 +86,11 @@ export default function MailDialog({
             throw new Error(result.message)
         }
         setTimeout(() => {
-            setRecipient("")
-            setSuccess(false)
-            setOpen(false)
-          }, 2000)
-          if(handleSkip) handleSkip()
+          setRecipient("")
+          setSuccess(false)
+          setOpen(false)
+        }, 2000)
+        if(handleSkip) handleSkip()
       } catch (error) {
         console.error(error);
         toast({

@@ -244,63 +244,8 @@ export default function BookingStartClient({
     }
     setIsLoading(true);
     try {
-      let overallProgress = 1;
-
-      setProgress(overallProgress);
-      const totalSize = Object.values(uploadedFiles)
-        .flat()
-        .reduce((acc, file) => acc + file.size, 0);
-
-      setLoadingMessage("Uploading Aadhar ");
-      const docFiles = [];
-      if (uploadedFiles.documents) {
-        for (const file of uploadedFiles.documents) {
-          const res = await uploadToDrive(file, booking.folderId);
-          if (res.error) {
-            throw new Error("Failed to upload documents");
-            return;
-          }
-          docFiles.push(res);
-          overallProgress += Math.round((file.size / totalSize) * 100) * 0.97;
-          setProgress(overallProgress);
-        }
-      }
-      setLoadingMessage("Uploaded Aadhar");
-
-      const photoFiles = [];
-      if(uploadedFiles.photos.length > 0) {
-        setLoadingMessage("Uploading Car Photos");
-        for (const file of uploadedFiles.photos) {
-          const res = await uploadToDrive(file, booking.bookingFolderId);
-          if (res.error) {
-            throw new Error("Failed to upload car photos");
-            return;
-          }
-          photoFiles.push(res);
-          overallProgress += Math.round((file.size / totalSize) * 100) * 0.97;
-          setProgress(overallProgress);
-        }
-      }
-      let resSelfie
-      if(uploadedFiles.selfie.length > 0) {
-        setLoadingMessage("Uploading Selfie");
-        resSelfie = await uploadToDrive(
-          uploadedFiles.selfie[0],
-          booking.bookingFolderId,
-        );
-        const selfieSize = uploadedFiles.selfie[0].size;
-        overallProgress += Math.round((selfieSize / totalSize) * 100) * 0.97;
-        setProgress(overallProgress);
-      }
-
-      setLoadingMessage("Uploaded Selfie");
-      
-      if (resSelfie && resSelfie.error) {
-        throw new Error("Failed to upload selfie photo");
-        return;
-      }
-      setProgress(98);
-      setLoadingMessage("Please wait");
+      setProgress(100);
+      setLoadingMessage("Starting booking");
       await axios.put(
         `${BASE_URL}/api/v1/booking/${bookingId}/start`,
         {
@@ -319,9 +264,6 @@ export default function BookingStartClient({
           totalAmount,
           paymentMethod,
           notes,
-          documents: docFiles.length > 0 ? docFiles : undefined,
-          selfieUrl: resSelfie ? resSelfie.url : undefined,
-          carImages: photoFiles,
           customerMail:customerMail,
         },
         {
@@ -331,13 +273,92 @@ export default function BookingStartClient({
           },
         },
       );
-      setIsLoading(false);
-      setProgress(100);
+
+      const totalSize = Object.values(uploadedFiles)
+          .flat()
+          .reduce((acc, file) => acc + file.size, 0);
+
       toast({
         description: `Booking Successfully started`,
-        className:
-          "text-black bg-white border-0 rounded-md shadow-mg shadow-black/5 font-normal",
+        duration: 2000,
       });
+      
+      if(totalSize> 0) {
+        let overallProgress = 1;
+        setProgress(overallProgress);
+        setLoadingMessage("Uploading Aadhar ");
+
+        const docFiles = [];
+        if (uploadedFiles.documents) {
+          for (const file of uploadedFiles.documents) {
+            const res = await uploadToDrive(file, booking.folderId);
+            if (res.error) {
+              throw new Error("Failed to upload documents");
+              return;
+            }
+            docFiles.push(res);
+            overallProgress += Math.round((file.size / totalSize) * 100) * 0.97;
+            setProgress(overallProgress);
+          }
+        }
+        setLoadingMessage("Uploaded Aadhar");
+
+        const photoFiles = [];
+        if(uploadedFiles.photos.length > 0) {
+          setLoadingMessage("Uploading Car Photos");
+          for (const file of uploadedFiles.photos) {
+            const res = await uploadToDrive(file, booking.bookingFolderId);
+            if (res.error) {
+              throw new Error("Failed to upload car photos");
+              return;
+            }
+            photoFiles.push(res);
+            overallProgress += Math.round((file.size / totalSize) * 100) * 0.97;
+            setProgress(overallProgress);
+          }
+        }
+        let resSelfie
+        if(uploadedFiles.selfie.length > 0) {
+          setLoadingMessage("Uploading Selfie");
+          resSelfie = await uploadToDrive(
+            uploadedFiles.selfie[0],
+            booking.bookingFolderId,
+          );
+          const selfieSize = uploadedFiles.selfie[0].size;
+          overallProgress += Math.round((selfieSize / totalSize) * 100) * 0.97;
+          setProgress(overallProgress);
+        }
+
+        setLoadingMessage("Uploaded Selfie");
+        
+        if (resSelfie && resSelfie.error) {
+          throw new Error("Failed to upload selfie photo");
+          return;
+        }
+        setProgress(98);
+        setLoadingMessage("Please wait");
+   
+        await axios.put(
+          `${BASE_URL}/api/v1/booking/${bookingId}/start/document`,
+          {
+            documents: docFiles.length > 0 ? docFiles : undefined,
+            selfieUrl: resSelfie ? resSelfie.url : undefined,
+            carImages: photoFiles.length > 0 ? photoFiles : undefined,
+          },
+          {
+            headers: {
+              "Content-type": "application/json",
+              authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          },
+        );
+        toast({
+          description: `Document Successfully uploaded`,
+          duration: 2000,
+        });
+      }
+      setIsLoading(false);
+      setProgress(100);
       setIsMailDialogOpen(true)
     } catch (error) {
       console.log(error);
@@ -821,10 +842,10 @@ export default function BookingStartClient({
 
         <div className="flex items-center justify-center space-x-2">
           {isLoading ? (
-            <div className="w-full max-w-[500px] border-2 border-border rounded-lg relative">
+            <div className="w-full max-w-[500px] border-2 border-border rounded-lg relative overflow-hidden">
               <div
                 style={{ width: `${progress}%` }}
-                className={`bg-primary rounded-lg text-white h-[35px] transition-all duration-300 ease-in-out hover:bg-opacity-80 ${isLoading && "rounded-e-none"}`}
+                className={`bg-primary rounded-lg text-white h-[35px] transition-all duration-300 ease-in-out hover:bg-opacity-80 ${(isLoading || progress === 100 )&& "rounded-e-none"}`}
               />
               <div
                 className={`w-full h-[35px] p-1 flex justify-center items-center absolute top-0 left-0 `}
