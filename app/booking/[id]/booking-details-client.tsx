@@ -352,8 +352,8 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
       const res = await axios.put(
         `${BASE_URL}/api/v1/booking/${booking.id}`,
         {
-          startDate,
-          endDate,
+          startDate:startDate.toLocaleDateString("en-US"),
+          endDate:endDate.toLocaleDateString("en-US"),
           startTime,
           endTime,
           carId: booking.carId,
@@ -741,7 +741,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
             <p className="text-sm text-blue-500">From</p>
             {!isEditable || !isAdmin ? (
               <p className="font-semibold max-sm:text-sm">
-                {formatDateTime(startDate)} {booking.startTime.slice(0,5)}
+                {formatDateTime(startDate)} {startTime.slice(0,5)}
               </p>
             ) : (
               <div className="flex space-x-2">
@@ -767,7 +767,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
             <p className="text-sm text-blue-500">To</p>
             {!isEditable || !isAdmin ? (
               <p className="font-semibold max-sm:text-sm">
-                {formatDateTime(endDate)} {booking.endTime.slice(0,5)}
+                {formatDateTime(endDate)} {endTime.slice(0,5)}
               </p>
             ) : (
               <div className="flex space-x-2">

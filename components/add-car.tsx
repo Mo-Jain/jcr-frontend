@@ -413,7 +413,7 @@ export function AddCarDialog({ isOpen, setIsOpen }: AddCarDialogProps) {
                   <Gear className="w-7 h-7 dark:fill-white mr-4 fill-black flex-shrink-0" />
                   <div className="w-full flex items-center justify-between gap-1">
                   <Label htmlFor="totalAmount" className="max-sm:w-1/3 max-sm:text-xs whitespace-nowrap w-fit">
-                    Gears
+                    Transmission
                   </Label>
                   <Select
                     value={gear} // Ensures placeholder shows when carId is 0 or undefined

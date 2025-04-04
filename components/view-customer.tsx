@@ -349,19 +349,23 @@ export function CustomerPopup({
               <div className="flex items-center space-x-2">
               <Calendar className="h-5 w-5 mr-3 flex-shrink-0 fill-black dark:fill-white stroke-black dark:stroke-white stroke-[1px]" />
                 <div className="flex items-center gap-2 ">
-                <Label htmlFor="joinning" className={`text-sm`}>Joining Date</Label>
-                {isEditing ? (
-                    <DatePicker
-                        className="max-sm:w-[120px]"
-                        date={joiningDate}
-                        setDate={setJoiningDate}/>
-                  ) : (
-                    <p className="text-sm font-semibold">{joiningDate.toLocaleString("en-GB", {
-                      month: "short",
-                      day: "numeric",
-                      year: "numeric",
-                    })}</p>
-                  )}
+                  <Label htmlFor="joinning" className={`text-sm`}>Joining Date</Label>
+                  {isEditing ? (
+                      <DatePicker
+                          className="max-sm:w-[120px]"
+                          date={joiningDate}
+                          setDate={setJoiningDate}/>
+                    ) : (
+                      <p className="text-sm font-semibold">{joiningDate.toLocaleString("en-GB", {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      })}</p>
+                    )}
+                </div>
+                <div className="text-sm" >
+                  <span>Pwd: </span>
+                  <span> {customer.password}</span>
                 </div>
               </div>
 

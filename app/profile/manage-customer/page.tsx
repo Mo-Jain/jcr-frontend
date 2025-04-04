@@ -37,6 +37,7 @@ export interface Customer {
   email?: string;
   documents?: Document[];
   kycStatus:string;
+  password?:string;
 }
 
 export interface Document {
@@ -67,7 +68,9 @@ export default function CustomersPage() {
             authorization: `Bearer ` + localStorage.getItem("token"),
           },
         });
-        setCustomers(res.data.customers);
+        //sort customers by joining date
+        const sortedCustomers = res.data.customers.sort((a:Customer, b:Customer) => new Date(b.joiningDate).getTime() - new Date(a.joiningDate).getTime());
+        setCustomers(sortedCustomers);
         setIsLoading(false);
         setFilteredCustomers(res.data.customers.filter((customer:Customer) => customer.kycStatus === "under review"));
       } catch (error) {
@@ -88,7 +91,7 @@ export default function CustomersPage() {
       (customer) =>
         (customer.name.toLowerCase().includes(e.target.value.toLowerCase()) ||
         customer.contact.toLowerCase().includes(e.target.value.toLowerCase())) &&
-        customer.kycStatus === status
+        (customer.kycStatus === status || status === "all")
     ));
   }
 
