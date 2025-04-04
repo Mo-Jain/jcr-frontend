@@ -129,7 +129,7 @@ export default function Profile() {
               </CardContent>
             </Card>
           )}
-          <Link href={USER_URL} className="flex w-full p-10 justify-center items-center text-blue-400">
+          <Link href={USER_URL || ""} className="flex w-full p-10 justify-center items-center text-blue-400">
             <div>Go to users page</div>
             <ArrowRight className="w-4 h-4 ml-2" />
           </Link>
