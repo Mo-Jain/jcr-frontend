@@ -408,7 +408,7 @@ export default function BookingStartClient({
         setOpen={setIsMailDialogOpen} 
         handleSkip={() => router.push("/bookings")}
         />
-      <div className="flex items-center gap-2 mb-6">
+      <div className="fixed top-[82px] px-3 sm:top-14 pt-2 bg-background z-10 w-full left-0 flex items-center gap-2 mb-6">
         <div
           className="mr-2 rounded-md font-bold  cursor-pointer dark:hover:bg-gray-800 hover:bg-gray-200"
           onClick={() => router.push("/booking/"+bookingId)}
@@ -427,6 +427,7 @@ export default function BookingStartClient({
           </div>
         </div>
       </div>
+      <div className="h-[60px] w-full"/>
       <div className="space-y-6 max-sm:mb-12">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-4">

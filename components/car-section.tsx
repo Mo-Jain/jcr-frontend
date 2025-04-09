@@ -19,6 +19,7 @@ import RequestedBookings from "./requested-bookings";
 import axios from "axios";
 import { BASE_URL } from "@/lib/config";
 import PausedCars from "./paused-cars";
+import LoaderOverlay from "./loader-overlay";
 
 export type PausedCar = {
   id: number;
@@ -35,6 +36,7 @@ export function CarSection() {
   const { cars } = useCarStore();
   const { name } = useUserStore();
   const [pausedCars,setPausedCars] = useState<PausedCar[]>([]);
+  const [isPageLoading,setIsPageLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -60,6 +62,7 @@ export function CarSection() {
 
   return (
     <div className="mx-2">
+      {isPageLoading && <LoaderOverlay />}
       <AddCarDialog isOpen={isOpen} setIsOpen={setIsOpen} />
       {name ? (
         <div >
@@ -93,22 +96,24 @@ export function CarSection() {
                 className="grid z-0 grid-cols-2 mt-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3"
               >
                 {cars.map((car) => (
-                  <Link
-                    href={`/car/${car.id}`}
-                    key={car.id}
-                    className="transform transition-all z-0 duration-300 hover:scale-105"
-                  >
-                    <CarCard
-                      name={car.brand + " " + car.model}
-                      imageUrl={car.imageUrl}
-                      plateNumber={car.plateNumber}
-                      color={car.colorOfBooking}
-                      ongoingBooking={car.ongoingBooking}
-                      upcomingBooking={car.upcomingBooking}
-                      photos={car.photos}
-                      status={car.status}
-                    />
-                  </Link>
+                  <div key={car.id} onClick={() => setIsPageLoading(true)}>
+                    <Link
+                      href={`/car/${car.id}`}
+                      key={car.id}
+                      className="transform transition-all z-0 duration-300 hover:scale-105"
+                    >
+                      <CarCard
+                        name={car.brand + " " + car.model}
+                        imageUrl={car.imageUrl}
+                        plateNumber={car.plateNumber}
+                        color={car.colorOfBooking}
+                        ongoingBooking={car.ongoingBooking}
+                        upcomingBooking={car.upcomingBooking}
+                        photos={car.photos}
+                        status={car.status}
+                      />
+                    </Link>
+                  </div>
                 ))}
               </div>
             ) : (

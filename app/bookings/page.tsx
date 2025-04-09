@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Loader from "@/components/loader";
 import Loader2 from "@/components/loader2";
+import LoaderOverlay from "@/components/loader-overlay";
 
 type BookingStatus = "Requested" | "Upcoming" | "Ongoing" | "Completed" | "Cancelled" | "All";
 
@@ -444,6 +445,7 @@ const BookingCard = ({
   const [isDropDownOpen, setIsDropdownOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [action, setAction] = useState<"confirm" | "reject">("confirm");
+  const [isPageLoading,setIsPageLoading] = useState(false);
 
   const handleCheckboxChange = (id: string) => {
     setSelectedBookings((prev) =>
@@ -538,12 +540,15 @@ const BookingCard = ({
         booking.otp && booking.otp !== "" && "pt-5 sm:pt-6"
       )}
     >
+      {isPageLoading && <LoaderOverlay />}
      {booking.isAdmin && <Checkbox
         checked={selectedBookings.includes(booking.id)}
         onClick={() => handleCheckboxChange(booking.id)}
         className={`h-5 w-5 max-sm:w-4 max-sm:h-4 ${selectedBookings.length > 0 ? "ml-0" : "-ml-6"} transition-all duration-300 p-0 sm:rounded-md accent-blue-300`}
       />}
-      <Card className="w-full relative bg-white dark:bg-background hover:shadow-md border-border transition-shadow mb-2">
+      <Card 
+      onClick={() => setIsPageLoading(true)}
+      className="w-full relative bg-white dark:bg-background hover:shadow-md border-border transition-shadow mb-2">
         {booking.otp && booking.otp !== "" &&
           <div className="flex gap-2 items-start text-gray-600 dark:text-gray-300  absolute -top-[20px] sm:-top-6 left-2 bg-white dark:bg-card rounded-t-sm px-2 py-[2px]">
           <p className="text-xs sm:text-sm">OTP</p>

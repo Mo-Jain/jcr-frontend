@@ -648,7 +648,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
         </div>
       )}
       <MailDialog mail={booking.customerMail} open={openMailDialog} setOpen={setOpenMailDialog} booking={booking}/>
-      <div className="flex items-center justify-between px-2 pb-2 border-b border-gray-300 dark:border-muted dark:text-white">
+      <div className="fixed top-[75px] sm:top-12 w-full left-0 flex pt-4 bg-background z-10 items-center justify-between px-2 pb-2 border-b border-gray-300 dark:border-muted dark:text-white">
         <div
           className="mr-2 rounded-md font-bold  cursor-pointer dark:hover:bg-gray-800 hover:bg-gray-200"
           onClick={() => router.push("/bookings")}
@@ -723,24 +723,26 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
         </div>
         {/* Spacer for alignment */}
       </div>
-      <div className="w-full py-4">
-        {booking.status === "Requested" && (
-            <div className="flex items-center justify-center gap-1 sm:gap-2 w-full">
-              <div 
-              onClick={() => handleConsent("confirm")}
-              className="active:scale-95 cursor-pointer flex gap-1 sm:gap-2 items-center rounded-sm bg-blue-500 hover:bg-blue-400 py-2 text-xs text-white px-2">
-                <Check className="w-4 h-4" />
-                <span >Accept</span>
+      <div className="w-full h-[70px]"/>
+
+      {booking.status === "Requested" && (
+        <div className="w-full py-4">
+              <div className="flex items-center justify-center gap-1 sm:gap-2 w-full">
+                <div 
+                onClick={() => handleConsent("confirm")}
+                className="active:scale-95 cursor-pointer flex gap-1 sm:gap-2 items-center rounded-sm bg-blue-500 hover:bg-blue-400 py-2 text-xs text-white px-2">
+                  <Check className="w-4 h-4" />
+                  <span >Accept</span>
+                </div>
+                <div 
+                onClick={() => handleConsent("reject")}
+                className="active:scale-95 cursor-pointer flex gap-1 sm:gap-2 items-center rounded-sm bg-red-500 hover:bg-red-400 text-xs py-2 text-white px-2">
+                  <X className="w-4 h-4" />
+                  <span>Reject</span>
+                </div>
               </div>
-              <div 
-              onClick={() => handleConsent("reject")}
-              className="active:scale-95 cursor-pointer flex gap-1 sm:gap-2 items-center rounded-sm bg-red-500 hover:bg-red-400 text-xs py-2 text-white px-2">
-                <X className="w-4 h-4" />
-                <span>Reject</span>
-              </div>
-            </div>
-          )}
-      </div>
+        </div>
+      )}
 
       <div className="relative px-1 sm:px-4 py-4 border-b-4 border-gray-200 dark:border-muted ">
         <div className="flex justify-between items-center ">

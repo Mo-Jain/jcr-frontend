@@ -13,11 +13,14 @@ import { cn } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { USER_URL } from "@/lib/config";
+import { useState } from "react";
+import LoaderOverlay from "@/components/loader-overlay";
 
 
 export default function Profile() {
   const router = useRouter();
   const { name, imageUrl, userId,setName, setImageUrl,setUserId } = useUserStore();
+  const [isPageLoading,setIsPageLoading] = useState(false);
 
   const handleLogout = () => {
     localStorage.setItem("token", "");
@@ -29,6 +32,7 @@ export default function Profile() {
 
   return (
     <div className="h-full min-h-[88vh] sm:min-h-[90vh] bg-background">
+      {isPageLoading && <LoaderOverlay />}
       <main className="container mx-auto px-4 py-8 pb-16 sm:pb-8">
         <div className="flex flex-col items-center justify-center space-y-4">
           <div className="relative">
@@ -78,7 +82,10 @@ export default function Profile() {
               <CardContent className="p-1 text-gray-600 dark:text-gray-400">
                 <div
                   className="flex items-center border-border border-b justify-between p-2 py-4 cursor-pointer rounded-md dark:hover:bg-zinc-700 hover:bg-gray-200 text-gray-600 dark:text-white"
-                  onClick={() => router.push("/profile/manage-garrage")}
+                  onClick={() => {
+                    setIsPageLoading(true);
+                    router.push("/profile/manage-garrage")
+                  }}
                 >
                   <div className="flex items-center">
                     <CarFrontIcon className="w-8 h-8 fill-gray-600 stroke-gray-600 dark:fill-white dark:stroke-white stroke-[5px]" />
@@ -88,7 +95,10 @@ export default function Profile() {
                 </div>
                 <div
                   className="flex items-center border-border border-b justify-between p-2 py-4 cursor-pointer rounded-md dark:hover:bg-zinc-700 hover:bg-gray-200"
-                  onClick={() => router.push("/profile/edit")}
+                  onClick={() => {
+                    setIsPageLoading(true);
+                    router.push("/profile/edit")
+                  }}
                 >
                   <div className="flex items-center">
                     <UserIcon className="w-7 h-7 stroke-[12px] fill-gray-600 stroke-gray-600 dark:fill-white dark:stroke-white " />
@@ -102,7 +112,10 @@ export default function Profile() {
                   className={cn("flex items-center justify-between p-2 py-4 cursor-pointer rounded-md dark:hover:bg-zinc-700 hover:bg-gray-200",
                     userId == 1 ? "border-b border-border" : ""
                   )}
-                  onClick={() => router.push("/profile/manage-customer")}
+                  onClick={() => {
+                    setIsPageLoading(true);
+                    router.push("/profile/manage-customer")
+                  }}
                 >
                   <div className="flex items-center">
                   <Customers className="w-7 h-7 stroke-0 fill-gray-600 stroke-gray-600 dark:fill-white dark:stroke-white " />
@@ -115,7 +128,10 @@ export default function Profile() {
                 {userId == 1 &&
                   <div
                     className="flex items-center justify-between p-2 py-4 cursor-pointer rounded-md dark:hover:bg-zinc-700 hover:bg-gray-200"
-                    onClick={() => router.push("/profile/manage-users")}
+                    onClick={() => {
+                      setIsPageLoading(true);
+                      router.push("/profile/manage-users")
+                    }}
                   >
                     <div className="flex items-center">
                     <Users className="w-7 h-7 stroke-0 fill-gray-600 stroke-gray-600 dark:fill-white dark:stroke-white " />
