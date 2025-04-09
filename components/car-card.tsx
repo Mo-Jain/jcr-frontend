@@ -2,7 +2,7 @@ import Image from "next/image";
 import Ashoka from "@/public/ashoke-chakra.svg";
 import { cn } from "@/lib/utils";
 import { useEffect, useRef, useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Pause } from "lucide-react";
 
 interface CarCardProps {
   name: string;
@@ -12,9 +12,10 @@ interface CarCardProps {
   ongoingBooking?: number;
   upcomingBooking?:number;
   photos:string[];
+  status:string;
 }
 
-export function CarCard({ name, plateNumber,ongoingBooking,upcomingBooking,photos }: CarCardProps) {
+export function CarCard({ name, plateNumber,ongoingBooking,upcomingBooking,photos,status }: CarCardProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [scrollValue,setScrollValue] = useState(0);
   const [previewImage,setPreviewImage] = useState<string | null>(photos ? photos[scrollValue]: null);
@@ -58,6 +59,7 @@ export function CarCard({ name, plateNumber,ongoingBooking,upcomingBooking,photo
             {upcomingBooking >0 &&
             <span
             className={cn("h-2 w-2 sm:h-3 sm:w-3 flex justify-center items-center text-xs p-1 text-center bg-blue-400 text-white rounded-full shadow-sm font-extrabold",
+              upcomingBooking > 1 && "h-3 w-3"
             )}
             >{upcomingBooking > 1 ? upcomingBooking : ""}</span>}
             {/* ongoing booking */}
@@ -66,6 +68,11 @@ export function CarCard({ name, plateNumber,ongoingBooking,upcomingBooking,photo
             className={cn("h-2 w-2 sm:h-3 sm:w-3 flex justify-center items-center text-xs p-1 text-center bg-green-400 text-white rounded-full shadow-sm font-extrabold",
             )}
             ></span>}
+          </div>
+          }
+          {status === "pause" &&
+          <div className="absolute z-10 -top-1 -left-1 p-1 bg-gray-300 dark:bg-card rounded-sm text-xs">
+            <Pause className="w-4 h-4" />
           </div>
           }
           <div 

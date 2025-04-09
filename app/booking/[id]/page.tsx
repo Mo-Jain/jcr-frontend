@@ -35,6 +35,7 @@ export interface Booking {
   carPlateNumber: string;
   carImageUrl: string;
   dailyRentalPrice: number;
+  type: string;
   securityDeposit?: string;
   totalPrice?: number;
   advancePayment?: number;

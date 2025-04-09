@@ -141,6 +141,7 @@ export function AddCarDialog({ isOpen, setIsOpen }: AddCarDialogProps) {
         upcomingBooking: 0,
         ongoingBooking: 0,
         photos:selectedImage ? [selectedImage] : [],
+        status: "Active"
       };
       setCars([...cars, car]);
       setCarBrand("");

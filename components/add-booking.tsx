@@ -22,6 +22,7 @@ import { DatePicker } from "./ui/datepicker";
 import AddTime from "./add-time";
 import CarFrontIcon from "@/public/car-front.svg";
 import UserIcon from "@/public/user.svg";
+import Delivery from "@/public/delivery.svg";
 import Calendar from "@/public/date-and-time.svg";
 import Rupee from "@/public/rupee-symbol.svg";
 import Advance from "@/public/advance.svg";
@@ -77,7 +78,7 @@ export function AddBookingDialog({
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   cars: Car[];
-  setBookings: React.Dispatch<React.SetStateAction<BookingType[]>>;
+  setBookings?: React.Dispatch<React.SetStateAction<BookingType[]>>;
 }) {
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [endDate, setEndDate] = useState<Date>(new Date());
@@ -93,6 +94,7 @@ export function AddBookingDialog({
   const [customerId, setCustomerId] = useState<number>();
   const [customers, setCustomers] = useState<Customer[]>();
   const [advance, setAdvance] = useState<number>(0);
+  const [type, setType] = useState<"pickup" | "home delivery">("pickup");
 
   useEffect(() => {
     const cost = calculateCost(startDate, endDate, startTime, endTime, price);
@@ -206,6 +208,7 @@ export function AddBookingDialog({
           customerContact: contact,
           dailyRentalPrice: price,
           totalAmount: totalAmount,
+          type,
           customerId: customerId,
           advance
         },
@@ -233,12 +236,14 @@ export function AddBookingDialog({
         carPlateNumber: car?.plateNumber || "",
         carColor: car?.colorOfBooking || "",
         status: "Upcoming",
+        type,
         isAdmin:true,
+
         otp:''
       };
 
       setIsOpen(false);
-      setBookings((prev: BookingType[]) => {
+      if(setBookings) setBookings((prev: BookingType[]) => {
         return [...prev, newBooking];
       });
 
@@ -289,14 +294,14 @@ export function AddBookingDialog({
         className={`${isOpen ? "" : "hidden"} fixed top-0 left-0 h-screen w-screen z-10 bg-opacity-5 backdrop-blur-sm`}
       ></div>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="sm:max-w-[425px] max-sm:p-2 max-sm:py-4 bg-white dark:bg-muted dark:border-zinc-700 md:max-w-[600px] h-[82vh] sm:top-[55%] sm:h-auto overflow-y-auto">
+        <DialogContent className="sm:max-w-[425px] max-sm:p-2 py-4 bg-white dark:bg-muted dark:border-zinc-700 md:max-w-[600px] h-[82vh] sm:top-[55%] sm:h-auto overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 mt-30 text-blue-700 dark:text-blue-600">
               <Booking className="w-6 h-6 flex-shrink-0 stroke-[6px] stroke-blue-600 fill-blue-600" />
               Add Booking
             </DialogTitle>
           </DialogHeader>
-          <form  className="space-y-3">
+          <form  className="space-y-2">
             <div className="flex items-center gap-4">
               <CarFrontIcon className="w-6 h-4 dark:stroke-blue-200 dark:fill-blue-200 stroke-[6px] stroke-black fill-black flex-shrink-0" />
               <Label htmlFor="car" className="w-1/3">
@@ -460,7 +465,47 @@ export function AddBookingDialog({
                 </div>
               </div>
             </div>
+            <div className="flex items-center gap-4">
+            <Delivery className="h-6 w-6 flex-shrink-0 stroke-[12px] stroke-black fill-black dark:stroke-white dark:fill-white" />
+              <Label htmlFor="car" className="w-1/3">
+                Delivery Type
+              </Label>
+              <Select
+                value={type} // Ensures placeholder shows when carId is 0 or undefined
+                onValueChange={(value) => {
+                  setType(value as "pickup" | "home delivery");
+                  setErrors((prev) => ({ ...prev, type: "" }));
+                }}
+              >
+                <SelectTrigger
+                  id="car"
+                  className="w-2/3 border-input focus:border-blue-400 focus:ring-blue-400 max-sm:max-w-[190px] focus-visible:ring-blue-400 focus:outline-none"
+                >
+                  <SelectValue placeholder="Select delivery" />
+                </SelectTrigger>
+                <SelectContent
+                  className="bg-background border-border"
+                  aria-modal={false}
+                >
+                    <SelectItem
+                      className="focus:bg-blue-300 dark:focus:bg-blue-900 cursor-pointer"
+                      value="pickup"
+                    >
+                      Pick Up
+                    </SelectItem>
+                    <SelectItem
+                      className="focus:bg-blue-300 dark:focus:bg-blue-900 cursor-pointer"
+                      value="home delivery"
+                    >
+                      Home Delivery
+                    </SelectItem>
+                </SelectContent>
+              </Select>
 
+              {errors.car && (
+                <p className="text-red-500 text-sm mt-1">{errors.car}</p>
+              )}
+            </div>
             <div className="flex items-center gap-4">
               <Price className="h-6 w-6 mr-[-2px] flex-shrink-0 stroke-[12px] stroke-black fill-black dark:stroke-white dark:fill-white" />
               <Label htmlFor="price" className="w-1/3">

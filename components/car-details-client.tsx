@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, Edit, IndianRupee, Loader, LogOut,  Trash2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Edit, IndianRupee, Loader, LogOut,  Pause,  Play,  Trash2 } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
@@ -51,6 +51,7 @@ interface Car {
   seats: number;
   fuel: string;
   gear: string;
+  status:string;
   photos:string[];
   bookings: {
     id: number;
@@ -97,6 +98,7 @@ export function CarDetailsClient({ carId }: { carId: number }) {
   const [scrollValue,setScrollValue] = useState(0);
   const [previewImage,setPreviewImage] = useState<string | null>(null);
   const [gear,setGear] = useState<string>(car?.gear || "");
+  const [status,setStatus] = useState<"active" | "pause">(car?.status as "active" | "pause" || "active");
 
   useEffect(() => {
     if (car) {
@@ -402,7 +404,9 @@ export function CarDetailsClient({ carId }: { carId: number }) {
 
   function getTimeUntilBooking(startTime: string, status: string) {
     if (status === "Completed") return "Booking has ended";
+    if (status === "Cancelled") return "Booking has been cancelled";
     if (status === "Ongoing") return "Booking has started";
+    if( status === "Requested") return "Booking hasn't been confirmed";
     const now = new Date();
     const start = new Date(startTime);
     const diffTime = start.getTime() - now.getTime();
@@ -449,6 +453,42 @@ export function CarDetailsClient({ carId }: { carId: number }) {
         variant: "destructive",
         duration: 2000,
       });
+    }
+  }
+
+  const handleBookingAction = async () => {
+    try{
+      if(status === "active") {
+        await axios.put(`${BASE_URL}/api/v1/car/${car.id}/action`, {
+          action: "pause"
+        },{
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        setStatus("pause");
+      }else {
+        await axios.put(`${BASE_URL}/api/v1/car/${car.id}/action`, {
+          action: "active"
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        setStatus("active");
+      }
+    } catch (error) {
+      console.log(error);
+      toast({
+        description: `Booking failed to update`,
+        className:
+          "text-black bg-white border-0 rounded-md shadow-mg shadow-black/5 font-normal",
+        variant: "destructive",
+        duration: 2000,
+      }); 
     }
   }
 
@@ -610,7 +650,24 @@ export function CarDetailsClient({ carId }: { carId: number }) {
           <div className="w-full h-full sm:border-l border-border">
             <div className="">
               <section className="px-2 py-2 pb-0 max-sm:border-t border-gray-200 dark:border-zinc-700">
-                <h2 className="text-lg font-semibold mb-4 ">Car Details</h2>
+                <div className="flex justify-between items-center">
+                  <h2 className="text-lg font-semibold mb-4 ">Car Details</h2>
+                  <Button 
+                  onClick={handleBookingAction}
+                  className="active:scale-95 rounded-full py-1 text-white px-2">
+                    {status === "active" ?
+                    <>
+                      <Pause className="w-6 h-6"/>
+                      <span>Pause</span>
+                    </>
+                    :
+                    <>
+                      <Play className="w-6 h-6"/>
+                      <span>Resume</span>
+                    </>
+                    }
+                  </Button>
+                </div>
                 <div className="grid grid-cols-2 gap-4 ">
                   <div className="space-y-4">
                     <p className="text-sm text-blue-500 mb-1">Brand</p>

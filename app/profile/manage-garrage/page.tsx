@@ -1,17 +1,20 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import { Edit } from "lucide-react";
+import { Edit, PlusSquare } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import BackArrow from "@/public/back-arrow.svg";
 import LoadingScreen from "@/components/loading-screen";
 import { useCarStore } from "@/lib/store";
 import CarIcon from "@/public/car-icon.svg";
+import { AddCarDialog } from "@/components/add-car";
+import { useState } from "react";
 
 const Page = () => {
   const { cars } = useCarStore();
   const router = useRouter();
+  const [isOpen,setIsOpen] = useState(false);
 
   if (!cars) {
     return <LoadingScreen />;
@@ -19,21 +22,34 @@ const Page = () => {
 
   return (
     <div className="py-6 px-2 sm:px-4 h-full min-h-[88vh] sm:min-h-[90vh] bg-background ">
-      <div className="w-full flex gap-6 h-fit items-start">
-        <Button
-          onClick={() => router.push("/profile")}
-          className=" sm:mt-2 flex bg-transparent active:scale-95 shadow-none justify-start text-black border dark:border-card border-gray-200 hover:bg-gray-200 dark:hover:bg-card "
-        >
-          <BackArrow className="h-7 w-7 stroke-0 fill-gray-800 dark:fill-blue-300" />
-        </Button>
-        <div className="flex justify-start sm:mt-2 mt-[4px] items-center h-full mb-8 ">
-          <h1
-            style={{ fontFamily: "var(--font-equinox), sans-serif" }}
-            className="text-3xl max-sm:text-xl font-black text-black dark:text-white font-myfont"
+      <div className="w-full flex h-fit items-center justify-between">
+        <div className="w-full flex gap-6 h-fit items-start">
+          <Button
+            onClick={() => router.push("/profile")}
+            className=" sm:mt-2 flex bg-transparent active:scale-95 shadow-none justify-start text-black border dark:border-card border-gray-200 hover:bg-gray-200 dark:hover:bg-card "
           >
-            MANAGE YOUR GARRAGE
-          </h1>
+            <BackArrow className="h-7 w-7 stroke-0 fill-gray-800 dark:fill-blue-300" />
+          </Button>
+          <div className="flex justify-start sm:mt-2 mt-[4px] items-center h-full mb-8 ">
+            <h1
+              style={{ fontFamily: "var(--font-equinox), sans-serif" }}
+              className="text-3xl max-sm:text-xl font-black text-black dark:text-white font-myfont"
+            >
+              MANAGE YOUR GARRAGE
+            </h1>
+          </div>
+          <AddCarDialog isOpen={isOpen} setIsOpen={setIsOpen} />
         </div>
+        {cars.length > 0 && (
+            <Button
+            style={{ fontFamily: "var(--font-pier), sans-serif" }}
+              className="bg-blue-600 rounded-sm transition-all duration-300 active:scale-95 text-white bg-primary hover:bg-opacity-80  shadow-lg max-sm:p-2"
+              onClick={() => setIsOpen(true)}
+            >
+              <PlusSquare className="text-20 max-sm:text-xs h-12 w-12" />
+              <span className="max-sm:text-xs ">Add Car</span>
+            </Button>
+          )}
       </div>
       {cars.length > 0 ? (
         <div

@@ -7,11 +7,11 @@ import { CarCard } from "@/components/car-card";
 import { CarSearch } from "@/components/car-search";    
 import { Plus, PlusSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { AddBookingDialog } from "./add-booking";
 import { cn } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
 import { Car, useCarStore, useSearchStore } from "@/lib/store";
 import { useState,useEffect } from "react";
+import { AddBookingDialog } from "@/components/add-booking";
 
 const Page = () => {
     const {cars} = useCarStore();
@@ -116,6 +116,7 @@ const Page = () => {
                 name={car.brand + " " + car.model}
                 photos={car.photos}
                 plateNumber={car.plateNumber}
+                status={car.status}
                 />
             </Link>
             ))}

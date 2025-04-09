@@ -27,6 +27,7 @@ export type Car = {
   price: number;
   ongoingBooking: number;
   upcomingBooking: number;
+  status: string;
   photos:string[];
 };
 

@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Edit,  MoreVertical, Share, Trash2, Upload } from "lucide-react";
+import { Check, Edit,  IndianRupee,  MoreVertical, Share, Trash2, Upload, X } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -32,6 +32,8 @@ import ExportIcon from "@/public/File export.svg"
 import ExportButton from "@/components/export-button";
 import Loader from "@/components/loader";
 import MailDialog from "@/components/mail-dialog";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 
 interface BookingDetailsClientProps {
   booking: Booking;
@@ -99,6 +101,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
   const [loadingMessage, setLoadingMessage] = useState("Please wait");
   const {events,setEvents} = useEventStore();
   const [openMailDialog, setOpenMailDialog] = useState(false);
+  const [deliveryOption, setDeliveryOption] = useState<"pickup" | "home delivery">("pickup");
 
   const initialReading = useMemo(() => {
     if (booking.endodometerReading) return booking.endodometerReading;
@@ -122,8 +125,13 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
       endTime,
       dailyRentalPrice,
     );
-    setTotalAmount(cost);
-  }, [dailyRentalPrice, startDate, endDate, startTime, endTime]);
+    if(deliveryOption === "pickup"){
+      setTotalAmount(cost);
+    }
+    else{
+      setTotalAmount(cost + 1000);
+    }
+  }, [dailyRentalPrice, startDate, endDate, startTime, endTime,deliveryOption]);
 
   function handleAction() {
     //add code to stop or start the booking
@@ -348,9 +356,9 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
         });
         throw new Error("Failed to upload selfie photo");
       }
-
+      setProgress(97);
       const res = await axios.put(
-        `${BASE_URL}/api/v1/booking/${booking.id}`,
+        `${BASE_URL}/api/v1/booking/${booking.id}/update`,
         {
           startDate:startDate.toLocaleDateString("en-US"),
           endDate:endDate.toLocaleDateString("en-US"),
@@ -361,6 +369,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
           customerName: name,
           customerAddress: address,
           customerContact: number,
+          type: deliveryOption,
           securityDeposit,
           dailyRentalPrice,
           paymentMethod,
@@ -484,7 +493,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
     }
   };
 
-   function getHeader(
+  function getHeader(
     status: string,
     startDate: string,
     startTime: string,
@@ -494,17 +503,17 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
     let headerText = "";
     const startDateTime = new Date(startDate);
     const endDateTime = new Date(endDate);
-
     const [startHour, startMinute] = startTime.split(":").map(Number);
     const [endHour, endMinute] = endTime.split(":").map(Number);
+    const type = deliveryOption[0].toUpperCase() + deliveryOption.slice(1);
     startDateTime.setHours(startHour, startMinute, 0, 0);
     endDateTime.setHours(endHour, endMinute, 0, 0);
     const currDate = new Date();
     if (status === "Upcoming") {
       if (startDateTime >= currDate) {
-        headerText = "Pickup scheduled on";
+        headerText = type + " scheduled on";
       } else {
-        headerText = "Pickup was scheduled on";
+        headerText = type + " was scheduled on";
       }
     } else if (status === "Ongoing") {
       if (endDateTime < currDate) {
@@ -523,7 +532,9 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
         headerText = "Booking was cancelled by you";
       }
     }
-
+    else if (status === "Requested") {
+      headerText = "Booking requested by";
+    }
     return headerText;
   }
 
@@ -594,6 +605,36 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
       </div>
     );
   };
+
+  const handleConsent = async (action : "confirm" | "reject") => {
+      try {
+          setIsLoading(true);
+          await axios.put(`${BASE_URL}/api/v1/booking/${booking.id}/consent`, {
+              action: action,
+            },
+            {
+              headers: {
+                "Content-Type": "application/json",
+                authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }
+          );
+          toast({
+              description: `Successfully ${action}ed`,
+              duration: 2000,
+          });
+          setBookingStatus("Upcoming")
+      } catch (error) {
+          console.log(error);
+          toast({
+              description: "Failed to confirm",
+              variant: "destructive",
+              duration: 2000,
+          });
+          setIsLoading(false);
+      }
+      setIsLoading(false);
+    }
 
  
 
@@ -682,18 +723,70 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
         </div>
         {/* Spacer for alignment */}
       </div>
+      <div className="w-full py-4">
+        {booking.status === "Requested" && (
+            <div className="flex items-center justify-center gap-1 sm:gap-2 w-full">
+              <div 
+              onClick={() => handleConsent("confirm")}
+              className="active:scale-95 cursor-pointer flex gap-1 sm:gap-2 items-center rounded-sm bg-blue-500 hover:bg-blue-400 py-2 text-xs text-white px-2">
+                <Check className="w-4 h-4" />
+                <span >Accept</span>
+              </div>
+              <div 
+              onClick={() => handleConsent("reject")}
+              className="active:scale-95 cursor-pointer flex gap-1 sm:gap-2 items-center rounded-sm bg-red-500 hover:bg-red-400 text-xs py-2 text-white px-2">
+                <X className="w-4 h-4" />
+                <span>Reject</span>
+              </div>
+            </div>
+          )}
+      </div>
 
-      <div className="px-1 sm:px-4 py-4 border-b-4 border-gray-200 dark:border-muted ">
-        <div className="flex justify-between items-center relative">
+      <div className="relative px-1 sm:px-4 py-4 border-b-4 border-gray-200 dark:border-muted ">
+        <div className="flex justify-between items-center ">
+          {!isEditable ?
+            <div className="absolute top-[10%] text-sm left-0 rounded-e-lg bg-blue-400 border-border p-1 px-2">
+                <span>{booking.type}</span>
+            </div> 
+            :
+            <RadioGroup value={deliveryOption} onValueChange={(value) => setDeliveryOption(value as "pickup" | "home delivery")} className="flex absolute top-[5%] text-sm left-0 flex-col ">
+              <div className="flex items-start space-x-2 w-full justify-between">
+                <div>
+                  <div className="flex items-center space-x-2 w-full">
+                    <RadioGroupItem value="home delivery" id="home" />
+                    <Label htmlFor="home" className="cursor-pointer" >
+                      <span>Home Delivery </span> 
+                    </Label>
+                  </div>
+                </div>
+                <span className="font-bold flex items-center gap-1">
+                  <IndianRupee className="w-4 h-4"/>
+                  1000
+                </span>
+              </div>
+              <div className="flex items-center space-x-2 w-full justify-between">
+              <div className="flex items-center space-x-2 w-full">
+                <RadioGroupItem value="pickup" id="pick-up" />
+                <Label htmlFor="pick-up" className="cursor-pointer">
+                  Pick up from our location
+                </Label>
+              </div>
+              <span className="font-bold flex items-center gap-1">
+                <IndianRupee className="w-4 h-4"/>
+                0
+              </span>
+            </div>
+          </RadioGroup>
+          }
           <div>
             {booking.otp && booking.otp !== "" &&
-              <div className="absolute top-1 left-1 flex gap-2 text-gray-500 items-center w-fit ">
-              <p className="font-semibold max-sm:text-sm">
-                OTP:
-              </p>
-              <p className="font-semibold max-sm:text-sm">
-                {booking.otp}
-              </p>
+              <div className="absolute -top-2 right-4 opacity-70 flex gap-2 px-2 text-sm items-center w-fit rounded-sm bg-gray-300 dark:bg-card">
+                <p className="font-semibold max-sm:text-sm">
+                  OTP:
+                </p>
+                <p className="font-semibold max-sm:text-sm">
+                  {booking.otp}
+                </p>
             </div>}
             <p className="text-sm text-blue-500">
               {getHeader(
@@ -1172,7 +1265,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
         <div className=" flex justify-center space-x-2 mt-2">
           {bookingStatus === "Upcoming" && (
             <Button
-              className="px-4 py-4 max-sm:w-full active:scale-95 bg-blue-600 dark:text-black text-blue-100  shadow-lg"
+              className="px-4 py-4 max-sm:w-full active:scale-95 bg-blue-600 text-white text-blue-100  shadow-lg"
               onClick={() => {
                 router.push(`/booking/start/form/${booking.id}`);
               }}
@@ -1182,7 +1275,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
           )}
           {bookingStatus === "Ongoing" && (
             <Button
-              className="px-4 py-4 max-sm:w-full active:scale-95 bg-blue-600 dark:text-black text-blue-100  shadow-lg"
+              className="px-4 py-4 max-sm:w-full active:scale-95 bg-blue-600 text-white text-blue-100  shadow-lg"
               onClick={() => {
                 setAction("Stop");
                 setIsBookingStopOpen(true);
@@ -1196,12 +1289,12 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
       </>
       }
       {isEditable && isAdmin && (
-        <div className=" flex justify-center space-x-2 mt-2">
+        <div className=" flex justify-center space-x-2 mt-2 text-white">
           <>
             {!isLoading ? (
               <>
                 <Button
-                  className="px-4 py-4 max-sm:w-full active:scale-95 min-w-[100px] bg-primary hover:bg-opacity-50 shadow-lg"
+                  className="px-4 py-4 max-sm:w-full text-white active:scale-95 min-w-[100px] bg-primary hover:bg-opacity-50 shadow-lg"
                   onClick={() => {
                     setAction("Update");
                     setIsDialogOpen(true);
@@ -1210,7 +1303,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
                   <span className="">Update</span>
                 </Button>
                 <Button
-                  className="px-4 py-4 max-sm:w-full active:scale-95 min-w-[100px] bg-primary hover:bg-opacity-50 shadow-lg"
+                  className="px-4 py-4 max-sm:w-full text-white active:scale-95 min-w-[100px] bg-primary hover:bg-opacity-50 shadow-lg"
                   onClick={handleReset}
                 >
                   <span className="">Reset</span>
@@ -1225,14 +1318,14 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
                 <div
                   className={`w-full h-[35px] p-1 flex justify-center items-center absolute top-0 left-0 `}
                 >
-                  <span className="text-black dark:text-white max-sm:text-xs">
+                  <span className="text-white text-white max-sm:text-xs">
                     {loadingMessage}
                   </span>
                   <div className="flex items-end px-1 pb-2 h-full">
                     <span className="sr-only">Loading...</span>
-                    <div className="h-1 w-1 bg-black dark:bg-white mx-[2px] border-border rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-                    <div className="h-1 w-1 bg-black dark:bg-white mx-[2px] border-border rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-                    <div className="h-1 w-1 bg-black dark:bg-white mx-[2px] border-border rounded-full animate-bounce"></div>
+                    <div className="h-1 w-1 bg-white mx-[2px] border-border rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                    <div className="h-1 w-1 bg-white mx-[2px] border-border rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                    <div className="h-1 w-1 bg-white mx-[2px] border-border rounded-full animate-bounce"></div>
                   </div>
                 </div>
               </div>

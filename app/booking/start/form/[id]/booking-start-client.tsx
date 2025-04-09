@@ -27,6 +27,7 @@ import { RenderFileList, RenderNewFileList } from "./render-file-list";
 import { uploadToDrive } from "@/app/actions/upload";
 import Link from "next/link";
 import MailDialog from "@/components/mail-dialog";
+import BackArrow from "@/public/back-arrow.svg";
 
 interface FormErrors {
   [key: string]: string;
@@ -407,12 +408,24 @@ export default function BookingStartClient({
         setOpen={setIsMailDialogOpen} 
         handleSkip={() => router.push("/bookings")}
         />
-      <h1 className="text-2xl font-bold ">Booking Start Checklist</h1>
-      <div className="mb-6">
-        <span className="text-sm text-blue-600 dark:text-blue-400">
-          Booking Id:{" "}
-        </span>
-        <span className="text-sm">{bookingId}</span>
+      <div className="flex items-center gap-2 mb-6">
+        <div
+          className="mr-2 rounded-md font-bold  cursor-pointer dark:hover:bg-gray-800 hover:bg-gray-200"
+          onClick={() => router.push("/booking/"+bookingId)}
+        >
+          <div className="h-10 w-9 flex border-border border justify-center items-center rounded-md ">
+            <BackArrow className="h-7 w-7 stroke-0 fill-gray-800 dark:fill-blue-300" />
+          </div>
+        </div>
+        <div>
+          <h1 className="text-2xl font-bold ">Booking Start Checklist</h1>
+          <div className="">
+            <span className="text-sm text-blue-600 dark:text-blue-400">
+              Booking Id:{" "}
+            </span>
+            <span className="text-sm">{bookingId}</span>
+          </div>
+        </div>
       </div>
       <div className="space-y-6 max-sm:mb-12">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -831,7 +844,7 @@ export default function BookingStartClient({
             className="text-sm font-medium text-blue-400 underline cursor-pointer leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
           >
             <Link href="/terms-and-conditions">
-              I agree to all the terms and conditions{" "}
+              I agree to all the terms and conditions
             </Link>
             <span className="text-red-500">*</span>
           </label>

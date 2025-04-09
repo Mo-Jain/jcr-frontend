@@ -1,6 +1,6 @@
 "use client";
 
-import {  useState } from "react";
+import {  useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus, PlusSquare } from "lucide-react";
 import { CarCard } from "./car-card";
@@ -15,11 +15,44 @@ import TakeAction from "./take-action";
 import MonthEarnings from "./month-earnings";
 import Customers from "./customers";
 import KYCVerification from "./kyc-verification";
+import RequestedBookings from "./requested-bookings";
+import axios from "axios";
+import { BASE_URL } from "@/lib/config";
+import PausedCars from "./paused-cars";
+
+export type PausedCar = {
+  id: number;
+  brand: string;
+  model: string;
+  plateNumber: string;
+  colorOfBooking: string;
+  status: string;
+  photos:string[];
+}
 
 export function CarSection() {
   const [isOpen, setIsOpen] = useState(false);
   const { cars } = useCarStore();
   const { name } = useUserStore();
+  const [pausedCars,setPausedCars] = useState<PausedCar[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(`${BASE_URL}/api/v1/car/paused/all`, {
+          headers: {
+            "Content-type": "application/json",
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        setPausedCars(res.data.cars);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+
 
   if (!cars) {
     return <LoadingScreen />;
@@ -30,6 +63,7 @@ export function CarSection() {
       <AddCarDialog isOpen={isOpen} setIsOpen={setIsOpen} />
       {name ? (
         <div >
+          {pausedCars.length > 0 && <PausedCars cars={pausedCars} setCars={setPausedCars}/>}
           <section className="py-6 bg-white bg-opacity-30 dark:bg-opacity-10 rounded-t-md backdrop-blur-lg sm:px-4 px-2">
             <div className="flex justify-between items-center sm:px-4 px-2">
                 <h1
@@ -38,17 +72,6 @@ export function CarSection() {
                 >
                   {name.split(" ")[0]}&apos;s GARRAGE
                 </h1>
-                
-              {cars.length > 0 && (
-                <Button
-                style={{ fontFamily: "var(--font-pier), sans-serif" }}
-                  className="bg-blue-600 rounded-sm transition-all duration-300 active:scale-95 text-white bg-primary hover:bg-opacity-80  shadow-lg max-sm:p-2"
-                  onClick={() => setIsOpen(true)}
-                >
-                  <PlusSquare className="text-20 max-sm:text-xs h-12 w-12" />
-                  <span className="max-sm:text-xs ">Add Car</span>
-                </Button>
-              )}
             </div>
             <div className="flex items-center gap-2 w-full px-4 mt-2 border-b border-border pb-3 mb-1">
               <div className="flex items-center gap-1 text-sm">
@@ -83,6 +106,7 @@ export function CarSection() {
                       ongoingBooking={car.ongoingBooking}
                       upcomingBooking={car.upcomingBooking}
                       photos={car.photos}
+                      status={car.status}
                     />
                   </Link>
                 ))}
@@ -111,6 +135,7 @@ export function CarSection() {
             </h1>
             <div className="grid z-0 sm:grid-cols-2 lg:grid-cols-3 gap-3 lg:grid-cols-[minmax(400px,_1fr)_minmax(400px,_1fr)_1fr]">
               <TakeAction />
+              <RequestedBookings/>
               <KYCVerification/>
               <MonthEarnings />
               <Customers/>

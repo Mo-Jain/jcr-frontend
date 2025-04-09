@@ -9,7 +9,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { MoreVertical, Plus, Trash2 } from "lucide-react";
+import { Check, MoreVertical, Plus, Trash2, X } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { AddBookingDialog } from "@/components/add-booking";
@@ -30,8 +30,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Loader from "@/components/loader";
+import Loader2 from "@/components/loader2";
 
-type BookingStatus = "Upcoming" | "Ongoing" | "Completed" | "Cancelled" | "All";
+type BookingStatus = "Requested" | "Upcoming" | "Ongoing" | "Completed" | "Cancelled" | "All";
 
 function formatDateTime(dateString: string) {
   return new Date(dateString).toLocaleString("en-US", {
@@ -65,6 +66,7 @@ function getTimeUntilBooking(startTime: string, status: string) {
   if (status === "Completed") return "Booking has ended";
   if (status === "Cancelled") return "Booking has been cancelled";
   if (status === "Ongoing") return "Booking has started";
+  if( status === "Requested") return "Booking hasn't been confirmed";
   const now = new Date();
   const start = new Date(startTime);
   const diffTime = start.getTime() - now.getTime();
@@ -91,6 +93,7 @@ export interface Booking {
   endTime: string;
   status: string;
   isAdmin: boolean;
+  type: string;
   otp: string;
 }
 
@@ -276,6 +279,15 @@ export default function Bookings() {
               All{getBookingLength("All")}
             </Button>
             <Button
+              variant={selectedStatus === "Requested" ? "default" : "outline"}
+              className={
+                selectedStatus === "Requested"
+                  ? "bg-blue-400 hover:bg-blue-500 active:scale-95 text-white rounded-sm"
+                  : "hover:bg-blue-100 rounded-sm bg-transparent border-border dark:text-white dark:hover:bg-zinc-700 text-black"
+              }
+              onClick={() => setSelectedStatus("Requested")}
+            >Requested{getBookingLength("Requested")}</Button>
+            <Button
               variant={selectedStatus === "Upcoming" ? "default" : "outline"}
               className={
                 selectedStatus === "Upcoming"
@@ -371,6 +383,7 @@ export default function Bookings() {
                 booking={booking}
                 selectedBookings={selectedBookings}
                 setSelectedBookings={setSelectedBookings}
+                setBookings={setBookings}
               />
             ))}
             {filteredBookings.length === 0 && (
@@ -421,12 +434,17 @@ const BookingCard = ({
   booking,
   selectedBookings,
   setSelectedBookings,
+  setBookings
 }: {
   selectedBookings: string[];
   setSelectedBookings: React.Dispatch<React.SetStateAction<string[]>>;
   booking: Booking;
+  setBookings: React.Dispatch<React.SetStateAction<Booking[]>>;
 }) => {
   const [isDropDownOpen, setIsDropdownOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [action, setAction] = useState<"confirm" | "reject">("confirm");
+
   const handleCheckboxChange = (id: string) => {
     setSelectedBookings((prev) =>
       prev.includes(id) ? prev.filter((b) => b !== id) : [...prev, id],
@@ -464,9 +482,53 @@ const BookingCard = ({
     } else if (status === "Completed") {
       headerText = "Booking ended at";
     } else if (status === "Cancelled") {
-      headerText = "Booking cancelled by customer";
+      headerText = "Booking cancelled";
     }
     return headerText;
+  }
+  const handleConsent = async (e:React.MouseEvent<HTMLDivElement, MouseEvent>,newAction : "confirm" | "reject") => {
+    if(e){
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    setAction(newAction);
+    try {
+        setIsLoading(true);
+        await axios.put(`${BASE_URL}/api/v1/booking/${booking.id}/consent`, {
+            action: newAction,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+        toast({
+            description: `Successfully ${newAction}ed`,
+            duration: 2000,
+        });
+        setBookings((prev) => {
+          const booking = prev.find(booking => booking.id === booking.id);
+          if(!booking) return prev;
+          if(newAction === "confirm"){
+            booking.status = "Upcoming"
+          }
+          else if(newAction === "reject"){
+            booking.status = "Cancelled"
+          }
+          return [...prev,booking]
+        })
+    } catch (error) {
+        console.log(error);
+        toast({
+            description: "Failed to confirm",
+            variant: "destructive",
+            duration: 2000,
+        });
+        setIsLoading(false);
+    }
+    setIsLoading(false);
   }
 
   return (
@@ -483,7 +545,7 @@ const BookingCard = ({
       />}
       <Card className="w-full relative bg-white dark:bg-background hover:shadow-md border-border transition-shadow mb-2">
         {booking.otp && booking.otp !== "" &&
-          <div className="flex gap-2 items-start text-gray-600 dark:text-gray-300  absolute -top-[22px] sm:-top-6 left-2 bg-white dark:bg-card rounded-t-sm px-2 py-[2px]">
+          <div className="flex gap-2 items-start text-gray-600 dark:text-gray-300  absolute -top-[20px] sm:-top-6 left-2 bg-white dark:bg-card rounded-t-sm px-2 py-[2px]">
           <p className="text-xs sm:text-sm">OTP</p>
           <p className="text-xs sm:text-sm">{booking.otp}</p>
         </div>
@@ -556,7 +618,10 @@ const BookingCard = ({
             </div>
             <hr className="border-t border-border" />
             <div className=" dark:bg-background border-b border-border flex flex-row-reverse items-start justify-between">
-              <div className="flex-1 sm:p-4 py-2 px-2">
+              <div className="relative flex-1 sm:p-4 py-2 px-2">
+                  <div className="absolute top-[10%] text-sm right-0 rounded-s-lg bg-blue-400 border-border p-1 px-2">
+                    {booking.type}
+                  </div>
                 <div className="flex items-center sm:pr-10 gap-2">
                     <p className="text-sm max-sm:text-xs whitespace-nowrap text-blue-500">
                       BOOKING ID:
@@ -620,11 +685,39 @@ const BookingCard = ({
                 </p>
               </div>
             </div>
-            <div className="p-3 max-sm:p-2 flex bg-gray-200 dark:bg-muted items-center text-green-600 dark:text-green-400 gap-2">
-              <CarIcon className="w-8 h-3 stroke-green-600 dark:stroke-green-400 fill-green-600 dark:fill-green-400 stroke-[4px]" />
-              <p className="text-sm max-sm:text-xs ">
-                {getTimeUntilBooking(booking.start, booking.status)}
-              </p>
+            <div className="p-3 max-sm:p-2 flex bg-gray-200 rounded-b-xl dark:bg-muted items-center justify-between text-green-600 dark:text-green-400 gap-2">
+              <div className="flex items-center gap-2">
+                <CarIcon className="w-8 h-3 stroke-green-600 dark:stroke-green-400 fill-green-600 dark:fill-green-400 stroke-[4px]" />
+                <p className="text-sm max-sm:text-xs ">
+                  {getTimeUntilBooking(booking.start, booking.status)}
+                </p>
+              </div>
+              {booking.status === "Requested" && (
+                <>
+                {!isLoading ?
+                <div className="flex items-center gap-1 sm:gap-2">
+                  <div 
+                  onClick={(e) => handleConsent(e,"confirm")}
+                  className="active:scale-95 cursor-pointer flex gap-1 sm:gap-2 items-center rounded-sm bg-blue-500 hover:bg-blue-400 py-2 text-xs text-white px-2">
+                    <Check className="w-4 h-4" />
+                    <span >Accept</span>
+                  </div>
+                  <div
+                  onClick={(e) => handleConsent(e,"reject")}
+                  className="active:scale-95 cursor-pointer flex gap-1 sm:gap-2 items-center rounded-sm bg-red-500 hover:bg-red-400 text-xs py-2 text-white px-2">
+                    <X className="w-4 h-4" />
+                    <span>Reject</span>
+                  </div>
+                </div>
+                :
+                  <div className={cn("active:scale-95 cursor-pointer flex gap-1 sm:gap-2 items-center rounded-sm bg-red-500 hover:bg-red-400 text-xs py-2 text-white px-2",
+                    action === "confirm" && "bg-blue-500"
+                  )}>
+                     <Loader2/>
+                  </div>
+                }
+                </>
+              )}
             </div>
           </CardContent>
         </Link>

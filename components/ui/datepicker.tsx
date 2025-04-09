@@ -62,6 +62,7 @@ export function DatePicker({
             selected={date}
             onSelect={(date) => setDate(date || new Date())}
             initialFocus
+            defaultMonth={date}
             style={{ pointerEvents: "auto" }}
             className="bg-background"
           />
