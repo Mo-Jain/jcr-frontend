@@ -16,11 +16,11 @@ const ThemeBg = () => {
   if (!mounted) return null;
 
   return (
-    <div className="fixed inset-10 left-0 -z-10 pointer-events-none opacity-80">
+    <div className="fixed no-print inset-10 left-0 -z-10 pointer-events-none opacity-80">
     <div className="-mt-7 -ml-20 max-sm:-ml-24 dark:mt-48  transition-mt dark:opacity-0 duration-500">
       <SunImage />
     </div>
-    <div className="absolute top-[-30%] dark:top-[5%] left-0  transition-top duration-300 ease-in-out pointer-events-none">
+    <div className="no-print absolute top-[-30%] dark:top-[5%] left-0  transition-top duration-300 ease-in-out pointer-events-none">
       <div className="w-48 h-48 relative scale-[5]">
         <div className="relative w-full h-full">
           <Moonlight_small className="w-1/3 h-1/3 scale-0 dark:scale-[1] transition-all duration-1000 ease-in-out absolute top-[34%] left-[34%] opacity-100" />

@@ -37,6 +37,7 @@ export interface Booking {
   dailyRentalPrice: number;
   securityDeposit?: string;
   totalPrice?: number;
+  type:string;
   advancePayment?: number;
   customerAddress?: string;
   customerMail?: string;
@@ -99,7 +100,7 @@ export default function BookingDetails() {
             </div>
           }
         >
-          <BookingStartClient booking={booking} bookingId={Booking?.id || ""} />
+          <BookingStartClient booking={booking} setBooking={setBooking} bookingId={Booking?.id || ""} />
         </Suspense>
       </main>
     </div>

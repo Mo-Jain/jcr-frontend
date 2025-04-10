@@ -21,7 +21,7 @@ const StarryBackground: React.FC = () => {
 
 
   return (
-    <div className="fixed top-0 left-0 w-full h-full -z-50">
+    <div className="fixed no-print top-0 left-0 w-full h-full -z-50">
        <div 
        className={cn("absolute inset-0 -z-50 overflow-hidden pointer-events-none transition-opacity duration-1000",
         isDarkMode ? "opacity-100" : "opacity-0"

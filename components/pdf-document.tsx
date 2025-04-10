@@ -1,4 +1,6 @@
+import { calculateCost } from "@/lib/utils";
 import { Document, Page, Text, View, StyleSheet, Image } from "@react-pdf/renderer";
+import { IndianRupee } from "lucide-react";
 
 const styles = StyleSheet.create({
     page: { 
@@ -108,6 +110,28 @@ const styles = StyleSheet.create({
       textAlign: "center",
       fontSize: 10,
       color: "#666"
+    },
+    printRow: {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+    },
+    total: {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      borderTop: "1px solid #ddd",
+      paddingTop:5,
+      fontSize:12,
+      fontWeight:"semibold",
+    },
+    money:{
+      display:"flex",
+      flexDirection:"row",
+      gap:2,
+      alignItems:"center"
     }
   });
 
@@ -121,6 +145,7 @@ const styles = StyleSheet.create({
   customerName: string;
   customerContact: string;
   carId: number;
+  type:string;
   carName: string;
   carPlateNumber: string;
   dailyRentalPrice: number;
@@ -141,6 +166,10 @@ const PDFDocument = ({ booking }: { booking: Booking }) => {
       year: "numeric",
     });
   };
+
+  const totalAmount = calculateCost(booking.start,booking.end,booking.startTime,booking.endTime,booking.dailyRentalPrice);
+  const charge = booking?.totalPrice && (booking.paymentMethod === "card" || booking.paymentMethod === "netbanking") ? booking?.totalPrice*0.02 : 0;
+  const amountRemaining = booking.totalPrice ? (booking.totalPrice - (booking.advancePayment || 0)) : 0;
 
   const getHeader = (
     status: string,
@@ -262,53 +291,6 @@ const PDFDocument = ({ booking }: { booking: Booking }) => {
 
         <View style={styles.divider} />
         <View style={styles.section}>
-        <Text style={styles.textHeading}>Payment Details</Text>
-        <View style={styles.row}>
-          <View>
-            <View style={{display:"flex",flexDirection:"row"}}>
-                <Text style={{...styles.text,...styles.bold}}>Daily Price: </Text>
-                <Text style={styles.text}>{booking.dailyRentalPrice}</Text>
-            </View>
-            {booking.totalPrice && (
-                <>
-                <View style={{display:"flex",flexDirection:"row"}}>
-                    <Text style={{...styles.text,...styles.bold}}>Total Amount: </Text>
-                    <Text style={styles.text}>{booking.totalPrice}</Text>
-                </View>
-                <View style={{display:"flex",flexDirection:"row"}}>
-                    <Text style={{...styles.text,...styles.bold}}>Balance Due: </Text>
-                    <Text style={styles.text}>{booking.totalPrice - (booking.advancePayment || 0)}</Text>
-                </View>
-                </>
-            )}
-          </View>
-          <View>
-            {booking.advancePayment && (
-                <View style={{display:"flex",flexDirection:"row"}}>
-                    <Text style={{...styles.text,...styles.bold}}>Advance Payment: </Text>
-                    <Text style={styles.text}>{booking.advancePayment}</Text>
-                </View>
-            )}
-            {booking.securityDeposit && (
-                <View style={{display:"flex",flexDirection:"row"}}>
-                    <Text style={{...styles.text,...styles.bold}}>Security Deposit: </Text>
-                    <Text style={styles.text}>{booking.securityDeposit}</Text>
-                </View>
-            )}
-            {booking.paymentMethod && (
-                <View style={{display:"flex",flexDirection:"row"}}>
-                    <Text style={{...styles.text,...styles.bold}}>Payment Method: </Text>
-                    <Text style={styles.text}>{booking.paymentMethod}</Text>
-                </View>
-            )}
-          </View>
-          <View>
-            <Text></Text>
-          </View>
-        </View>
-        </View>
-        <View style={styles.divider} />
-        <View style={styles.section}>
           <Text style={styles.textHeading}>Some more details</Text>
           <View >
             <View>
@@ -327,6 +309,81 @@ const PDFDocument = ({ booking }: { booking: Booking }) => {
             </View>
             <View>
               <Text></Text>
+            </View>
+          </View>
+        </View>
+        
+        <View style={styles.divider} />
+        <View style={styles.section}>
+          <Text style={styles.textHeading}>Payment Details</Text>
+          <View>
+            <View style={styles.printRow}>
+              <Text style={styles.text}>Daily Rate:</Text>
+              <View style={styles.money}>
+                <Image src="/rupee.png" style={{width:12,height:12,marginTop:-2}} />
+                <Text style={styles.text}>
+                  {booking.dailyRentalPrice.toFixed(2)}
+                </Text>
+              </View>
+            </View>
+            <View style={styles.printRow}>
+              <Text style={styles.text}>Duration:</Text>
+              <Text style={styles.text}>{(totalAmount/booking.dailyRentalPrice).toFixed(2)} days</Text>
+            </View>
+            <View style={styles.printRow}>
+              <Text style={styles.text}>Delivery charges:</Text>
+              <View style={styles.money}>
+                <Image src="/rupee.png" style={{width:12,height:12,marginTop:-2}} />
+                <Text style={styles.text}>
+                  {(booking.type === "home delivery" ? 1000 : 0).toFixed(2)}
+                </Text>
+              </View>
+            </View>
+            <View style={styles.printRow}>
+              <Text style={styles.text}>Merchant fees:</Text>
+              <View style={styles.money}>
+                <Image src="/rupee.png" style={{width:12,height:12,marginTop:-2}} />
+                <Text style={styles.text}>
+                {charge.toFixed(2)}
+                </Text>
+              </View>
+            </View>
+            <View style={styles.total}>
+              <Text style={styles.text}>Total Amount:</Text>
+              <View style={styles.money}>
+                <Image src="/rupee.png" style={{width:12,height:12,marginTop:-2}} />
+                <Text style={styles.text}>
+                  {(booking.type === "home delivery" ? totalAmount + charge + 1000 : totalAmount + charge).toFixed(2)}
+                </Text>
+              </View>
+            </View>
+            <View style={styles.printRow}>
+              <Text style={styles.text}>Amount Paid:</Text>
+              <View style={styles.money}>
+                <Image src="/rupee.png" style={{width:12,height:12,marginTop:-2}} />
+                <Text style={styles.text}>
+                {(booking.advancePayment || 0).toFixed(2)}
+                </Text>
+              </View>
+            </View>
+            <View style={styles.total}>
+              <Text style={styles.text}>Amount Remaining:</Text>
+              {amountRemaining > 0 ?
+              <View style={styles.money}>
+                <Image src="/rupee.png" style={{width:12,height:12,marginTop:-2}} />
+                <Text style={styles.text}>
+                  {amountRemaining.toFixed(2)}
+                </Text>
+              </View>
+              :
+              <Text style={styles.text}>
+                  Fully Paid
+              </Text>
+              }
+            </View>
+            <View style={{display:"flex",flexDirection:"row"}}>
+                <Text style={{...styles.text}}>Security Deposit: </Text>
+                <Text style={{...styles.text,fontStyle:"italic"}}>No Security Deposit</Text>
             </View>
           </View>
         </View>

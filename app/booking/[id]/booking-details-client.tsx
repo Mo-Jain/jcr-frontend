@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Check, Edit,  IndianRupee,  MoreVertical, Share, Trash2, Upload, X } from "lucide-react";
+import { Check, Download, Edit,  IndianRupee,  MoreVertical, Share, Trash2, Upload, X } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -639,7 +639,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
  
 
   return (
-    <div>
+    <div className="print:text-black">
       {isDeleting && (
         <div className=" bg-black bg-opacity-80 fixed top-0 left-0 w-screen h-screen z-50 flex items-center justify-center">
           <div className="flex space-x-2 justify-center items-center w-screen h-screen">
@@ -648,9 +648,9 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
         </div>
       )}
       <MailDialog mail={booking.customerMail} open={openMailDialog} setOpen={setOpenMailDialog} booking={booking}/>
-      <div className="fixed top-[75px] sm:top-12 w-full left-0 flex pt-4 bg-background z-10 items-center justify-between px-2 pb-2 border-b border-gray-300 dark:border-muted dark:text-white">
+      <div className="no-print:fixed top-[75px] sm:top-12 print:top-0 w-full left-0 flex pt-4 print:pt-2 bg-background z-10 items-center justify-between print:justify-center px-2 pb-2 border-b border-gray-300 dark:border-muted dark:text-white">
         <div
-          className="mr-2 rounded-md font-bold  cursor-pointer dark:hover:bg-gray-800 hover:bg-gray-200"
+          className="mr-2 rounded-md font-bold no-print cursor-pointer dark:hover:bg-gray-800 hover:bg-gray-200"
           onClick={() => router.push("/bookings")}
         >
           <div className="h-10 w-9 flex border-border border justify-center items-center rounded-md ">
@@ -658,10 +658,10 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
           </div>
         </div>
         <div className="text-center">
-          <h2 className="text-xl font-bold">Booking {bookingStatus}</h2>
+          <h2 className="text-xl font-bold print:text-black">Booking {bookingStatus}</h2>
           <p className="text-sm text-blue-500">Booking ID: {booking.id}</p>
         </div>
-        <div className="mr-1 sm:mr-4 ">
+        <div className="mr-1 sm:mr-4 no-print">
           {isAdmin &&
           <DropdownMenu
             open={isDropDownOpen}
@@ -717,16 +717,23 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
                 <Share className="mr-2 h-4 w-4 " />
                 <span>Share</span>
               </DropdownMenuItem>
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onClick={() => window.print()}
+              >
+                <Download className="mr-2 h-4 w-4 stroke-1 stroke-black dark:stroke-white dark:fill-white" />
+                <span>Print PDF</span>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
           }
         </div>
         {/* Spacer for alignment */}
       </div>
-      <div className="w-full h-[70px]"/>
+      <div className="w-full h-[70px] print:h-0"/>
 
       {booking.status === "Requested" && (
-        <div className="w-full py-4">
+        <div className="w-full py-4 no-print">
               <div className="flex items-center justify-center gap-1 sm:gap-2 w-full">
                 <div 
                 onClick={() => handleConsent("confirm")}
@@ -828,7 +835,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
         </div>
       </div>
 
-      <div className="px-1 sm:px-4 py-4 border-b-4 border-gray-200 dark:border-muted">
+      <div className="px-1 sm:px-4 py-4 print:py-2 border-b-4 border-gray-200 dark:border-muted">
         <h3 className="text-lg font-semibold mb-4 ">Booking Details</h3>
         <div className="flex items-center justify-center gap-8 max-sm:gap-2 mb-4">
           <div className="w-full flex flex-col items-end">
@@ -947,7 +954,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
           </div>
         </div>
       </div>
-      <div className="px-1 sm:px-4 py-4 border-b-4 border-gray-200 dark:border-muted">
+      <div className="px-1 sm:px-4 py-4 print:py-2 border-b-4 border-gray-200 dark:border-muted">
         <h3 className="text-lg font-semibold mb-4 ">
           Price and Payment Details
         </h3>
@@ -1055,7 +1062,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
           </div>
         </div>
       </div>
-      <div className="px-1 sm:px-4 py-4 border-b-4 border-gray-200 dark:border-muted">
+      <div className="px-1 sm:px-4 py-4 print:py-2 border-b-4 border-gray-200 dark:border-muted">
         <h3 className="text-lg font-semibold mb-4 ">Some more details</h3>
         <div className="grid grid-cols-2 gap-4 sm:gap-6">
           <div className="space-y-4">
@@ -1078,7 +1085,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
               </div>
             )}
             {booking.status !== "Upcoming" && (
-              <div>
+              <div className="no-print">
                 <p className="text-xs sm:text-sm text-blue-500">
                   Selfie with car
                 </p>
@@ -1111,7 +1118,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
               </div>
             )}
 
-            <div>
+            <div className="no-print">
               <div className="flex sm:gap-1 items-center">
                 <p className="text-xs sm:text-sm text-blue-500">
                   Aadhar Card and Driving License
@@ -1209,7 +1216,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
               </div>
             )}
             {booking.status !== "Upcoming" && (
-              <div>
+              <div className="no-print">
                 <div className="flex sm:gap-1 items-center">
                   <p className="text-xs sm:text-sm text-blue-500">
                     Photos Before pick-up
@@ -1264,7 +1271,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
       {isAdmin &&
       <>
       {!isEditable && isAdmin && (
-        <div className=" flex justify-center space-x-2 mt-2">
+        <div className="no-print flex justify-center space-x-2 mt-2">
           {bookingStatus === "Upcoming" && (
             <Button
               className="px-4 py-4 max-sm:w-full active:scale-95 bg-blue-600 text-white text-blue-100  shadow-lg"
@@ -1291,7 +1298,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
       </>
       }
       {isEditable && isAdmin && (
-        <div className=" flex justify-center space-x-2 mt-2 text-white">
+        <div className=" flex no-print justify-center space-x-2 mt-2 text-white">
           <>
             {!isLoading ? (
               <>

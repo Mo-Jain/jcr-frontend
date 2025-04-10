@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from 'react';
-import {  pdf } from '@react-pdf/renderer';
+import {  pdf, PDFViewer } from '@react-pdf/renderer';
 import * as Dialog from '@radix-ui/react-dialog';
 import { Mail, Share2 } from 'lucide-react';
 import PDFDocument from '@/components/pdf-document';
@@ -47,6 +47,7 @@ const dummyBooking = {
   customerName: "John Doe",
   customerContact: "+91 9876543210",
   carId: 101,
+  type:"card",
   carName: "Toyota Corolla",
   carPlateNumber: "GJ05AB1234",
   carImageUrl: "https://images.unsplash.com/photo-1590362891991-f776e747a588?q=80&w=300",
@@ -145,9 +146,9 @@ function App() {
       </div>
 
       {/* PDF Viewer */}
-      {/* <PDFViewer className="w-full h-full">
+      <PDFViewer className="w-full h-full">
         <PDFDocument booking={dummyBooking} />
-      </PDFViewer> */}
+      </PDFViewer>
     </div>
   );
 }

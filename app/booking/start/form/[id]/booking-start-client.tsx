@@ -35,9 +35,11 @@ interface FormErrors {
 
 export default function BookingStartClient({
   booking,
+  setBooking,
   bookingId,
 }: {
   booking: Booking;
+  setBooking: React.Dispatch<React.SetStateAction<Booking | undefined>>;
   bookingId: string | string[];
 }) {
   const [customerName, setCustomerName] = useState(booking.customerName);
@@ -274,6 +276,28 @@ export default function BookingStartClient({
           },
         },
       );
+
+      const newBooking:Booking ={
+        ...booking,
+        customerName,
+        customerContact: phoneNumber,
+        carId:selectedCar,
+        start: startDate.toLocaleDateString("en-US"),
+        startTime,
+        end: returnDate.toLocaleDateString("en-US"),
+        endTime:returnTime,
+        securityDeposit,
+        odometerReading: odometerReading.toString(),
+        customerAddress: address,
+        advancePayment:bookingAmountReceived,
+        dailyRentalPrice,
+        totalPrice:totalAmount,
+        paymentMethod,
+        notes,
+        customerMail:customerMail,
+      }
+
+      setBooking(newBooking);
 
       const totalSize = Object.values(uploadedFiles)
           .flat()
