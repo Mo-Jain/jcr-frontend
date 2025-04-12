@@ -55,7 +55,7 @@ export function NavBar() {
   };
 
   return (
-    <div className="relative no-print">
+    <div className="relative no-print pdf-mode:hidden">
       <Redirect />
       <nav className="fixed w-full max-sm:pt-[30px] border-border top-0 left-0 z-[99999] py-1 flex items-center rounded-none cursor-normal bg-white/30 dark:bg-white/10 backdrop-blur-lg justify-between px-4">
         <div className="flex w-full transition-all duration-300">

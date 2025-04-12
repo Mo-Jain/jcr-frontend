@@ -2,7 +2,7 @@
 
 import {  useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Plus, PlusSquare } from "lucide-react";
+import { Plus } from "lucide-react";
 import { CarCard } from "./car-card";
 import Link from "next/link";
 import LoadingScreen from "./loading-screen";

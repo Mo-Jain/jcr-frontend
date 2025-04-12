@@ -26,6 +26,7 @@ import { toast } from "@/hooks/use-toast"
   endTime: string;
   status: string;
   customerName: string;
+  type:string;
   customerContact: string;
   carId: number;
   carName: string;

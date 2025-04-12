@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Check, Download, Edit,  IndianRupee,  MoreVertical, Share, Trash2, Upload, X } from "lucide-react";
+import { Check, Download, Edit,  IndianRupee,  MoreVertical, Printer, Share, Trash2, Upload, X } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -34,6 +34,8 @@ import Loader from "@/components/loader";
 import MailDialog from "@/components/mail-dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import { useDownloadPDF } from "@/hooks/useDownload";
+import { cn } from "@/lib/utils";
 
 interface BookingDetailsClientProps {
   booking: Booking;
@@ -102,6 +104,9 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
   const {events,setEvents} = useEventStore();
   const [openMailDialog, setOpenMailDialog] = useState(false);
   const [deliveryOption, setDeliveryOption] = useState<"pickup" | "home delivery">("pickup");
+  const { downloadPDF } = useDownloadPDF();
+  const phoneNumber = "+91 79995 51582"
+  const emailAddress = "jcrahmedabad@gmail.com";
 
   const initialReading = useMemo(() => {
     if (booking.endodometerReading) return booking.endodometerReading;
@@ -149,6 +154,10 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
       handleCancel();
     }
     return;
+  }
+
+  const exportPDF = async () => {
+    await downloadPDF('printable-section', 'booking.pdf');
   }
 
   function handleReset() {
@@ -636,10 +645,24 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
       setIsLoading(false);
     }
 
- 
+    const amount = calculateCost(startDate,endDate,startTime,endTime,dailyRentalPrice);
+    const charge = totalAmount && ((paymentMethod || "") === "card" || (paymentMethod || "") === "netbanking") ? totalAmount*0.02 : 0;
+    const amountRemaining = totalAmount ? (totalAmount - ((advancePayment || 0) || 0)) : 0;
+    
+    // const isSomeDetails = odometerReading || endOdometerReading
+    // || (documents && documents.length >0) || selfieUrl || (carImages && carImages.length > 0);
+    
+    // useEffect(() => {
+    //   console.log("odometerReading",odometerReading)  
+    //   console.log("endOdometerReading",endOdometerReading)  
+    //   console.log("documents",documents)  
+    //   console.log("selfieUrl",selfieUrl)  
+    //   console.log("carImages",carImages)
+    //   console.log("isSomeDetails",isSomeDetails)  
+    // },[odometerReading,endOdometerReading,documents,selfieUrl,carImages,isSomeDetails])
 
   return (
-    <div className="print:text-black">
+    <>
       {isDeleting && (
         <div className=" bg-black bg-opacity-80 fixed top-0 left-0 w-screen h-screen z-50 flex items-center justify-center">
           <div className="flex space-x-2 justify-center items-center w-screen h-screen">
@@ -648,9 +671,10 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
         </div>
       )}
       <MailDialog mail={booking.customerMail} open={openMailDialog} setOpen={setOpenMailDialog} booking={booking}/>
-      <div className="no-print:fixed top-[75px] sm:top-12 print:top-0 w-full left-0 flex pt-4 print:pt-2 bg-background z-10 items-center justify-between print:justify-center px-2 pb-2 border-b border-gray-300 dark:border-muted dark:text-white">
+    <div id="printable-section" className="print:text-black pdf-mode:text-black">
+      <div className="no-print:fixed pdf-mode:relative pdf-mode:bg-transparent pdf-mode:p-2 top-[75px] pdf-mode:pt-0 sm:top-12 print:top-0 pdf-mode:top-0 w-full left-0 flex pt-4 print:pt-2 bg-background z-10 items-center justify-between print:justify-center pdf-mode:justify-center px-2 pb-2 border-b border-gray-300 dark:border-muted dark:text-white">
         <div
-          className="mr-2 rounded-md font-bold no-print cursor-pointer dark:hover:bg-gray-800 hover:bg-gray-200"
+          className="mr-2 rounded-md pdf-mode:hidden font-bold no-print cursor-pointer dark:hover:bg-gray-800 hover:bg-gray-200"
           onClick={() => router.push("/bookings")}
         >
           <div className="h-10 w-9 flex border-border border justify-center items-center rounded-md ">
@@ -658,10 +682,10 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
           </div>
         </div>
         <div className="text-center">
-          <h2 className="text-xl font-bold print:text-black">Booking {bookingStatus}</h2>
+          <h2 className="text-xl font-bold print:text-black pdf-mode:text-black">Booking {bookingStatus}</h2>
           <p className="text-sm text-blue-500">Booking ID: {booking.id}</p>
         </div>
-        <div className="mr-1 sm:mr-4 no-print">
+        <div className="mr-1 sm:mr-4 no-print pdf-mode:hidden">
           {isAdmin &&
           <DropdownMenu
             open={isDropDownOpen}
@@ -715,14 +739,21 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
                 onClick={() => setOpenMailDialog(true)}
               >
                 <Share className="mr-2 h-4 w-4 " />
-                <span>Share</span>
+                <span>Share Agreement</span>
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="cursor-pointer"
                 onClick={() => window.print()}
               >
-                <Download className="mr-2 h-4 w-4 stroke-1 stroke-black dark:stroke-white dark:fill-white" />
-                <span>Print PDF</span>
+                <Printer className="mr-2 h-4 w-4" />
+                <span>Print Booking</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onClick={exportPDF}
+              >
+                <Download className="mr-2 h-4 w-4 stroke-1 stroke-black dark:stroke-white fill-black dark:fill-white" />
+                <span>Export Booking</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -730,10 +761,10 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
         </div>
         {/* Spacer for alignment */}
       </div>
-      <div className="w-full h-[70px] print:h-0"/>
+      <div className="w-full h-[70px] print:h-0 pdf-mode:hidden"/>
 
       {booking.status === "Requested" && (
-        <div className="w-full py-4 no-print">
+        <div className="w-full py-4 no-print pdf-mode:hidden">
               <div className="flex items-center justify-center gap-1 sm:gap-2 w-full">
                 <div 
                 onClick={() => handleConsent("confirm")}
@@ -751,14 +782,14 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
         </div>
       )}
 
-      <div className="relative px-1 sm:px-4 py-4 border-b-4 border-gray-200 dark:border-muted ">
+      <div className="relative px-1 sm:px-4 py-4 pdf-mode:py-0 pdf-mode:pt-2  border-b-4 border-gray-200 dark:border-muted ">
         <div className="flex justify-between items-center ">
           {!isEditable ?
             <div className="absolute top-[10%] text-sm left-0 rounded-e-lg bg-blue-400 border-border p-1 px-2">
                 <span>{booking.type}</span>
             </div> 
             :
-            <RadioGroup value={deliveryOption} onValueChange={(value) => setDeliveryOption(value as "pickup" | "home delivery")} className="flex absolute top-[5%] text-sm left-0 flex-col ">
+            <RadioGroup value={deliveryOption} onValueChange={(value) => setDeliveryOption(value as "pickup" | "home delivery")} className="flex pdf-mode:hidden absolute top-[5%] text-sm left-0 flex-col ">
               <div className="flex items-start space-x-2 w-full justify-between">
                 <div>
                   <div className="flex items-center space-x-2 w-full">
@@ -789,7 +820,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
           }
           <div>
             {booking.otp && booking.otp !== "" &&
-              <div className="absolute -top-2 right-4 opacity-70 flex gap-2 px-2 text-sm items-center w-fit rounded-sm bg-gray-300 dark:bg-card">
+              <div className="absolute pdf-mode:hidden -top-2 right-4 opacity-70 flex gap-2 px-2 text-sm items-center w-fit rounded-sm bg-gray-300 dark:bg-card">
                 <p className="font-semibold max-sm:text-sm">
                   OTP:
                 </p>
@@ -813,7 +844,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
             </p>
           </div>
           <div className="text-right flex flex-col items-end w-fit">
-            <div className="relative flex items-center sm:h-24 sm:w-36 rounded-md border border-border h-20 w-32 mb-2">
+            <div className="relative pdf-mode:relative flex items-center sm:h-24 sm:w-36 rounded-md border border-border h-20 w-32 mb-2">
               {booking.carImageUrl !== "" ? (
                 <Image
                   src={booking.carImageUrl}
@@ -821,7 +852,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
                   fill
                   sizes="6"
                   priority={true}
-                  className="object-cover rounded w-full"
+                  className="object-cover pdf-mode:object-cover rounded w-full"
                 />
               ) : (
                 <CarIcon className="w-full dark:stroke-blue-200 p-1  dark:fill-blue-200 stroke-black fill-black" />
@@ -835,7 +866,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
         </div>
       </div>
 
-      <div className="px-1 sm:px-4 py-4 print:py-2 border-b-4 border-gray-200 dark:border-muted">
+      <div className="px-1 sm:px-4 py-4 pdf-mode:py-0 print:py-2 border-b-4 border-gray-200 dark:border-muted">
         <h3 className="text-lg font-semibold mb-4 ">Booking Details</h3>
         <div className="flex items-center justify-center gap-8 max-sm:gap-2 mb-4">
           <div className="w-full flex flex-col items-end">
@@ -888,7 +919,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
             )}
           </div>
         </div>
-        <hr className="my-4 border-gray-200 dark:border-muted" />
+        <hr className="my-4 pdf-mode:my-2 border-gray-200 dark:border-muted" />
         <div className="grid grid-cols-2 items-center sm:gap-6">
           <div>
             <p className="text-sm text-blue-500 mb-1">Booked by</p>
@@ -904,7 +935,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
                   id="name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-[130px] sm:w-[170px]  sm:text-sm text-xs border-0 p-0 px-1 bg-gray-200 dark:bg-muted dark:hover:bg-card rounded-sm hover:bg-gray-300 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400 "
+                  className="w-[130px] sm:w-[170px] sm:text-sm text-xs border-0 p-0 px-1 bg-gray-200 dark:bg-muted dark:hover:bg-card rounded-sm hover:bg-gray-300 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400 "
                 />
                 <Input
                   type="text"
@@ -938,8 +969,8 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
             )}
           </div>
         </div>
-        <hr className="my-4 border-gray-200 dark:border-muted" />
-        <div>
+        <hr className="my-4 pdf-mode:my-2 border-gray-200 dark:border-muted" />
+        <div className="pdf-mode:hidden">
           <p className="text-sm text-blue-500 mb-1">Booking Status</p>
           <div>
             {isEditable && isAdmin ? (
@@ -949,74 +980,55 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
                 className="bg-gray-200 dark:bg-muted"
               />
             ) : (
-              <p className={` `}>{bookingStatus}</p>
+              <p>{bookingStatus}</p>
             )}
           </div>
         </div>
+        {paymentMethod && paymentMethod !== "" && 
+        <div className="hidden pdf-mode:flex flex-col">
+          <p className="text-sm text-blue-500 mb-1">Payment method</p>
+          <div>
+              <p>{paymentMethod}</p>
+          </div>
+        </div>
+        }
       </div>
-      <div className="px-1 sm:px-4 py-4 print:py-2 border-b-4 border-gray-200 dark:border-muted">
-        <h3 className="text-lg font-semibold mb-4 ">
+      <div className="px-1 sm:px-4 py-4 pdf-mode:py-0 print:py-2 border-b-4 border-gray-200 dark:border-muted">
+        <h3 className="text-lg font-semibold mb-4 pdf-mode:mb-0">
           Price and Payment Details
         </h3>
-        <div className="grid grid-cols-2 gap-4 sm:gap-6">
-          <div>
-            <p className="text-sm text-blue-500 mb-1">24 Hr Price</p>
-            {!isEditable || !isAdmin ? (
-              <p className="text-sm">{dailyRentalPrice}</p>
-            ) : (
-              <>
-                <Input
-                  type="text"
-                  id="number"
-                  value={dailyRentalPrice}
-                  onChange={(e) => setDailyRentalPrice(Number(e.target.value))}
-                  className="w-[130px] sm:w-[170px]  sm:text-sm text-xs  border-0 p-0 px-1 my-1 bg-gray-200 dark:bg-muted dark:hover:bg-card rounded-sm hover:bg-gray-300 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400
-                  [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
-                  "
-                />
-              </>
-            )}
-          </div>
-          {booking.securityDeposit && (
+        <div className="pdf-mode:hidden">
+          <div className="grid grid-cols-2 gap-4 sm:gap-6">
             <div>
-              <p className="text-sm text-blue-500">Security Deposit</p>
+              <p className="text-sm text-blue-500 mb-1">24 Hr Price</p>
               {!isEditable || !isAdmin ? (
-                <span className="text-sm">{securityDeposit}</span>
+                <p className="text-sm">{dailyRentalPrice}</p>
               ) : (
                 <>
                   <Input
                     type="text"
-                    id="name"
-                    value={securityDeposit}
-                    onChange={(e) => setSecurityDeposit(e.target.value)}
-                    className="w-[130px] sm:w-[170px]  sm:text-sm text-xs  border-0 p-0 px-1 bg-gray-200 dark:bg-muted dark:hover:bg-card rounded-sm hover:bg-gray-300 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400 "
+                    id="number"
+                    value={dailyRentalPrice}
+                    onChange={(e) => setDailyRentalPrice(Number(e.target.value))}
+                    className="w-[130px] sm:w-[170px]  sm:text-sm text-xs  border-0 p-0 px-1 my-1 bg-gray-200 dark:bg-muted dark:hover:bg-card rounded-sm hover:bg-gray-300 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400
+                    [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
+                    "
                   />
                 </>
               )}
             </div>
-          )}
-        </div>
-        <hr className="my-4 border-gray-200 dark:border-muted" />
-        <div className="grid grid-cols-2 gap-4 sm:gap-6">
-          <div className="space-y-3">
-            <div>
-              <p className="text-sm text-blue-500">Payment Amount</p>
-              <span className="text-sm">{totalAmount}</span>
-            </div>
-            {booking.paymentMethod && (
+            {booking.securityDeposit && (
               <div>
-                <p className="text-sm text-blue-500">Payment Method</p>
+                <p className="text-sm text-blue-500">Security Deposit</p>
                 {!isEditable || !isAdmin ? (
-                  <>
-                    <span className="text-sm">{paymentMethod}</span>
-                  </>
+                  <span className="text-sm">{securityDeposit}</span>
                 ) : (
                   <>
                     <Input
                       type="text"
                       id="name"
-                      value={paymentMethod}
-                      onChange={(e) => setPaymentMethod(e.target.value)}
+                      value={securityDeposit}
+                      onChange={(e) => setSecurityDeposit(e.target.value)}
                       className="w-[130px] sm:w-[170px]  sm:text-sm text-xs  border-0 p-0 px-1 bg-gray-200 dark:bg-muted dark:hover:bg-card rounded-sm hover:bg-gray-300 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400 "
                     />
                   </>
@@ -1024,45 +1036,184 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
               </div>
             )}
           </div>
-          <div className="space-y-3">
-            <p className="text-sm text-blue-500">Payment Remaining</p>
-            <span className="text-sm">
-              {(totalAmount ? totalAmount : 0) -
-                (advancePayment ? advancePayment : 0)}
-            </span>
+          <hr className="my-4 border-gray-200 dark:border-muted" />
+          <div className="grid grid-cols-2 gap-4 sm:gap-6">
+            <div className="space-y-3">
               <div>
-                <p className="text-sm text-blue-500">Payment Done</p>
-                {!isEditable || !isAdmin ? (
-                  <>
-                    {advancePayment ?
-                    <span className="text-sm">{advancePayment}</span>
-                    :
-                    <span className="text-sm">NA</span>
-                    }
-                  </>
-                ) : (
-                  <>
-                    <Input
-                      type="text"
-                      id="number"
-                      value={advancePayment}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        if (/^\d*$/.test(value)) {
-                          setAdvancePayment(Number(e.target.value))
-                        }
-                      }}
-                      className="w-[130px] sm:w-[170px]  sm:text-sm text-xs  border-0 p-0 my-0 px-1 bg-gray-200 dark:bg-muted dark:hover:bg-card rounded-sm hover:bg-gray-300 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400
-                        [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
-                        "
-                    />
-                  </>
-                )}
+                <p className="text-sm text-blue-500">Payment Amount</p>
+                <span className="text-sm">{totalAmount}</span>
+              </div>
+              {booking.paymentMethod && (
+                <div>
+                  <p className="text-sm text-blue-500">Payment Method</p>
+                  {!isEditable || !isAdmin ? (
+                    <>
+                      <span className="text-sm">{paymentMethod}</span>
+                    </>
+                  ) : (
+                    <>
+                      <Input
+                        type="text"
+                        id="name"
+                        value={paymentMethod}
+                        onChange={(e) => setPaymentMethod(e.target.value)}
+                        className="w-[130px] sm:w-[170px]  sm:text-sm text-xs  border-0 p-0 px-1 bg-gray-200 dark:bg-muted dark:hover:bg-card rounded-sm hover:bg-gray-300 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400 "
+                      />
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
+            <div className="space-y-3">
+              <p className="text-sm text-blue-500">Payment Remaining</p>
+              <span className="text-sm">
+                {(totalAmount ? totalAmount : 0) -
+                  (advancePayment ? advancePayment : 0)}
+              </span>
+                <div>
+                  <p className="text-sm text-blue-500">Payment Done</p>
+                  {!isEditable || !isAdmin ? (
+                    <>
+                      {advancePayment ?
+                      <span className="text-sm">{advancePayment}</span>
+                      :
+                      <span className="text-sm">NA</span>
+                      }
+                    </>
+                  ) : (
+                    <>
+                      <Input
+                        type="text"
+                        id="number"
+                        value={advancePayment}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          if (/^\d*$/.test(value)) {
+                            setAdvancePayment(Number(e.target.value))
+                          }
+                        }}
+                        className="w-[130px] sm:w-[170px]  sm:text-sm text-xs  border-0 p-0 my-0 px-1 bg-gray-200 dark:bg-muted dark:hover:bg-card rounded-sm hover:bg-gray-300 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400
+                          [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
+                          "
+                      />
+                    </>
+                  )}
+                </div>
+            </div>
+          </div>
+        </div>
+        <div className="rounded-lg bg-transparent py-4 px-2 space-y-2 w-full max-w-[500px] mx-auto hidden pdf-mode:flex flex-col">
+          <div className="flex justify-between">
+            <span className="text-sm">Daily Rate:</span>
+            <span className="text-sm font-medium flex items-center pdf-mode:items-center gap-1 pdf-mode:gap-0">
+              <span className="pdf-mode:mt-4">
+                <IndianRupee className="w-4 h-4  "/>
+              </span>
+              {booking.dailyRentalPrice.toFixed(2)}
+            </span>
+          </div>
+          {booking.totalPrice &&
+          <div className="flex justify-between">
+            <span className="text-sm">Duration:</span>
+            <span className="text-sm font-medium">{(amount/booking.dailyRentalPrice).toFixed(2)} days</span>
+          </div>}
+          <div className="flex justify-between">
+            <span className="text-sm">Delivery charges:</span>
+            <span className="text-sm font-medium flex items-center gap-1">
+              <span className="pdf-mode:mt-4">
+                <span className="pdf-mode:mt-4">
+                <IndianRupee className="w-4 h-4  "/>
+              </span>
+              </span>
+              {(booking.type === "home delivery" ? 1000 : 0).toFixed(2)}
+            </span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-sm">Merchant fees:</span>
+            <span className="text-sm font-medium flex items-center gap-1">
+              <span className="pdf-mode:mt-4">
+                <IndianRupee className="w-4 h-4  "/>
+              </span>
+              {charge.toFixed(2)}
+            </span>
+          </div>
+          {booking.totalPrice &&
+          <div className="flex justify-between border-t pt-2 mt-2">
+            <span className="font-medium">Total Amount:</span>
+            <span className="font-bold flex items-center gap-1">
+              <span className="pdf-mode:mt-4">
+                <IndianRupee className="w-4 h-4  "/>
+              </span>
+              {booking.totalPrice.toFixed(2)}</span>
+          </div>}
+          
+          <div className="flex justify-between">
+            <span className="text-sm">Amount paid:</span>
+            <span className="text-sm font-medium flex items-center gap-1">
+              <span className="pdf-mode:mt-4">
+                <IndianRupee className="w-4 h-4  "/>
+              </span>
+              {((booking.advancePayment || 0)).toFixed(2)}
+            </span>
+          </div>
+          <div className="flex justify-between border-t pt-2 mt-2">
+            <span className="font-medium">Amount remaining:</span>
+            {amountRemaining > 0 ?
+            <span className=" font-bold flex items-center gap-1">
+              <span className="pdf-mode:mt-4">
+                <IndianRupee className="w-4 h-4  "/>
+              </span>
+                {amountRemaining.toFixed(2)}
+            </span>
+            :
+            <span className=" font-bold flex items-center gap-1">
+              Fully Paid
+            </span>
+            }
+          </div>
+        </div>
+        <div className="hidden pdf-mode:flex gap-2 border-t py-2 pb-6 ">
+          <span className="font-medium">Security Deposit:</span>
+          {securityDeposit && securityDeposit !="" ?
+          <span className="flex items-center gap-1">
+              {securityDeposit}
+          </span>
+          :
+          <span className="flex items-center italic gap-1">
+            No Security Deposit
+          </span>
+          }
+        </div>
+      </div>
+      <div className="px-1 sm:px-4 py-4 border-b-4 pdf-mode:py-2 border-gray-200 dark:border-muted hidden pdf-mode:flex flex-col">
+        <h3 className="text-lg font-semibold mb-4 ">Owner Details</h3>
+        <div className="grid grid-cols-2 gap-2 sm:gap-6">
+          <div className="space-y-4">
+              <div>
+                <p className="text-sm text-blue-500">Owner Name</p>
+                  <span className="text-sm">Naveen Jain</span>
+              </div>
+              <div>
+                <p className="text-sm text-blue-500">Phone</p>
+                <div className="flex items-center">
+                  <span className="text-sm">{phoneNumber}</span>
+                  
+                </div>
+              </div>
+          </div>
+          <div className="space-y-4">
+              <div>
+                <h3 className="font-medium">Email</h3>
+                <a href={`mailto:${emailAddress}`} className="text-primary text-xs sm:text-sm hover:underline">
+                  {emailAddress}
+                </a>
               </div>
           </div>
         </div>
       </div>
-      <div className="px-1 sm:px-4 py-4 print:py-2 border-b-4 border-gray-200 dark:border-muted">
+      <div className={cn("px-1 sm:px-4 py-4 pdf-mode:py-0 pdf-mode:pb-2 print:py-2 border-b-4 border-gray-200 dark:border-muted",
+       odometerReading || endOdometerReading || notes ? "" : "pdf-mode:hidden",
+     )}>
         <h3 className="text-lg font-semibold mb-4 ">Some more details</h3>
         <div className="grid grid-cols-2 gap-4 sm:gap-6">
           <div className="space-y-4">
@@ -1085,7 +1236,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
               </div>
             )}
             {booking.status !== "Upcoming" && (
-              <div className="no-print">
+              <div className="no-print pdf-mode:hidden">
                 <p className="text-xs sm:text-sm text-blue-500">
                   Selfie with car
                 </p>
@@ -1118,7 +1269,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
               </div>
             )}
 
-            <div className="no-print">
+            <div className="no-print pdf-mode:hidden">
               <div className="flex sm:gap-1 items-center">
                 <p className="text-xs sm:text-sm text-blue-500">
                   Aadhar Card and Driving License
@@ -1182,7 +1333,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
                       id="name"
                       value={endOdometerReading}
                       onChange={(e) => setEndOdometerReading(e.target.value)}
-                      className="w-[130px] sm:w-[170px]  sm:text-sm text-xs  border-0 p-0 px-1 bg-gray-200 dark:bg-muted dark:hover:bg-card rounded-sm hover:bg-gray-300 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400 "
+                      className="w-[130px] sm:w-[170px] sm:text-sm text-xs  border-0 p-0 px-1 bg-gray-200 dark:bg-muted dark:hover:bg-card rounded-sm hover:bg-gray-300 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400 "
                     />
                   </>
                 )}
@@ -1209,14 +1360,14 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
                       id="name"
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}
-                      className="w-[130px] sm:w-[170px]  sm:text-sm text-xs  border-0 p-0 px-1 bg-gray-200 dark:bg-muted dark:hover:bg-card rounded-sm hover:bg-gray-300 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400 "
+                      className="w-[130px] sm:w-[170px] sm:text-sm text-xs  border-0 p-0 px-1 bg-gray-200 dark:bg-muted dark:hover:bg-card rounded-sm hover:bg-gray-300 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400 "
                     />
                   </>
                 )}
               </div>
             )}
             {booking.status !== "Upcoming" && (
-              <div className="no-print">
+              <div className="no-print pdf-mode:hidden">
                 <div className="flex sm:gap-1 items-center">
                   <p className="text-xs sm:text-sm text-blue-500">
                     Photos Before pick-up
@@ -1271,7 +1422,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
       {isAdmin &&
       <>
       {!isEditable && isAdmin && (
-        <div className="no-print flex justify-center space-x-2 mt-2">
+        <div className="no-print pdf-mode:hidden flex justify-center space-x-2 mt-2">
           {bookingStatus === "Upcoming" && (
             <Button
               className="px-4 py-4 max-sm:w-full active:scale-95 bg-blue-600 text-white text-blue-100  shadow-lg"
@@ -1298,7 +1449,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
       </>
       }
       {isEditable && isAdmin && (
-        <div className=" flex no-print justify-center space-x-2 mt-2 text-white">
+        <div className=" flex no-print pdf-mode:hidden justify-center space-x-2 mt-2 text-white">
           <>
             {!isLoading ? (
               <>
@@ -1362,5 +1513,6 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
         odometerReading={odometerReading}
       />
     </div>
+    </>
   );
 }

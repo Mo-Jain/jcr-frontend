@@ -1,6 +1,5 @@
 import { calculateCost } from "@/lib/utils";
 import { Document, Page, Text, View, StyleSheet, Image } from "@react-pdf/renderer";
-import { IndianRupee } from "lucide-react";
 
 const styles = StyleSheet.create({
     page: { 
@@ -320,6 +319,7 @@ const PDFDocument = ({ booking }: { booking: Booking }) => {
             <View style={styles.printRow}>
               <Text style={styles.text}>Daily Rate:</Text>
               <View style={styles.money}>
+                {/* eslint-disable-next-line jsx-a11y/alt-text */}
                 <Image src="/rupee.png" style={{width:12,height:12,marginTop:-2}} />
                 <Text style={styles.text}>
                   {booking.dailyRentalPrice.toFixed(2)}
@@ -333,6 +333,7 @@ const PDFDocument = ({ booking }: { booking: Booking }) => {
             <View style={styles.printRow}>
               <Text style={styles.text}>Delivery charges:</Text>
               <View style={styles.money}>
+                {/* eslint-disable-next-line jsx-a11y/alt-text */}
                 <Image src="/rupee.png" style={{width:12,height:12,marginTop:-2}} />
                 <Text style={styles.text}>
                   {(booking.type === "home delivery" ? 1000 : 0).toFixed(2)}
@@ -342,6 +343,7 @@ const PDFDocument = ({ booking }: { booking: Booking }) => {
             <View style={styles.printRow}>
               <Text style={styles.text}>Merchant fees:</Text>
               <View style={styles.money}>
+                {/* eslint-disable-next-line jsx-a11y/alt-text */}
                 <Image src="/rupee.png" style={{width:12,height:12,marginTop:-2}} />
                 <Text style={styles.text}>
                 {charge.toFixed(2)}
@@ -351,6 +353,7 @@ const PDFDocument = ({ booking }: { booking: Booking }) => {
             <View style={styles.total}>
               <Text style={styles.text}>Total Amount:</Text>
               <View style={styles.money}>
+                {/* eslint-disable-next-line jsx-a11y/alt-text */}
                 <Image src="/rupee.png" style={{width:12,height:12,marginTop:-2}} />
                 <Text style={styles.text}>
                   {(booking.type === "home delivery" ? totalAmount + charge + 1000 : totalAmount + charge).toFixed(2)}
@@ -360,6 +363,7 @@ const PDFDocument = ({ booking }: { booking: Booking }) => {
             <View style={styles.printRow}>
               <Text style={styles.text}>Amount Paid:</Text>
               <View style={styles.money}>
+                {/* eslint-disable-next-line jsx-a11y/alt-text */}
                 <Image src="/rupee.png" style={{width:12,height:12,marginTop:-2}} />
                 <Text style={styles.text}>
                 {(booking.advancePayment || 0).toFixed(2)}
@@ -370,6 +374,7 @@ const PDFDocument = ({ booking }: { booking: Booking }) => {
               <Text style={styles.text}>Amount Remaining:</Text>
               {amountRemaining > 0 ?
               <View style={styles.money}>
+                {/* eslint-disable-next-line jsx-a11y/alt-text */}
                 <Image src="/rupee.png" style={{width:12,height:12,marginTop:-2}} />
                 <Text style={styles.text}>
                   {amountRemaining.toFixed(2)}

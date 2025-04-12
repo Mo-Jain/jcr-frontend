@@ -7,7 +7,7 @@ import { Booking } from "@/app/booking/[id]/page";
 export default function ExportButton({booking}:{booking:Booking}) {
   return (
     <PDFDownloadLink document={<PdfDocument booking={booking}/>} fileName="exported.pdf">
-      {({ loading }) => (loading ? "Preparing document..." : "Export to PDF")}
+      {({ loading }) => (loading ? "Preparing document..." : "Export agreement")}
     </PDFDownloadLink>
   );
 }

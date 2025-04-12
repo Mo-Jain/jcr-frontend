@@ -103,6 +103,7 @@ export default {
     plugin(function ({ addVariant }) {
       addVariant('print', '@media print')
       addVariant('no-print', '@media not print')
+      addVariant('pdf-mode', '.pdf-mode &')
     }),
   ],
 } satisfies Config;

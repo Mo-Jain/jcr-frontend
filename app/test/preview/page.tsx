@@ -146,9 +146,9 @@ function App() {
       </div>
 
       {/* PDF Viewer */}
-      <PDFViewer className="w-full h-full">
+      {/* <PDFViewer className="w-full h-full">
         <PDFDocument booking={dummyBooking} />
-      </PDFViewer>
+      </PDFViewer> */}
     </div>
   );
 }
