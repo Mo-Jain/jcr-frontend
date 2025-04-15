@@ -154,6 +154,8 @@ export default function Bookings() {
       length = newBookings.filter(booking => booking.status === "Completed").length;
     }else if (status === "Cancelled"){
       length = newBookings.filter(booking => booking.status === "Cancelled").length;
+    }else if (status === "Requested"){
+      length = newBookings.filter(booking => booking.status === "Requested").length;
     }
     return length > 0 ? ` (${length})` : "";
   }
