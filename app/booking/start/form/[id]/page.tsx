@@ -45,6 +45,7 @@ export interface Booking {
   drivingLicence?: string;
   aadharCard?: string;
   odometerReading?: string;
+  fastrack?: number;
   notes?: string;
   selfieUrl?: string;
   documents: Document[];

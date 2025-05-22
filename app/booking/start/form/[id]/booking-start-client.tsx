@@ -83,7 +83,8 @@ export default function BookingStartClient({
   const [progress, setProgress] = useState(0);
   const [loadingMessage, setLoadingMessage] = useState("Please wait");
   const [customerMail, setCustomerMail] = useState(booking.customerMail || "");
-  const [isMailDialogOpen, setIsMailDialogOpen] = useState(false)
+  const [isMailDialogOpen, setIsMailDialogOpen] = useState(false);
+  const [fastrack,setFastrack] = useState(Number(booking.fastrack) || 0);
 
   useEffect(() => {
     const cost = calculateCost(
@@ -119,7 +120,7 @@ export default function BookingStartClient({
     if (!termsAccepted)
       newErrors.terms = "You must accept the terms and conditions";
     if(customerMail === "") newErrors.mail = "This field is mandatory";
- 
+    if(fastrack === 0) newErrors.fastrack = "This field is mandatory";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -261,6 +262,7 @@ export default function BookingStartClient({
           returnTime,
           securityDeposit,
           odometerReading: odometerReading.toString(),
+          fastrack:fastrack,
           customerAddress: address,
           bookingAmountReceived,
           dailyRentalPrice,
@@ -288,6 +290,7 @@ export default function BookingStartClient({
         endTime:returnTime,
         securityDeposit,
         odometerReading: odometerReading.toString(),
+        fastrack,
         customerAddress: address,
         advancePayment:bookingAmountReceived,
         dailyRentalPrice,
@@ -764,27 +767,51 @@ export default function BookingStartClient({
                 )}
               </div>
             </div>
-            <div>
-              <Label className="max-sm:text-xs" htmlFor="securityDeposit">
-                Security Deposit <span className="text-red-500">*</span>
-              </Label>
-              <Input
-                type="text"
-                id="securityDeposit"
-                value={securityDeposit}
-                onChange={(e) => {
-                  setSecurityDeposit(e.target.value);
-                  setErrors((prev) => ({ ...prev, securityDeposit: "" }));
-                }}
-                className={inputClassName("securityDeposit")}
-              />
-              {errors.securityDeposit && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.securityDeposit}
-                </p>
-              )}
+            <div className="flex justify-between space-x-2 items-center">
+              <div>
+                <Label className="max-sm:text-xs" htmlFor="securityDeposit">
+                  Security Deposit <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  type="text"
+                  id="securityDeposit"
+                  value={securityDeposit}
+                  onChange={(e) => {
+                    setSecurityDeposit(e.target.value);
+                    setErrors((prev) => ({ ...prev, securityDeposit: "" }));
+                  }}
+                  className={inputClassName("securityDeposit")}
+                />
+                {errors.securityDeposit && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.securityDeposit}
+                  </p>
+                )}
+              </div>
+              <div>
+                <Label className="max-sm:text-xs" htmlFor="securityDeposit">
+                  FastTag Amount<span className="text-red-500"> *</span>
+                </Label>
+                <Input
+                  type="text"
+                  id="fastrack"
+                  value={fastrack || 0}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (/^\d*$/.test(value)) {
+                    setFastrack(Number(e.target.value));
+                    }
+                    setErrors((prev) => ({ ...prev, fastrack: "" }));
+                  }}
+                  className={inputClassName("fastrack")}
+                />
+                {errors.fastrack && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.fastrack}
+                  </p>
+                )}
+              </div>
             </div>
-
             <div>
               <Label className="max-sm:text-xs" htmlFor="notes">
                 Notes

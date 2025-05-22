@@ -44,6 +44,8 @@ export interface Booking {
   paymentMethod?: string;
   odometerReading?: string;
   endodometerReading?: string;
+  fastrack?: number;
+  endfastrack?:number;
   notes?: string;
   selfieUrl?: string;
   documents?: Document[];

@@ -16,12 +16,16 @@ import { Button } from "@/components/ui/button";
 import { DatePicker } from "@/components/ui/datepicker";
 import AddTime from "@/components/add-time";
 import { useState } from "react";
+import { IndianRupee } from "lucide-react";
 
 const BookingStop = ({
   endOdometerReading,
   setEndOdometerReading,
   bookingId,
   endDate,
+  fastrack,
+  endFastrack,
+  setEndFastrack,
   setEndDate,
   endTime,
   setEndTime,
@@ -36,6 +40,9 @@ const BookingStop = ({
   setEndOdometerReading: React.Dispatch<React.SetStateAction<string>>;
   bookingId: string;
   endDate: Date;
+  fastrack: number;
+  endFastrack: number;
+  setEndFastrack: React.Dispatch<React.SetStateAction<number>>;
   setEndDate: React.Dispatch<React.SetStateAction<Date>>;
   endTime: string;
   setEndTime: React.Dispatch<React.SetStateAction<string>>;
@@ -72,6 +79,7 @@ const BookingStop = ({
           endDate: endDate.toLocaleDateString("en-US"),
           endTime: endTime,
           odometerReading: endOdometerReading,
+          fastrack: endFastrack,
         },
         {
           headers: {
@@ -134,7 +142,7 @@ const BookingStop = ({
                 </div>
               </div>
             </div>
-            <span>Odometer Reading</span>
+            <div className="w-full border-t border-border">Odometer Reading</div>
             <div className="flex w-fit items-center gap-2 mt-2">
               <div className="flex items-center gap-2 ">
                 <Label htmlFor="start" className="text-left">
@@ -174,6 +182,54 @@ const BookingStop = ({
                 </div>
               </div>
             </div>
+            {Number(endOdometerReading) > Number(odometerReading) &&
+            <div>
+              <span>Killometer travelled : </span>
+              <span>{Number(endOdometerReading) - Number(odometerReading)}</span>
+              <span> Kms</span>
+            </div>  
+            }
+            
+            <div className="w-full border-t border-border">FasTag Amount</div>
+            <div className="flex w-fit items-center gap-2 mt-2">
+              <div className="flex items-center gap-2 ">
+                <Label htmlFor="start" className="text-left">
+                  Start
+                </Label>
+                <Input
+                  id="start"
+                  type="text"
+                  readOnly
+                  disabled
+                  value={fastrack}
+                  className="bg-muted w-24 p-2 cursor-not-allowed select-none border-border text-xs sm:text-sm focus-visible:ring-0 focus-visible:ring-ring focus-visible:ring-offset-0"
+                />
+              </div>
+              <div className="flex items-center gap-3">
+                <Label htmlFor="stop" className="text-left">
+                  End
+                </Label>
+                <div className="relative">
+                  <Input
+                    id="stop"
+                    type="text"
+                    value={endFastrack}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (/^\d*$/.test(value)) {
+                        setEndFastrack(Number(e.target.value));
+                      }
+                    }}
+                    className="w-24 p-2 max-sm:text-xs"
+                  />
+                </div>
+              </div>
+            </div>
+              <div className="flex items-center mt-1">
+                <span>FastTag used :</span>
+                <IndianRupee className="w-4 h-4 mr-1" />
+                <span>{fastrack-endFastrack}</span>
+              </div>  
           </div>
           <DialogFooter>
             <Button variant="outline" className="active:scale-95" onClick={() => setIsOpen(false)}>

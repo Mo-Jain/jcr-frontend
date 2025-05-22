@@ -27,6 +27,7 @@ export interface Booking {
   status: string;
   action: string;
   odometerReading: string;
+  fastrack?: number;
 }
 
 const TakeAction = () => {
@@ -121,6 +122,7 @@ const Booking = ({
     return reading.toString();
   }, [booking.odometerReading]);
   const [endOdometerReading, setEndOdometerReading] = useState(initialReading);
+  const [endFastrack, setEndFastrack] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isOpenEventSummary, setIsOpenEventSummary] = useState(false);
@@ -161,6 +163,9 @@ const Booking = ({
         setEndOdometerReading={setEndOdometerReading}
         setBookings={setBookings}
         setIsLoading={setIsLoading}
+        fastrack={booking.fastrack || 0}
+        endFastrack={endFastrack}
+        setEndFastrack={setEndFastrack} 
       />
       <EventSummaryPopup isOpen={isOpenEventSummary} onClose={() => setIsOpenEventSummary(false)} event={getEvent()} />
       <div

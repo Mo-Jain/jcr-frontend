@@ -81,6 +81,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
   const [odometerReading, setOdometerReading] = useState<string | undefined>(
     booking.odometerReading,
   );
+  const [fastrack, setFastrack] = useState<number>(booking.fastrack || 0);
   const [notes, setNotes] = useState<string | undefined>(booking.notes);
   const [selfieUrl, setSelfieUrl] = useState(booking.selfieUrl);
   const [address, setAddress] = useState(booking.customerAddress);
@@ -121,6 +122,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
     return reading.toString();
   }, [odometerReading, booking.endodometerReading]);
   const [endOdometerReading, setEndOdometerReading] = useState(initialReading);
+  const [endFastrack, setEndFastrack] = useState(booking.endfastrack || 0);
 
   useEffect(() => {
     const cost = calculateCost(
@@ -670,7 +672,7 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
           </div>
         </div>
       )}
-      <MailDialog mail={booking.customerMail} open={openMailDialog} setOpen={setOpenMailDialog} booking={booking}/>
+      <MailDialog booking={booking} mail={booking.customerMail} open={openMailDialog} setOpen={setOpenMailDialog} />
     <div id="printable-section" className="print:text-black pdf-mode:text-black">
       <div className="no-print:fixed pdf-mode:relative pdf-mode:bg-transparent pdf-mode:p-2 top-[75px] pdf-mode:pt-0 sm:top-12 print:top-0 pdf-mode:top-0 w-full left-0 flex pt-4 print:pt-2 bg-background z-10 items-center justify-between print:justify-center pdf-mode:justify-center px-2 pb-2 border-b border-gray-300 dark:border-muted dark:text-white">
         <div
@@ -1235,6 +1237,29 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
                 )}
               </div>
             )}
+            {booking.fastrack && (
+              <div>
+                <p className="text-sm text-blue-500">FasTag start Amount</p>
+                {!isEditable || !isAdmin ? (
+                  <span className="text-sm">{fastrack}</span>
+                ) : (
+                  <>
+                    <Input
+                      type="text"
+                      id="name"
+                      value={fastrack}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        if (/^\d*$/.test(value)) {
+                        setFastrack(Number(e.target.value));
+                        }
+                      }}
+                      className="w-[130px] sm:w-[170px]  sm:text-sm text-xs  border-0 p-0 px-1 bg-gray-200 dark:bg-muted dark:hover:bg-card rounded-sm hover:bg-gray-300 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400 "
+                    />
+                  </>
+                )}
+              </div>
+            )}
             {booking.status !== "Upcoming" && (
               <div className="no-print pdf-mode:hidden">
                 <p className="text-xs sm:text-sm text-blue-500">
@@ -1339,6 +1364,38 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
                 )}
               </div>
             )}
+            {booking.endfastrack && (
+              <div>
+                <p className="text-sm text-blue-500">FasTag end amount</p>
+                {!isEditable || !isAdmin ? (
+                  <span className="text-sm">{endFastrack}</span>
+                ) : (
+                  <>
+                    <Input
+                      type="text"
+                      id="name"
+                      value={endFastrack}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        if (/^\d*$/.test(value)) {
+                          setEndFastrack(Number(e.target.value));
+                        }
+                      }}
+                      className="w-[130px] sm:w-[170px] sm:text-sm text-xs  border-0 p-0 px-1 bg-gray-200 dark:bg-muted dark:hover:bg-card rounded-sm hover:bg-gray-300 focus-visible:ring-0 border-transparent border-y-4 focus:border-b-blue-400"
+                    />
+                  </>
+                )}
+              </div>
+            )}
+            {booking.fastrack &&
+              Number(fastrack) > Number(endFastrack) && (
+                <div>
+                  <p className="text-sm text-blue-500">FasTag used</p>
+                  <span className="text-sm">
+                    {Number(fastrack) - Number(endFastrack)}
+                  </span>
+                </div>
+              )}
             {booking.odometerReading &&
               Number(endOdometerReading) > Number(odometerReading) && (
                 <div>
@@ -1511,6 +1568,9 @@ export function BookingDetailsClient({ booking,isAdmin }: BookingDetailsClientPr
         isOpen={isBookingStopOpen}
         setIsOpen={setIsBookingStopOpen}
         odometerReading={odometerReading}
+        fastrack={fastrack}
+        endFastrack={endFastrack}
+        setEndFastrack={setEndFastrack}
       />
     </div>
     </>

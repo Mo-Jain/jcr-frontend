@@ -155,6 +155,8 @@ const styles = StyleSheet.create({
   paymentMethod?: string;
   odometerReading?: string;
   notes?: string;
+  fastrack?:number;
+  endfastrack?:number;
 }
 
 const PDFDocument = ({ booking }: { booking: Booking }) => {
@@ -299,6 +301,20 @@ const PDFDocument = ({ booking }: { booking: Booking }) => {
               </View>
             </View>
             <View>
+              <View style={{display:"flex",flexDirection:"row"}}>
+                  <Text style={{...styles.text,...styles.bold}}>FasTag Amount: </Text>
+                  <Image src="/rupee.png" style={{width:12,height:12}} />
+                  <Text style={styles.text}>{booking.fastrack} </Text>
+              </View>
+            </View>
+            <View>
+              <View style={{display:"flex",flexDirection:"row"}}>
+                  <Text style={{...styles.text,...styles.bold}}>FasTag end Amount: </Text>
+                  <Image src="/rupee.png" style={{width:12,height:12}} />
+                  <Text style={styles.text}>{booking.endfastrack}</Text>
+              </View>
+            </View>
+            <View>
               {booking.notes && (
                   <View style={{display:"flex",flexDirection:"row"}}>
                       <Text style={{...styles.text,...styles.bold}}>Notes: </Text>
@@ -390,6 +406,18 @@ const PDFDocument = ({ booking }: { booking: Booking }) => {
                 <Text style={{...styles.text}}>Security Deposit: </Text>
                 <Text style={{...styles.text,fontStyle:"italic"}}>No Security Deposit</Text>
             </View>
+            {booking.fastrack && booking.endfastrack &&
+            <View style={styles.printRow}>
+              <Text style={styles.text}>FasTag used:</Text>
+              <View style={styles.money}>
+                {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                <Image src="/rupee.png" style={{width:12,height:12,marginTop:-2}} />
+                <Text style={styles.text}>
+                  {booking.fastrack - booking.endfastrack}
+                </Text>
+              </View>
+            </View>
+            }
           </View>
         </View>
         </View>
