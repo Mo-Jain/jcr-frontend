@@ -19,9 +19,9 @@ A full-featured **admin panel** for managing a car rental platform. This dashboa
 
 ## 🛠️ Tech Stack
 
-- **Framework**: React / Next.js / Vite  
+- **Framework**: React / Next.js 
 - **Styling**: Tailwind CSS  
-- **State Management**: Recoil / Redux / Context API  
+- **State Management**: Zustand
 - **Authentication**: JWT / NextAuth / custom auth (specify if applicable)  
 - **Calendar**: FullCalendar / react-calendar  
 - **Charts**: Chart.js / Recharts  
@@ -40,15 +40,6 @@ Admin access is restricted. Only authorized users can log in to manage cars and 
 
 ---
 
-## 💳 Payment Integration
-
-The admin dashboard supports payment status tracking for bookings:
-
-- Razorpay Webhook integration for live payment status
-- View total earnings from completed transactions
-- Filter bookings by paid/unpaid status
-
----
 
 ## 📅 Calendar View
 
