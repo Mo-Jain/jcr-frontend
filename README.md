@@ -55,8 +55,9 @@ All bookings are displayed in an interactive calendar, making it easier to:
 
 The frontend is deployed on:
 
-> [https://your-live-site-url.com](https://your-live-site-url.com)  
-> *(Replace with actual deployed URL)*
+> (https://admin.jaincarrental.in)
+You can't Sign in here for my data security, I have provided guest username and password so that you can exlore it
+username- guest, password-12345678
 
 You can deploy your own version using:
 
